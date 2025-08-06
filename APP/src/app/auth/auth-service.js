@@ -15,6 +15,7 @@ export const register = async (data) => {
 };
 
 export const verify = async (token) => {
+  console.log("Verifying token:", token);
   try {
     const request = await HttpRequest.method("GET")
       .url(authEndpoint.verify(token))
