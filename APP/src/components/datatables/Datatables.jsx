@@ -20,20 +20,13 @@ import {
 
 import { DatatablePagination } from "./datatable-components/datatable-pagination";
 import { DatatableToolbar } from "./datatable-components/datatable-toolbar";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 
-export default function DataTable({
-  data,
-  columns,
-  filterFields,
-  state,
-  modalBtn,
-}) {
+export default function DataTable({ data, columns, filterFields, state }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState([]);
   const [rowSelection, setRowSelection] = useState([]);
+
   const table = useReactTable({
     data,
     columns,
@@ -52,9 +45,10 @@ export default function DataTable({
       rowSelection,
     },
   });
+
   return (
     <>
-      <div className="mb-2 ">
+      <div className="mb-2">
         <DatatableToolbar
           table={table}
           filterFields={filterFields}

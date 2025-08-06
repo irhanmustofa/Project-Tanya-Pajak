@@ -8,7 +8,6 @@ const initialState = {
 const actionReducer = {
   SUCCESS: "SUCCESS",
   FAILURE: "FAILURE",
-  RESET: "RESET",
 };
 
 const appReducer = (state, action) => {
@@ -24,8 +23,6 @@ const appReducer = (state, action) => {
     case actionReducer.FAILURE:
       return { ...state, loading: false, error: action.payload };
 
-    case actionReducer.RESET:
-      return { ...initialState };
     default:
       return state;
   }

@@ -5,12 +5,16 @@ import { register as registerService } from "@/app/auth/auth-service";
 import { useState, useContext, useEffect } from "react";
 import { dialogContext } from "@/dialogs/DialogContext";
 import { useValidateInput } from "@/hooks/use-validate-input";
-import svgImage from "@/public/vite.svg";
-import { Link } from "react-router-dom";
+import svgImage from "@/public/register.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { EyeClosed, EyeIcon } from "lucide-react";
+import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 
 export function RegisterForm() {
+  const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
-  const { DialogInfo } = useContext(dialogContext);
+  const dialogDispatch = useDialogDispatch();
+  const { dialogAction, dialogState, DialogInfo } = useDialog();
 
   const [register, setRegister] = useState({
     name: "",
@@ -26,13 +30,6 @@ export function RegisterForm() {
     },
   });
 
-  const [flashState, setFlashState] = useState({
-    title: "",
-    message: "",
-    status: "",
-    show: false,
-  });
-
   const registerHandler = async (event) => {
     event.preventDefault();
     setIsPending(true);
@@ -42,20 +39,32 @@ export function RegisterForm() {
       email: register.email,
       password: register.password,
     });
-
-    if (!response.success) {
-      setFlashState({
-        title: "Register Failed",
-        message: response.message,
-        status: "error",
-        show: true,
+    console.log("response", response);
+    if (response.success) {
+      setIsPending(false);
+      dialogDispatch({
+        type: dialogAction.DIALOG_INFO,
+        payload: {
+          isOpen: true,
+          message: response.message || "Register successful",
+          title: "Success",
+          status: "success",
+        },
       });
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } else {
-      setFlashState({
-        title: "Register Success",
-        message: "Register success, please check your email",
-        status: "success",
-        show: true,
+      setIsPending(false);
+      dialogDispatch({
+        type: dialogAction.DIALOG_INFO,
+        payload: {
+          isOpen: true,
+          message: response.message || "Register failed",
+          title: "Error",
+          status: "error",
+        },
       });
     }
   };
@@ -77,20 +86,11 @@ export function RegisterForm() {
             isPending={isPending}
             valid={valid}
             errors={errors}
+            handleChange={handleChange}
           />
         </BodyContent>
       </Card>
-      {flashState.show && (
-        <DialogInfo
-          title={flashState.title}
-          message={flashState.message}
-          status={flashState.status}
-          onClose={() => {
-            setIsPending(false);
-            setFlashState({});
-          }}
-        />
-      )}
+      {dialogState.message && <DialogInfo />}
     </>
   );
 }
@@ -134,7 +134,9 @@ const FormInput = ({
   isPending,
   errors,
   valid,
+  handleChange,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <>
       <div className="flex flex-col gap-6">
@@ -143,7 +145,7 @@ const FormInput = ({
             title="Name"
             name="name"
             type="text"
-            placeholder="Your Full Name"
+            placeholder="Your Name"
             error={errors.name}
             onChange={(e) => setRegister({ ...register, name: e.target.value })}
           />
@@ -157,16 +159,26 @@ const FormInput = ({
               setRegister({ ...register, email: e.target.value })
             }
           />
-          <InputVertical
-            title="Password"
-            name="password"
-            type="password"
-            placeholder="******"
-            error={errors.password}
-            onChange={(e) =>
-              setRegister({ ...register, password: e.target.value })
-            }
-          />
+          <div className="relative">
+            <InputVertical
+              title="Password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="********"
+              onChange={(e) => {
+                setRegister({ ...register, password: e.target.value });
+                handleChange("password", e.target.value);
+              }}
+              error={errors.password}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-8 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <EyeClosed /> : <EyeIcon />}
+            </button>
+          </div>
           <Button
             type="submit"
             className="w-full mt-4"

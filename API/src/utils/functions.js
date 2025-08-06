@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
 export const generateId = () => {
-  return "xxxx4xxxyxxx".replace(/[xy]/g, (c) => {
+  return "xxxx4xxxyxxxxyxxyxxx".replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0,
       v = c == "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);

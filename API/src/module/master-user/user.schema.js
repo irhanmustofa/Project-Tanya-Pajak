@@ -4,7 +4,7 @@ import { createConnection } from "../../database/mongo/mongo.connection.js";
 export const userSchema = () => {
   const collection = mongoConfig.collection.users;
   const schema = {
-    group_id: {
+    client_id: {
       type: String,
       required: true,
     },

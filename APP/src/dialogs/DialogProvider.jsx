@@ -15,6 +15,7 @@ export default function DialogProvider({ children }) {
     dialogReducer,
     dialogInitial
   );
+
   const value = {
     dialogState,
     dialogAction,

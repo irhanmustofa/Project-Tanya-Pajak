@@ -6,7 +6,7 @@ export default function Middleware() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const expiry = 30 * 60 * 1000; // 30 menit
+    const expiry = 30 * 60 * 1000;
     const lastAccess = useLocalStorage.get("lastAccess");
     const email = useLocalStorage.get("email");
     const token = useLocalStorage.get("token");
@@ -24,7 +24,6 @@ export default function Middleware() {
       useLocalStorage.remove();
       navigate("/");
     } else {
-      // refresh last access jika session valid
       useLocalStorage.set("lastAccess", new Date().toISOString());
     }
   }, [navigate]);

@@ -16,7 +16,6 @@ class HttpRequest {
     url: "",
     headers: {},
     body: {},
-    credentials: "include",
     options: {},
   };
 
@@ -45,25 +44,20 @@ class HttpRequest {
     return this;
   }
 
-  static credentials() {
-    HttpRequest.request.options.credentials = "include";
-    return this;
-  }
-
   static async send() {
     onRequestStart();
 
     const token = useLocalStorage.get("token");
     const email = useLocalStorage.get("email");
     const device = useLocalStorage.get("device");
-    const groupId = useLocalStorage.get("groupId");
-    const clientId = useLocalStorage.get("clientId");
     const lastAccess = useLocalStorage.get("lastAccess");
 
     if (token) {
       if (Date.now() > lastAccess) {
-        useLocalStorage.remove();
-        window.location.href = href("/");
+        if (!useLocalStorage.isAdmin()) {
+          useLocalStorage.remove();
+          window.location.href = href("/");
+        }
       } else {
         useLocalStorage.set("lastAccess", Date.now() + 1000 * 60 * 30);
       }
@@ -106,13 +100,6 @@ class HttpRequest {
         token,
         email,
       };
-      if (groupId || clientId) {
-        fetchOptions.headers = {
-          ...fetchOptions.headers,
-          groupId,
-          clientId,
-        };
-      }
     }
 
     try {
