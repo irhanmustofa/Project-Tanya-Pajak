@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { MoreHorizontal, LucideEdit, LucideTrash } from "lucide-react";
@@ -10,56 +9,49 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { useState } from "react";
+import { serviceAll, serviceEndpoint } from "./ServiceService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
-import LoaderOverlay from "@/components/custom/loader-overlay";
+import { useService, useServiceDispatch } from "./ServiceProvider";
+import ServiceUpdateForm from "@/app/management/service/service-pages/ServiceUpdateForm";
 
-export default function UserAction({ row }) {
-  const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
-  const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
-
+export default function serviceAction({ row }) {
   const [onUpdate, setOnUpdate] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const serviceDispatch = useServiceDispatch();
+  const { serviceAction } = useService();
+
+  const dispatch = useDialogDispatch();
+  const { dialogState, dialogAction, DialogDelete } = useDialog();
 
   const handleDelete = (id) => {
     dispatch({
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Service",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this service? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: serviceEndpoint.delete(id),
       },
     });
   };
 
-  const handleOnCloseDelete = async (success) => {
+  const handleOnCloseDeelete = (success) => {
     if (!success) return;
 
-    setIsLoading(true);
-
-    await userAll().then((res) => {
-      if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
-      }
-    });
-
-    setIsLoading(false);
+    setTimeout(() => {
+      serviceAll().then((res) => {
+        if (res.success) {
+          serviceDispatch({ type: serviceAction.SUCCESS, payload: res.data });
+        }
+      });
+    }, 500);
   };
 
   const item = row.original;
   return (
-    <div className="relative">
-      {isLoading && <LoaderOverlay />}
-
+    <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -80,12 +72,10 @@ export default function UserAction({ row }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
       {onUpdate && (
-        <UserUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
+        <ServiceUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
       )}
-
-      {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
-    </div>
+      {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDeelete} />}
+    </>
   );
 }

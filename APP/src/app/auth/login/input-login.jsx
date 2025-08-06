@@ -31,6 +31,7 @@ const InputLogin = ({ setSuccess, setOtp }) => {
   const handleLogin = async (formData) => {
     startTransition(async () => {
       const login = await loginService(formData);
+
       if (!login.success) {
         setSuccess({
           success: false,
@@ -40,10 +41,17 @@ const InputLogin = ({ setSuccess, setOtp }) => {
               : login.message,
         });
       } else {
+<<<<<<< HEAD
         useLocalStorage.set("clientId", login.data.client_id);
         useLocalStorage.set("email", formData.get("email"));
         useLocalStorage.set("name", login.data.name);
         useLocalStorage.set("role", login.data.role);
+=======
+        useLocalStorage.set("token", login.token);
+        useLocalStorage.set("email", formData.get("email"));
+        useLocalStorage.set("name", login.name);
+        useLocalStorage.set("role", login.role);
+>>>>>>> fd410b4 (update-register)
         useLocalStorage.set("sb", "true");
         useLocalStorage.set(
           "lastAccess",
