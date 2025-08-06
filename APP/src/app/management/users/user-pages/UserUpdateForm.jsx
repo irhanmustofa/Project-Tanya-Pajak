@@ -24,11 +24,7 @@ import { userUpdate } from "../user-components/UserService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { InputHorizontal } from "@/components/custom/input-custom";
 import { useValidateInput } from "@/hooks/use-validate-input";
-<<<<<<< HEAD
 import { userLevel, statusType } from "@/helpers/variables";
-=======
-import { statusType, roles } from "@/helpers/variables";
->>>>>>> e60f755 (update files)
 import { userAll } from "../user-components/UserService";
 
 export default function UserUpdateForm({ id, onClose }) {
@@ -39,19 +35,12 @@ export default function UserUpdateForm({ id, onClose }) {
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const userDispatch = useUserDispatch();
-<<<<<<< HEAD
   const { userAction, userState } = useUser();
-=======
-  const { userAction, userGroup, userState } = useUser();
->>>>>>> e60f755 (update files)
 
   const { errors, handleChange } = useValidateInput({
     schema: {
       name: "required|string|min:3",
-<<<<<<< HEAD
       email: "required|email",
-=======
->>>>>>> e60f755 (update files)
       password: "required|password",
       role: "required|number",
       status: "required|number",
@@ -62,35 +51,23 @@ export default function UserUpdateForm({ id, onClose }) {
     const user = userState.data.find((item) => item._id === id);
     setInput({
       name: user.name,
-<<<<<<< HEAD
       email: user.email,
       role: user.role,
-=======
-      group_id: user.group_id,
->>>>>>> e60f755 (update files)
       status: user.status,
     });
 
     setIsOpen(true);
   }, [id, userState.data]);
-<<<<<<< HEAD
 
-=======
->>>>>>> e60f755 (update files)
   const inputHandler = (event) => {
     event.preventDefault();
 
     startTransition(async () => {
       const formData = new FormData();
       formData.append("name", input.name);
-<<<<<<< HEAD
       formData.append("email", input.email);
       formData.append("status", input.status);
       formData.append("role", input.role);
-=======
-      formData.append("status", input.status);
-      formData.append("group_id", input.group_id);
->>>>>>> e60f755 (update files)
 
       if (input.password) {
         formData.append("password", input.password);
@@ -149,11 +126,7 @@ export default function UserUpdateForm({ id, onClose }) {
           <DialogTrigger asChild>
             <Button variant="outline">
               <LucideUserPlus2 className="mr-2 h-4 w-4" />
-<<<<<<< HEAD
               Update User
-=======
-              Update User {input.name || ""}
->>>>>>> e60f755 (update files)
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
@@ -176,7 +149,6 @@ export default function UserUpdateForm({ id, onClose }) {
                 />
 
                 <InputHorizontal
-<<<<<<< HEAD
                   title="Email"
                   type="email"
                   name="email"
@@ -189,8 +161,6 @@ export default function UserUpdateForm({ id, onClose }) {
                 />
 
                 <InputHorizontal
-=======
->>>>>>> e60f755 (update files)
                   title="Password"
                   type="password"
                   name="password"
@@ -201,48 +171,27 @@ export default function UserUpdateForm({ id, onClose }) {
                   error={errors.password}
                 />
                 <div className="grid grid-cols-4 items-center gap-4">
-<<<<<<< HEAD
                   <Label>Level</Label>
                   <Select
                     name="role"
                     onValueChange={(value) => {
                       setInput({ ...input, role: value });
                       handleChange("role", value);
-=======
-                  <Label>Group</Label>
-                  <Select
-                    name="group_id"
-                    value={input.group_id || ""}
-                    onValueChange={(value) => {
-                      setInput({ ...input, group_id: value });
-                      handleChange("group_id", value);
->>>>>>> e60f755 (update files)
                     }}
                   >
                     <SelectTrigger className="col-span-3 rounded-md border">
                       <SelectValue
                         placeholder={
-<<<<<<< HEAD
                           userLevel.find(
                             (level) => level.code === Number(input.role)
                           ).name || "Select Level"
-=======
-                          userGroup.find((team) => team._id === input.group_id)
-                            ?.name || "Select Group"
->>>>>>> e60f755 (update files)
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
-<<<<<<< HEAD
                       {userLevel.map((level) => (
                         <SelectItem key={level.code} value={String(level.code)}>
                           {level.name}
-=======
-                      {userGroup.map((team) => (
-                        <SelectItem key={team._id} value={team._id}>
-                          {team.name}
->>>>>>> e60f755 (update files)
                         </SelectItem>
                       ))}
                     </SelectContent>
