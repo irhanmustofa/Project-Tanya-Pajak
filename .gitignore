@@ -1,5 +1,6 @@
 /API/node_modules
 /APP/node_modules
 /APP/dist
+/APP/src/public
 package-lock.json
 error.log
