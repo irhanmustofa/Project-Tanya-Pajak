@@ -12,16 +12,14 @@ import { useState, useEffect, useTransition } from "react";
 import { useExcelReader } from "@/hooks/use-excel-reader";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
+import { clientImport, clientAll } from "../client-components/ClientService";
 import {
-  useJurnalUmum,
-  useJurnalUmumDispatch,
-} from "../jurnal-umum-components/JurnalUmumProvider";
-import {
-  jurnalUmumGetBuku,
-  jurnalUmumImport,
-} from "../jurnal-umum-components/JurnalUmumService";
+  useClient,
+  useClientDispatch,
+} from "../client-components/ClientProvider";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
-export default function JurnalUmumImportForm({ onClose }) {
+export default function ClientImportForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
   const [disabled, setDisabled] = useState(true);
   const [file, setFile] = useState("");
@@ -30,8 +28,8 @@ export default function JurnalUmumImportForm({ onClose }) {
 
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const dialogDispatch = useDialogDispatch();
-  const { jurnalUmumAction } = useJurnalUmum();
-  const jurnalUmumDispatch = useJurnalUmumDispatch();
+  const { clientAction } = useClient();
+  const clientDispatch = useClientDispatch();
 
   const { content } = useExcelReader(file || undefined);
 
@@ -39,31 +37,40 @@ export default function JurnalUmumImportForm({ onClose }) {
     useExcelWriter(
       [
         [
-          "Tanggal",
-          "Voucher",
-          "Vendor",
-          "Keterangan",
-          "Currency",
-          "Kurs",
-          "Valas",
-          "IDR",
-          "Akun Debet",
-          "Akun Kredit",
+          "Type",
+          "PIC",
+          "Name",
+          "Address",
+          "City",
+          "Company",
+          "Email",
+          "Phone",
+          "Refferal",
         ],
         [
-          "2025-01-20",
-          "BANK-2025-00018",
-          "PT Bank Indonesia",
-          "KR OTOMATIS 2001/AUTCR",
-          "IDR",
-          "1",
-          "0",
-          "10000000",
-          "1001.10",
-          "3000.10",
+          "Individual",
+          "Dinda Putri",
+          "Agus Suratno",
+          "Jl. Raya Cibitung No. 1",
+          "Bekasi",
+          "",
+          "suratno@example.com",
+          "08123456789",
+          "",
+        ],
+        [
+          "Company",
+          "Dinda Putri",
+          "Agus Suratno",
+          "Jl. Raya Cibitung No. 15",
+          "Bekasi",
+          "PT. Suratno Jaya Mandiri",
+          "suratno@jayamadiri.co",
+          "021.12345678",
+          "Agus Suratno",
         ],
       ],
-      "Template Import Jurnal Umum.xlsx"
+      "TemplateImportClients.xlsx"
     );
   };
 
@@ -83,60 +90,65 @@ export default function JurnalUmumImportForm({ onClose }) {
 
   const handleImportData = (event) => {
     event.preventDefault();
-    if (!excelContent || excelContent.length === 0) {
-      dialogDispatch({
-        type: dialogAction.DIALOG_INFO,
-        payload: {
-          isOpen: true,
-          title: "Import Data",
-          message: "Import Data Failed! No data to import.",
-          status: "error",
-        },
-      });
-      return;
-    }
 
     startTrasition(() => {
-      const inputData = excelContent.map((item) => ({
-        tanggal: item["Tanggal"] || null,
-        tahun: new Date(item["Tanggal"]).getFullYear(),
-        masa: new Date(item["Tanggal"]).getMonth() + 1,
-        voucher: item["Voucher"] || item["Voucher"] || null,
-        vendor: item["Vendor"] || item["Vendor"] || null,
-        keterangan: item["Keterangan"] || item["Keterangan"] || null,
-        currency: item["Currency"] || item["Currency"] || null,
-        kurs: item["Kurs"] || item["Kurs"] || null,
-        valas: item["Valas"] || item["Valas"] || null,
-        amount_1: item["IDR"] || item["IDR"] || null,
-        akun_debet_1: item["Akun Debet"] || item["Akun Debet"] || null,
-        akun_credit_1: item["Akun Kredit"] || item["Akun Kredit"] || null,
-      }));
+      const inputData = {};
 
-      jurnalUmumImport(inputData).then((response) => {
+      let factory = {
+        type: 0,
+        pic: "",
+        name: "",
+        address: "",
+        city: "",
+        company: "",
+        email: "",
+        phone: "",
+        refferal: "",
+        admin: "",
+      };
+
+      for (let i = 0; i < excelContent.length; i++) {
+        const inputCompany =
+          excelContent[i]["Type"].toLowerCase() == "company" ? 1 : 0;
+
+        factory = {
+          type: inputCompany || 0,
+          pic: excelContent[i]["PIC"] || "",
+          name: excelContent[i]["Name"] || "",
+          address: excelContent[i]["Address"] || "",
+          city: excelContent[i]["City"] || "",
+          company: excelContent[i]["Company"] || "",
+          email: excelContent[i]["Email"] || "",
+          phone: excelContent[i]["Phone"] || "",
+          refferal: excelContent[i]["Refferal"] || "",
+          admin: useLocalStorage.get("name"),
+        };
+
+        inputData[i] = factory;
+      }
+
+      clientImport(inputData).then((response) => {
         if (response.success) {
           dialogDispatch({
             type: dialogAction.DIALOG_INFO,
             payload: {
               isOpen: true,
-              title: "Import Data",
-              message: "Import Data Successfully",
+              title: "Import Data Client",
+              message: "Import Data Client Successfully",
               status: "success",
             },
           });
 
-          jurnalUmumGetBuku().then((res) => {
-            jurnalUmumDispatch({
-              type: jurnalUmumAction.SUCCESS,
-              payload: res.data,
-            });
+          clientAll().then((res) => {
+            clientDispatch({ type: clientAction.SUCCESS, payload: res.data });
           });
         } else {
           dialogDispatch({
             type: dialogAction.DIALOG_INFO,
             payload: {
               isOpen: true,
-              title: "Import Data",
-              message: "Import Data Failed!\n" + response.message,
+              title: "Import Data Client",
+              message: "Import Data Client Failed!\n" + response.message,
               status: "error",
             },
           });
@@ -157,8 +169,8 @@ export default function JurnalUmumImportForm({ onClose }) {
         }}
       >
         <DialogContent className="sm:max-w-[425px]">
-          <DialogTitle>Import Jurnal Umum</DialogTitle>
-          <DialogDescription>Add some data to the system.</DialogDescription>
+          <DialogTitle>Import New Client</DialogTitle>
+          <DialogDescription>Add some client to the system.</DialogDescription>
           <form onSubmit={handleImportData}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
@@ -179,7 +191,7 @@ export default function JurnalUmumImportForm({ onClose }) {
               >
                 Template Excel
               </Button>
-              <Button type="submit" disabled={disabled} pending={isPending}>
+              <Button type="submit" pending={isPending}>
                 Upload Data
               </Button>
             </div>
