@@ -13,24 +13,26 @@ import {
 
 import {
   LucideFileUp,
+  LucideFileDown,
   LucideFilePen,
-  LucideGroup,
   LucideFileText,
   LucideFileSpreadsheet,
+  LucideSettings,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
+import { useClient } from "./ClientProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
-import { useGroup } from "./GroupProvider";
-import GroupAddForm from "@/app/management/groups/group-pages/GroupAddForm";
-import { statusType } from "@/helpers/variables";
+import { clientType, clientStatus } from "@/helpers/variables";
+import ClientAddForm from "@/app/management/clients/client-pages/ClientAddForm";
+import ClientImportForm from "@/app/management/clients/client-pages/ClientImportForm";
 
-export default function GroupSubject() {
+export default function ClientSubject() {
   const { ExportPDF } = useExportPDF();
-  const { groupState } = useGroup();
   const [openAdd, setOpenAdd] = useState(false);
+  const [openImport, setOpenImport] = useState(false);
   const [isExportExcel, setIsExportExcel] = useState(false);
   const [isExportPdf, setIsExportPdf] = useState(false);
   const [showExportPdf, setShowExportPdf] = useState(false);
@@ -39,19 +41,44 @@ export default function GroupSubject() {
     body: [],
   });
 
+  const { clientState } = useClient();
+
   useEffect(() => {
     if (isExportExcel || isExportPdf) {
-      if (groupState.data.length > 0) {
+      if (clientState.data.length > 0) {
         const exportExcel = [];
         setDataExport({ head: [], body: [] });
 
-        dataExport.head = ["Name", "Status"];
-        exportExcel.push(dataExport.head);
+        dataExport.head = [
+          "Type",
+          "Name",
+          "PIC",
+          "Address",
+          "City",
+          "Company",
+          "Status",
+          "Email",
+          "Phone",
+          "Refferal",
+        ];
 
-        groupState.data.map((item) =>
+        exportExcel.push(dataExport.head);
+        const data = clientState.data.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        data.map((item) =>
           dataExport.body.push([
+            clientType.find((x) => x.code === item.type).name,
             item.name,
-            statusType.find((x) => x.code === item.status).name,
+            item.pic,
+            item.address,
+            item.city,
+            item.company,
+            clientStatus.find((x) => x.code === item.status).name,
+            item.email,
+            item.phone,
+            item.refferal,
           ])
         );
 
@@ -59,7 +86,7 @@ export default function GroupSubject() {
 
         if (isExportExcel) {
           setIsExportExcel(false);
-          useExcelWriter(exportExcel, "Clients Group.xlsx");
+          useExcelWriter(exportExcel, "Data Clients.xlsx");
         } else if (isExportPdf) {
           setDataExport(dataExport);
           setIsExportPdf(false);
@@ -70,29 +97,32 @@ export default function GroupSubject() {
   }, [isExportExcel, isExportPdf]);
 
   return (
-    <div className="flex justify-between mb-4">
+    <div className="flex justify-between mb-2">
       <h2 className="text-2xl font-semibold">
-        Groups <b>Management </b>
+        Clients <b>Management </b>
       </h2>
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
-            <LucideGroup className="h-4 w-4" />
-            <span className="">Group Manager</span>
+            <LucideSettings className="h-4 w-4" />
+            <span className="">Client Manager</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="font-light w-36">
-            Group Manager
+            Client Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setOpenAdd(true)}>
             <LucideFilePen className="mr-2 h-4 w-4" />
             <span>Add New</span>
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpenImport(true)}>
+            <LucideFileDown className="mr-2 h-4 w-4" />
+            <span>Bulk Import</span>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          {groupState.data.length > 0 && (
+          {clientState.data.length > 0 && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <LucideFileUp className="mr-2 h-4 w-4" />
@@ -114,13 +144,20 @@ export default function GroupSubject() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      {openAdd && <GroupAddForm onClose={() => setOpenAdd(false)} />}
+      {openAdd && <ClientAddForm onClose={() => setOpenAdd(false)} />}
+      {openImport && <ClientImportForm onClose={() => setOpenImport(false)} />}
       {showExportPdf && (
         <ExportPDF
-          title="Clients Group"
+          title="Data Clients"
           columns={dataExport.head}
           data={dataExport.body}
-          onClose={() => setShowExportPdf(false)}
+          config={{
+            orientation: "landscape",
+          }}
+          onClose={() => {
+            setDataExport({ head: [], body: [] });
+            setShowExportPdf(false);
+          }}
         />
       )}
     </div>

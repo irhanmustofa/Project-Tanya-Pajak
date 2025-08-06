@@ -7,12 +7,12 @@ export const registerSchema = () => {
     name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     company_name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     company_npwp: {
       type: String,
@@ -23,22 +23,22 @@ export const registerSchema = () => {
       type: String,
       required: true,
       trim: true,
-      unique: false
+      unique: false,
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     token: {
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     status: {
       type: Number,
       required: true,
-      default: 0
+      default: 0,
     },
     expired: {
       type: Date,
