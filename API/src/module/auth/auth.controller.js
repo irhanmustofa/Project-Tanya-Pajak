@@ -6,6 +6,7 @@ import Response, {
 import { createToken } from "../../utils/functions.js";
 import authRepositories from "./auth.repositories.js";
 import { authorizationSchema } from "./auth.schema.js";
+import authRegister from "./controllers/auth.register.js";
 import authenticationProcess from "./controllers/authentication.process.js";
 import forgotPasswordController from "./controllers/forgot.password.js";
 import setLogin from "./controllers/set.login.js";
@@ -121,6 +122,7 @@ const resetPassword = async (req, res) => {
 const AuthController = {
   login,
   logout,
+  register,
   authentication,
   authorization,
   forgot,
