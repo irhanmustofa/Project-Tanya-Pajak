@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createContext, useContext, useEffect, useState } from "react";
 import { userClientAll } from "@/layouts/UserClientService";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -54,6 +55,13 @@ export const LayoutProvider = ({ children }) => {
     >
       {children}
     </layoutsContext.Provider>
+=======
+import { layoutsContext } from "@/layouts/LayoutContext";
+
+export function LayoutProvider({ children }) {
+  return (
+    <layoutsContext.Provider value={{}}>{children}</layoutsContext.Provider>
+>>>>>>> fd410b4 (update-register)
   );
 };
 
