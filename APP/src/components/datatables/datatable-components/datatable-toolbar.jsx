@@ -23,10 +23,11 @@ export function DatatableToolbar({ table, filterFields }) {
   useEffect(() => {
     if (table.getFilteredSelectedRowModel().rows.length > 0) {
       setIdSelector(
-        table.getFilteredSelectedRowModel().rows.map((row) => row.original._id)
+        table.getFilteredSelectedRowModel().rows.map((row) => row.original.id)
       );
     }
   }, [table.getFilteredSelectedRowModel().rows.length]);
+
   const handleDelete = () => {
     dispatch({
       type: dialogAction.DIALOG_DELETE_SOME,
@@ -67,7 +68,7 @@ export function DatatableToolbar({ table, filterFields }) {
           className="w-[150px] lg:w-[250px]"
         />
 
-        {Object.keys(filterColumn || {}).map((columnKey) => {
+        {Object.keys(filterColumn).map((columnKey) => {
           const columnInstance = table.getColumn(columnKey);
 
           return (
@@ -93,7 +94,7 @@ export function DatatableToolbar({ table, filterFields }) {
           </Button>
         )}
 
-        {filterDate?.active && (
+        {filterDate.active && (
           <DatatableDatePicker
             date={dateRange}
             onDateSelect={handleDateSelect}

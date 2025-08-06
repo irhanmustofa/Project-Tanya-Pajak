@@ -45,37 +45,6 @@ export const InputHorizontal = (props) => {
     </>
   );
 };
-export const InputHorizontalDate = (props) => {
-  const { title, name, error = "", onChange, ...rest } = props;
-
-  return (
-    <>
-      <div className="grid grid-cols-4 gap-2">
-        <div className="col-span-1 flex items-center">
-          <Label htmlFor={name}>{title}</Label>
-        </div>
-        <div className="col-span-3">
-          <Input
-            id={name}
-            name={name}
-            type="date"
-            {...rest}
-            onChange={onChange}
-            className="w-full 
-              [&::-webkit-calendar-picker-indicator]:opacity-100 
-              [&::-webkit-calendar-picker-indicator]:cursor-pointer
-              [&::-webkit-calendar-picker-indicator]:w-5
-              [&::-webkit-calendar-picker-indicator]:h-5
-              [&::-webkit-calendar-picker-indicator]:bg-gray-500
-              [&::-webkit-calendar-picker-indicator]:hover:bg-gray-700
-              dark:[&::-webkit-calendar-picker-indicator]:filter-invert"
-          />
-        </div>
-      </div>
-      {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
-    </>
-  );
-};
 
 export const InputFloating = (props) => {
   const { title, name, type, placeholder, error = "" } = props;

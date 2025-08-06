@@ -14,7 +14,7 @@ import Spinner from "@/components/custom/spinner";
 export default function MainPage({ children }) {
   return (
     <>
-      {/* <Middleware /> */}
+      <Middleware />
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <LayoutProvider>
           <SidebarProvider>

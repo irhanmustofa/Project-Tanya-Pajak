@@ -12,10 +12,12 @@ import { useValidateInput } from "@/hooks/use-validate-input";
 import { useTransition, useState } from "react";
 import { login as loginService } from "@/app/auth/auth-service";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { EyeClosed, EyeIcon } from "lucide-react";
 
 const InputLogin = ({ setSuccess, setOtp }) => {
   const [isPending, startTrasition] = useTransition();
   const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { errors, valid, handleChange } = useValidateInput({
     schema: {
@@ -27,6 +29,7 @@ const InputLogin = ({ setSuccess, setOtp }) => {
   const handleLogin = async (formData) => {
     startTrasition(async () => {
       const login = await loginService(formData);
+
       if (!login.success) {
         setSuccess({
           success: false,
@@ -36,16 +39,17 @@ const InputLogin = ({ setSuccess, setOtp }) => {
               : login.message,
         });
       } else {
+        useLocalStorage.set("token", login.token);
         useLocalStorage.set("email", formData.get("email"));
-        useLocalStorage.set("groupId", login.data.group_id);
-        useLocalStorage.set("clientId", login.data.client_id);
-        useLocalStorage.set("device", login.device);
+        useLocalStorage.set("name", login.name);
+        useLocalStorage.set("role", login.role);
         useLocalStorage.set("sb", "true");
         useLocalStorage.set(
           "lastAccess",
           new Date(new Date().getTime() + 30 * 60 * 1000).toLocaleString()
         );
 
+        setOtp(login.otp);
         setSuccess({ success: true, message: login.message });
       }
     });
@@ -74,14 +78,23 @@ const InputLogin = ({ setSuccess, setOtp }) => {
                   }}
                   error={errors.email}
                 />
-                <InputVertical
-                  title="Password"
-                  name="password"
-                  type="password"
-                  placeholder="********"
-                  onChange={(e) => handleChange("password", e.target.value)}
-                  error={errors.password}
-                />
+                <div className="relative">
+                  <InputVertical
+                    title="Password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="********"
+                    onChange={(e) => handleChange("password", e.target.value)}
+                    error={errors.password}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-8 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? <EyeClosed /> : <EyeIcon />}
+                  </button>
+                </div>
                 <Button
                   pending={isPending}
                   type="submit"
@@ -95,6 +108,12 @@ const InputLogin = ({ setSuccess, setOtp }) => {
                   Forgot your password?{" "}
                   <Link to="/forgot" className="underline underline-offset-4">
                     Reset Password
+                  </Link>
+                </div>
+                <div className="text-center text-sm">
+                  Don't have an account?{" "}
+                  <Link to="/register" className="underline underline-offset-4">
+                    Register
                   </Link>
                 </div>
               </div>

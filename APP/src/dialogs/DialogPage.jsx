@@ -22,7 +22,6 @@ import HttpRequest from "@/api/http-request";
 import { authEndpoint } from "@/app/auth/auth-endpoint";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useState, useTransition } from "react";
-import { useAuth } from "@/app/auth/AuthContext";
 
 export const DialogInfoPage = ({ onClose }) => {
   const dispatch = useDialogDispatch();
@@ -171,11 +170,13 @@ export const DialogDeleteSomePage = ({ onClose }) => {
 
   const handleDeleteSomeData = async () => {
     setIsPending(true);
+
     try {
       const response = await HttpRequest.method("POST")
         .url(dialogState.url)
         .body(dialogState.data)
         .send();
+
       if (response.success) {
         dispatch({
           type: dialogAction.DIALOG_INFO,
@@ -267,7 +268,6 @@ export const DialogLogoutPage = () => {
   const { dialogState, dialogAction } = useDialog();
   const dispatch = useDialogDispatch();
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
 
   if (dialogState.dialog !== "logout") return null;
 
@@ -275,34 +275,14 @@ export const DialogLogoutPage = () => {
     dispatch({ type: dialogAction.RESET });
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      const email = useLocalStorage.get("email");
-      const device = useLocalStorage.get("device");
-
-      const response = await HttpRequest.method("POST")
-        .url(authEndpoint.logout)
-        .headers({
-          email: email,
-          device: device,
-        })
-        .send();
-
-      if (response?.success) {
-        useLocalStorage.remove("token");
-        useLocalStorage.remove("email");
-        useLocalStorage.remove("device");
-        setAuth({
-          loading: false,
-          isAuthenticated: false,
-          token: null,
-          user: null,
-        });
+      (async () => {
+        await HttpRequest.method("GET").url(authEndpoint.logout).send();
+        useLocalStorage.reset();
         dispatch({ type: dialogAction.RESET });
-        navigate("/", { replace: true });
-      } else {
-        console.error("Logout gagal:", response.message);
-      }
+        navigate("/");
+      })();
     } catch (error) {
       console.error("Error logging out:", error);
     }

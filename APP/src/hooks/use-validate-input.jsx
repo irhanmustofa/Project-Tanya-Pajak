@@ -45,22 +45,6 @@ export function useValidateInput({ schema }) {
       );
     }
 
-    const number_min = rules.match(/number_min:(\d+)/)?.[1];
-    if (number_min) {
-      fieldSchema = fieldSchema.refine(
-        (value) => Number(value) >= Number(number_min),
-        `${key} must be at least ${number_min}`
-      );
-    }
-
-    const number_max = rules.match(/number_max:(\d+)/)?.[1];
-    if (number_max) {
-      fieldSchema = fieldSchema.refine(
-        (value) => Number(value) <= Number(number_max),
-        `${key} must be at most ${number_max}`
-      );
-    }
-
     const mime = rules.match(/mime:([^|]+)/)?.[1];
     if (mime) {
       const mimeTypes = mime.split("|");

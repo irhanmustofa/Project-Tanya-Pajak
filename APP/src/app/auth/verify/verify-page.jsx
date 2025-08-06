@@ -1,14 +1,15 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { dialogContext } from "@/dialogs/DialogContext";
+import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { verify } from "@/app/auth/auth-service";
 
 export default function VerifyPage() {
+  console.log("VerifyPage rendered");
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
   const onCloseHandler = () => {
-    success === true ? navigate("/") : navigate("/register");
+    success === true ? navigate("/register") : navigate("/");
   };
 
   return (
@@ -19,52 +20,74 @@ export default function VerifyPage() {
 }
 
 export const DialogVerify = ({ setSuccess, onClose }) => {
+  const hasVerified = useRef(false);
   const { token } = useParams();
-  const { DialogInfo } = useContext(dialogContext);
-  const [flashState, setFlashState] = useState({});
+  const dialogDispatch = useDialogDispatch();
+  const { dialogAction, dialogState, DialogInfo } = useDialog();
 
   useEffect(() => {
-    try {
-      (async () => {
+    if (hasVerified.current) return;
+
+    const verifyToken = async () => {
+      console.log("Starting verification for token:", token);
+
+      if (!token) {
+        setSuccess(false);
+        dialogDispatch({
+          type: dialogAction.DIALOG_INFO,
+          payload: {
+            isOpen: true,
+            message: "Invalid verification link.",
+            title: "Error",
+            status: "error",
+          },
+        });
+        return;
+      }
+
+      try {
         const response = await verify(token);
+        console.log("Verify response:", response);
+
         if (response.success) {
           setSuccess(true);
-          setFlashState({
-            type: "success",
-            title: "Success",
-            message: "Your account has been verified.",
+          dialogDispatch({
+            type: dialogAction.DIALOG_INFO,
+            payload: {
+              isOpen: true,
+              message: "Your account has been verified.",
+              title: "Success",
+              status: "success",
+            },
           });
-        }
 
-        if (!response.success) {
+          setTimeout(() => {
+            onClose();
+          }, 3000);
+        } else {
           setSuccess(false);
-          setFlashState({
-            type: "error",
-            title: "Error",
-            message: response.message || "Failed to verify account.",
+          dialogDispatch({
+            type: dialogAction.DIALOG_INFO,
+            payload: {
+              isOpen: true,
+              message: response.message || "Verification failed.",
+              title: "Error",
+              status: "error",
+            },
           });
+          setTimeout(() => {
+            onClose();
+          }, 3000);
         }
-      })();
-    } catch (error) {
-      setFlashState({
-        type: "error",
-        title: "Error",
-        message: error.message || "Something went wrong.",
-      });
-    }
-  }, [token, setSuccess]);
+      } catch (error) {
+        console.error("Verification error:", error);
+        setSuccess(false);
+      }
+    };
 
-  return (
-    <>
-      {flashState.message && (
-        <DialogInfo
-          show={true}
-          title={flashState.title}
-          message={flashState.message}
-          status={flashState.type}
-          onClose={onClose}
-        />
-      )}
-    </>
-  );
+    verifyToken();
+    hasVerified.current = true;
+  }, [token, setSuccess, dialogDispatch, dialogAction]);
+
+  return <>{dialogState.isOpen && <DialogInfo />}</>;
 };

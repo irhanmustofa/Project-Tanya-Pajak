@@ -1,24 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   AudioWaveform,
   Command,
   GalleryVerticalEnd,
   FolderCogIcon,
+  ShoppingBagIcon,
   WalletIcon,
   LucideUser2,
-  BookDashed,
-  LucideFileChartColumn,
-  Folders,
-  FolderSync,
+  LucideCommand,
+  LucidePresentation,
+  LucideScale,
 } from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import {
-  masterAsset,
-  masterBuku,
-  masterProses,
-  masterReport,
-} from "@/helpers/variables";
-import { layoutsContext } from "@/layouts/LayoutContext";
 
 export const sidebarData = () => {
   const avatarImage = () => {
@@ -40,219 +33,160 @@ export const sidebarData = () => {
     );
   };
 
-  // users
   const [userState, setUserState] = useState({
     name: useLocalStorage.get("name"),
     email: useLocalStorage.get("email"),
+    role: useLocalStorage.get("role") || 7,
     avatar: avatarImage(),
   });
 
   const users = userState;
+  const setUser = (user) => setUserState({ ...userState, ...user });
 
-  const setUser = (user) => {
-    setUserState({
-      ...userState,
-      ...user,
-    });
-  };
-
-  // clients
-  const { clients } = useContext(layoutsContext);
-  const [clientsState, setClientsState] = useState([]);
-
-  useEffect(() => {
-    if (clients && clients.length > 0) {
-      setClientsState(
-        clients.map((client) => ({
-          name: client.company_name,
-          _id: client._id,
-          avatar: avatarImage(),
-          logo: client.logo,
-        }))
-      );
-    }
-  }, [clients]);
-
-  const clientList = clientsState;
-  const setClients = (clientList) => {
-    setClientsState(clientList);
-  };
-
-  // teams
   const [teamState, setTeamState] = useState([
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
+    { name: "Acme Inc", logo: GalleryVerticalEnd, plan: "Enterprise" },
+    { name: "Acme Corp.", logo: AudioWaveform, plan: "Startup" },
+    { name: "Evil Corp.", logo: Command, plan: "Free" },
   ]);
 
   const teams = teamState;
   const setTeam = (teams) => setTeamState(teams);
 
   const path = window.location.pathname;
-  const is_administration =
-    path === "/user" || path === "/group" || path === "/client";
-  const is_assets = path === "/asset" || path === "/asset-group";
-  const is_jurnals = path.startsWith("/buku/");
-  const is_reports = path.startsWith("/report/") || path === "/report";
-  const is_proses = path.startsWith("/proses/") || path === "/proses";
-  // groups
-  const settings =
-    path === "/perusahaan" ||
-    path === "/view-profile" ||
-    path === "/direktur-pengurus" ||
-    path === "/setting" ||
-    path === "/periode-laporan" ||
-    path === "/tarif-cit" ||
-    path === "/legalitas";
+  const is_administration = path === "/user" || path === "/client-group";
+  const is_marketing =
+    path === "/client" ||
+    path === "/service" ||
+    path === "/quotation" ||
+    path === "/contract";
+  const is_finance =
+    path === "/invoice" || path === "/payment" || path === "/outstanding";
+  const is_hr = path === "/incentive" || path === "/member";
+  const is_spv =
+    path === "/project" || path === "/team" || path === "/project-reports";
+  const is_project = path === "/projects";
+  const is_legal = path === "/legal-order" || path === "/legal-report";
 
-  const [is_settings, setIsSettings] = useState([
-    {
-      title: "Profile",
-      url: "#",
-      icon: LucideUser2,
-      isActive: settings,
-      items: [
-        {
-          title: "View Profile",
-          url: "/perusahaan",
-          icon: WalletIcon,
-          subMenus: [
-            {
-              title: "Print Profile",
-              url: "#",
-              icon: WalletIcon,
-            },
-          ],
-        },
-        {
-          title: "Periode Laporan",
-          url: "/periode-laporan",
-          icon: WalletIcon,
-        },
-      ],
-    },
-  ]);
-
-  const settings_coa =
-    path === "/coa/master" || path === "/coa/head" || path === "/coa/group";
-
-  const [is_settings_coa, setIsSettingsCoa] = useState([
-    {
-      title: "COA",
-      url: "#",
-      icon: LucideUser2,
-      isActive: settings_coa,
-      items: [
-        {
-          title: "Master COA",
-          url: "/coa/master",
-          icon: WalletIcon,
-        },
-        {
-          title: "Group",
-          url: "/coa/group",
-          icon: WalletIcon,
-        },
-        {
-          title: "Head",
-          url: "/coa/head",
-          icon: WalletIcon,
-        },
-      ],
-    },
-  ]);
-
-  // sidebar
-  const [sidebarState, setSidebarState] = useState([
+  const fullSidebar = [
     {
       title: "Administration",
       url: "#",
       icon: FolderCogIcon,
       isActive: is_administration,
       items: [
-        {
-          title: "Master Users",
-          url: "/user",
-        },
-        {
-          title: "Master Groups",
-          url: "/group",
-        },
-        {
-          title: "Master Clients",
-          url: "/client",
-        },
+        { title: "Master Users", url: "/user" },
+        { title: "Master Groups", url: "/client-group" },
       ],
     },
     {
-      title: "Assets",
+      title: "Marketing",
       url: "#",
-      icon: Folders,
-      isActive: is_assets,
-      items: masterAsset.map((aset) => ({
-        title: aset.name,
-        url: `/${aset.url}`,
-      })),
+      icon: ShoppingBagIcon,
+      isActive: is_marketing,
+      items: [
+        { title: "Clients", url: "/client" },
+        { title: "Services", url: "/service" },
+        { title: "Quotations", url: "/quotation" },
+        { title: "Contracts", url: "/contract" },
+      ],
     },
     {
-      title: "Buku-buku",
+      title: "Legal",
       url: "#",
-      icon: BookDashed,
-      isActive: is_jurnals,
-      items: masterBuku.map((buku) => ({
-        title: buku.name,
-        url: `/${buku.url}`,
-      })),
+      icon: LucideScale,
+      isActive: is_legal,
+      items: [
+        { title: "Order", url: "/legal-order" },
+        { title: "Report", url: "/legal-report" },
+      ],
     },
     {
-      title: "Reports",
+      title: "Finance",
       url: "#",
-      icon: LucideFileChartColumn,
-      isActive: is_reports,
-      items: masterReport.map((report) => ({
-        title: report.name,
-        url: `#`,
-      })),
+      icon: WalletIcon,
+      isActive: is_finance,
+      items: [
+        { title: "Invoices", url: "/invoice" },
+        { title: "Payments", url: "/payment" },
+        { title: "Outstanding", url: "/outstanding" },
+      ],
     },
     {
-      title: "Proses",
+      title: "Supervisor",
       url: "#",
-      icon: FolderSync,
-      isActive: is_proses,
-      items: masterProses.map((proses) => ({
-        title: proses.name,
-        url: `#`,
-      })),
+      icon: LucideUser2,
+      isActive: is_spv,
+      items: [
+        { title: "Team", url: "/team" },
+        { title: "Projects", url: "/project" },
+        { title: "Reports", url: "/project-reports" },
+      ],
     },
-  ]);
+    {
+      title: "Human Resources",
+      url: "#",
+      icon: LucideCommand,
+      isActive: is_hr,
+      items: [
+        { title: "Members", url: "/member" },
+        { title: "Incentives", url: "/incentive" },
+      ],
+    },
+    {
+      title: "Projects",
+      url: "#",
+      icon: LucidePresentation,
+      isActive: is_project,
+      items: [{ title: "Project List", url: "/projects" }],
+    },
+  ];
+
+  const roleAccess = {
+    0: {
+      Administration: ["Master Users", "Master Groups"],
+      Marketing: ["Clients", "Services", "Quotations", "Contracts"],
+      Legal: ["Order", "Payment", "Report"],
+      Finance: ["Invoices", "Payments", "Outstanding"],
+      Supervisor: ["Team", "Projects", "Reports"],
+      "Human Resources": ["Members", "Incentives"],
+      Projects: ["Project List"],
+    },
+    1: {
+      Administration: ["Master Users", "Master Groups"],
+      Marketing: ["Clients"],
+    },
+    2: {
+      Finance: ["Invoices", "Payments", "Outstanding"],
+      Marketing: ["Clients", "Services"],
+    },
+    3: { Marketing: ["Clients", "Services", "Quotations", "Contracts"] },
+    4: {
+      Supervisor: ["Team", "Projects", "Reports"],
+      Projects: ["Project List"],
+    },
+    5: { Supervisor: ["Team", "Reports"], Projects: ["Project List"] },
+    6: { Supervisor: ["Team"] },
+    7: { "Human Resources": ["Members", "Incentives"] },
+    8: { Legal: ["Order", "Payment", "Report"] },
+  };
+
+  const filteredSidebar = fullSidebar
+    .map((menu) => {
+      const allowedMenu = roleAccess[users.role]?.[menu.title];
+      if (!allowedMenu) return null;
+
+      const filteredItems = menu.items.filter((item) =>
+        allowedMenu.includes(item.title)
+      );
+
+      return { ...menu, items: filteredItems };
+    })
+    .filter((menu) => menu && menu.items.length > 0);
+
+  const [sidebarState, setSidebarState] = useState(filteredSidebar);
 
   const sidebars = sidebarState;
   const setSidebar = (sidebar) => setSidebarState(sidebar);
 
-  return {
-    users,
-    setUser,
-    teams,
-    setTeam,
-    sidebars,
-    setSidebar,
-    is_settings,
-    setIsSettings,
-    is_settings_coa,
-    setIsSettingsCoa,
-    clientList,
-    setClients,
-  };
+  return { users, setUser, teams, setTeam, sidebars, setSidebar };
 };

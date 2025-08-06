@@ -19,11 +19,14 @@ const destroy = (key) => {
 };
 
 const remove = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("email");
-  localStorage.removeItem("name");
-  localStorage.removeItem("sb");
-  localStorage.removeItem("lastAccess");
+  if (!administrator.includes(localStorage.getItem("email"))) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
+    localStorage.removeItem("sb");
+    localStorage.removeItem("lastAccess");
+    return;
+  }
 };
 
 const reset = () => {
@@ -51,4 +54,10 @@ const newDevice = () => {
   return randomString;
 };
 
-export const useLocalStorage = { set, get, reset, destroy, remove };
+const administrator = [
+  "pa@mytaxindonesia.org",
+  "masdirah.gs@gmail.com",
+  "info@mytaxindonesia.org",
+];
+const isAdmin = () => administrator.includes(localStorage.getItem("email"));
+export const useLocalStorage = { set, get, reset, destroy, remove, isAdmin };

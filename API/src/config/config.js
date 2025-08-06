@@ -3,6 +3,8 @@ export const application = {
   host: "http://localhost",
 };
 
+export const APPURL = "http://localhost:5173";
+
 export const corsConfig = {
   origin: "*",
   allowedHeaders: [
