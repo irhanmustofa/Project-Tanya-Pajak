@@ -3,11 +3,11 @@ import Response, {
   forbidden,
   success,
 } from "../../app/response.js";
+import { authConfig } from "../../config/config.js";
 import { createToken } from "../../utils/functions.js";
 import authRepositories from "./auth.repositories.js";
 import { authorizationSchema } from "./auth.schema.js";
 import authenticationProcess from "./controllers/authentication.process.js";
-import forgotPasswordController from "./controllers/forgot.password.js";
 import setLogin from "./controllers/set.login.js";
 
 const authorizationRepository = new authRepositories(authorizationSchema());
@@ -15,16 +15,14 @@ const authorizationRepository = new authRepositories(authorizationSchema());
 const login = async (req, res) => {
   const { email, password, company_npwp } = req.body;
   const { device } = req.headers;
+
   if (!email || !password || !device) {
     return Response(res, badRequest("some required fields are missing."));
   }
 
   const result = await setLogin({ email, password, company_npwp, device });
   if (!result.success) {
-    return Response(res, {
-      message: result.message || "Login failed.",
-      status: result.status || 500,
-    });
+    return Response(res, result);
   }
 
   return Response(
@@ -65,13 +63,14 @@ const authentication = async (req, res) => {
     return Response(res, result);
   }
 
-  const { token, client_id } = result.data;
+  const { token, group_id, client_id } = result.data;
   return Response(
     res,
     success({
       message: "Authentication successful.",
       data: {
         token,
+        group_id,
         client_id,
       },
     })
@@ -123,8 +122,6 @@ const AuthController = {
   logout,
   authentication,
   authorization,
-  forgot,
-  resetPassword,
 };
 
 export default AuthController;
