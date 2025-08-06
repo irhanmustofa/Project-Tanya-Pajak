@@ -1,6 +1,9 @@
 import HttpRequest from "@/api/http-request";
 import { authEndpoint } from "@/app/auth/auth-endpoint";
+<<<<<<< HEAD
 import { useLocalStorage } from "@/hooks/use-local-storage";
+=======
+>>>>>>> fd410b4 (update-register)
 
 export const register = async (data = {}) => {
   const name = data.name;
@@ -46,6 +49,7 @@ export const login = async (formData) => {
   } catch (error) {
     console.error(error);
   }
+<<<<<<< HEAD
 };
 
 export const verifyOtp = async (otp) => {
@@ -73,6 +77,15 @@ export const resetPassword = async ({ data, token }) => {
   console.log("Resetting password with token:", token);
   console.log("Password:", password);
   console.log("Confirm Password:", confirmPassword);
+=======
+};
+
+export const reset = async (formData) => {
+  const password = formData.get("password");
+  const pathname = window.location.pathname;
+  const token = pathname.split("/")[2];
+
+>>>>>>> fd410b4 (update-register)
   try {
     const request = await HttpRequest.method("PUT")
       .url(authEndpoint.setReset(token))

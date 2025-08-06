@@ -26,7 +26,7 @@ import {
   useUserDispatch,
 } from "@/app/management/users/user-components/UserProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-// import { roles } from "@/helpers/variables";
+import { userLevel } from "@/helpers/variables";
 
 export default function UserAddForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -53,8 +53,8 @@ export default function UserAddForm({ onClose }) {
       formData.append("name", event.target.name.value);
       formData.append("email", event.target.email.value);
       formData.append("password", event.target.password.value);
-      formData.append("group_id", event.target.group_id.value);
-      // formData.append("role", event.target.role.value);
+      formData.append("role", event.target.role.value);
+      formData.append("team", event.target.team.value);
 
       await userCreate(formData).then((response) => {
         if (response.success) {
@@ -129,25 +129,25 @@ export default function UserAddForm({ onClose }) {
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label>Group</Label>
                 <Select
-                  name="group_id"
+                  name="team"
                   onValueChange={(value) => {
-                    handleChange("group_id", Number(value));
+                    handleChange("team", Number(value));
                   }}
                 >
                   <SelectTrigger className="col-span-3 rounded-md border">
                     <SelectValue placeholder="Select Group" />
                   </SelectTrigger>
                   <SelectContent>
-                    {userGroup.map((group) => (
-                      <SelectItem value={String(group._id)} key={group._id}>
-                        {group.name}
+                    {userGroup.map((team) => (
+                      <SelectItem value={String(team.id)} key={team.id}>
+                        {team.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              {/* <div className="grid grid-cols-4 items-center gap-4">
-                <Label>Role</Label>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label>Level</Label>
                 <Select
                   name="role"
                   onValueChange={(value) => {
@@ -155,17 +155,17 @@ export default function UserAddForm({ onClose }) {
                   }}
                 >
                   <SelectTrigger className="col-span-3 rounded-md border">
-                    <SelectValue placeholder="Select Role" />
+                    <SelectValue placeholder="Select Level" />
                   </SelectTrigger>
                   <SelectContent>
-                    {roles.map((role) => (
-                      <SelectItem value={String(role.code)} key={role.code}>
-                        {role.name}
+                    {userLevel.map((level) => (
+                      <SelectItem value={String(level.code)} key={level.code}>
+                        {level.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-              </div> */}
+              </div>
             </div>
             <DialogFooter>
               <Button type="submit" disabled={!valid} pending={isPending}>

@@ -14,11 +14,14 @@ export const registerSchema = () => {
       required: true,
       trim: true,
     },
+<<<<<<< HEAD
     company_name: {
       type: String,
       required: true,
       trim: true
     },
+=======
+>>>>>>> fd410b4 (update-register)
     email: {
       type: String,
       required: true,
