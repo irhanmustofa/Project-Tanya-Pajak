@@ -48,8 +48,13 @@ export const masterClientSchema = () => {
     status: { required: true, type: Number, default: 1 },
   };
 
+  const options = {
+    _id: false,
+    timestamps: true,
+  };
   return createConnection({
     collection,
+    options,
     schema,
     options,
   });

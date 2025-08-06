@@ -11,7 +11,6 @@ import VerifyPage from "@/app/auth/verify/verify-page";
 import Dashboard from "@/app/dashboard/Dashboard";
 import Users from "@/app/management/users/Users";
 import DialogProvider from "@/dialogs/DialogProvider";
-
 import { PendingRequestProvider } from "./hooks/use-pending-request";
 import RegisterPage from "./app/auth/register/register-page";
 
