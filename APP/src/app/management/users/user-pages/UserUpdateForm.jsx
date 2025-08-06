@@ -24,7 +24,7 @@ import { userUpdate } from "../user-components/UserService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { InputHorizontal } from "@/components/custom/input-custom";
 import { useValidateInput } from "@/hooks/use-validate-input";
-import { statusType } from "@/helpers/variables";
+import { userLevel, statusType } from "@/helpers/variables";
 import { userAll } from "../user-components/UserService";
 
 export default function UserUpdateForm({ id, onClose }) {
@@ -40,30 +40,37 @@ export default function UserUpdateForm({ id, onClose }) {
   const { errors, handleChange } = useValidateInput({
     schema: {
       name: "required|string|min:3",
+      email: "required|email",
       password: "required|password",
       role: "required|number",
+      team: "required|number",
       status: "required|number",
     },
   });
 
   useEffect(() => {
-    const user = userState.data.find((item) => item._id === id);
+    const user = userState.data.find((item) => item.id === id);
     setInput({
       name: user.name,
-      group_id: user.group_id,
+      email: user.email,
+      role: user.role,
+      team: user.team,
       status: user.status,
     });
 
     setIsOpen(true);
   }, [id, userState.data]);
+
   const inputHandler = (event) => {
     event.preventDefault();
 
     startTransition(async () => {
       const formData = new FormData();
       formData.append("name", input.name);
+      formData.append("email", input.email);
       formData.append("status", input.status);
-      formData.append("group_id", input.group_id);
+      formData.append("team", input.team);
+      formData.append("role", input.role);
 
       if (input.password) {
         formData.append("password", input.password);
@@ -122,7 +129,7 @@ export default function UserUpdateForm({ id, onClose }) {
           <DialogTrigger asChild>
             <Button variant="outline">
               <LucideUserPlus2 className="mr-2 h-4 w-4" />
-              Update User {input.name || ""}
+              Update User
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
@@ -145,6 +152,18 @@ export default function UserUpdateForm({ id, onClose }) {
                 />
 
                 <InputHorizontal
+                  title="Email"
+                  type="email"
+                  name="email"
+                  value={input.email}
+                  onChange={(e) => {
+                    setInput({ ...input, email: e.target.value });
+                    handleChange("email", e.target.value);
+                  }}
+                  error={errors.email}
+                />
+
+                <InputHorizontal
                   title="Password"
                   type="password"
                   name="password"
@@ -157,25 +176,51 @@ export default function UserUpdateForm({ id, onClose }) {
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label>Group</Label>
                   <Select
-                    name="group_id"
-                    value={input.group_id || ""}
+                    name="team"
                     onValueChange={(value) => {
-                      setInput({ ...input, group_id: value });
-                      handleChange("group_id", value);
+                      setInput({ ...input, team: value });
+                      handleChange("team", value);
                     }}
                   >
                     <SelectTrigger className="col-span-3 rounded-md border">
                       <SelectValue
                         placeholder={
-                          userGroup.find((team) => team._id === input.group_id)
+                          userGroup.find((team) => team.id === input.team)
                             ?.name || "Select Group"
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
                       {userGroup.map((team) => (
-                        <SelectItem key={team._id} value={team._id}>
+                        <SelectItem key={team.id} value={team.id}>
                           {team.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label>Level</Label>
+                  <Select
+                    name="role"
+                    onValueChange={(value) => {
+                      setInput({ ...input, role: value });
+                      handleChange("role", value);
+                    }}
+                  >
+                    <SelectTrigger className="col-span-3 rounded-md border">
+                      <SelectValue
+                        placeholder={
+                          userLevel.find(
+                            (level) => level.code === Number(input.role)
+                          ).name || "Select Level"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {userLevel.map((level) => (
+                        <SelectItem key={level.code} value={String(level.code)}>
+                          {level.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
