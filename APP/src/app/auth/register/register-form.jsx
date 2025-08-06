@@ -7,6 +7,7 @@ import { dialogContext } from "@/dialogs/DialogContext";
 import { useValidateInput } from "@/hooks/use-validate-input";
 import svgImage from "@/public/register.svg";
 import { Link, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { EyeClosed, EyeIcon, RefreshCcw } from "lucide-react";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 
@@ -19,13 +20,20 @@ const generateCaptcha = () => {
   }
   return result;
 };
+=======
+import { EyeClosed, EyeIcon } from "lucide-react";
+import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
+>>>>>>> 2cd1356 (update-register)
 
 export function RegisterForm() {
   const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
+<<<<<<< HEAD
   const [captcha, setCaptcha] = useState(generateCaptcha());
+=======
+>>>>>>> 2cd1356 (update-register)
 
   const [register, setRegister] = useState({
     name: "",
@@ -138,8 +146,11 @@ export function RegisterForm() {
             valid={valid}
             errors={errors}
             handleChange={handleChange}
+<<<<<<< HEAD
             refreshCaptcha={refreshCaptcha}
             captcha={captcha}
+=======
+>>>>>>> 2cd1356 (update-register)
           />
         </BodyContent>
       </Card>
@@ -188,8 +199,11 @@ const FormInput = ({
   errors,
   valid,
   handleChange,
+<<<<<<< HEAD
   refreshCaptcha,
   captcha,
+=======
+>>>>>>> 2cd1356 (update-register)
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -254,6 +268,7 @@ const FormInput = ({
               {showPassword ? <EyeClosed /> : <EyeIcon />}
             </button>
           </div>
+<<<<<<< HEAD
 
           <div className="space-y-2 flex flex-col">
             <label className="text-sm font-medium">CAPTCHA</label>
@@ -296,6 +311,8 @@ const FormInput = ({
             />
           </div>
 
+=======
+>>>>>>> 2cd1356 (update-register)
           <Button
             type="submit"
             className="w-full mt-4"
