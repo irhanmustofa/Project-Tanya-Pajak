@@ -1,20 +1,21 @@
 import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
 
-export const usersEndpoint = {
-  all: `${base_url}/user`,
-  create: `${base_url}/user`,
-  deleteSome: `${base_url}/user/delete`,
-  get: (id) => `${base_url}/user/${id}`,
-  update: (id) => `${base_url}/user/${id}`,
-  delete: (id) => `${base_url}/user/${id}`,
-  email: (email) => `${base_url}/user/email/${email}`,
+export const serviceEndpoint = {
+  all: `${base_url}/service`,
+  create: `${base_url}/service`,
+  import: `${base_url}/service/import`,
+  status: `${base_url}/service/status`,
+  deleteSome: `${base_url}/service/delete`,
+  get: (id) => `${base_url}/service/${id}`,
+  update: (id) => `${base_url}/service/${id}`,
+  delete: (id) => `${base_url}/service/${id}`,
 };
 
-export const userAll = async () => {
+export const serviceAll = async () => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(usersEndpoint.all)
+      .url(serviceEndpoint.all)
       .send();
 
     return request;
@@ -26,10 +27,10 @@ export const userAll = async () => {
   }
 };
 
-export const userFirst = async (id) => {
+export const serviceFirst = async (id) => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(usersEndpoint.get(id))
+      .url(serviceEndpoint.get(id))
       .send();
 
     return request;
@@ -41,25 +42,10 @@ export const userFirst = async (id) => {
   }
 };
 
-export const userByEmail = async (email) => {
-  try {
-    const request = await HttpRequest.method("GET")
-      .url(usersEndpoint.email(email))
-      .send();
-
-    return request;
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message,
-    };
-  }
-};
-
-export const userCreate = async (data) => {
+export const serviceCreate = async (data) => {
   try {
     const request = await HttpRequest.method("POST")
-      .url(usersEndpoint.create)
+      .url(serviceEndpoint.create)
       .body(data)
       .send();
 
@@ -72,10 +58,26 @@ export const userCreate = async (data) => {
   }
 };
 
-export const userUpdate = async (id, data) => {
+export const serviceImport = async (data) => {
+  try {
+    const request = await HttpRequest.method("POST")
+      .url(serviceEndpoint.import)
+      .body(data)
+      .send();
+
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const serviceUpdate = async (id, data) => {
   try {
     const request = await HttpRequest.method("PUT")
-      .url(usersEndpoint.update(id))
+      .url(serviceEndpoint.update(id))
       .body(data)
       .send();
 

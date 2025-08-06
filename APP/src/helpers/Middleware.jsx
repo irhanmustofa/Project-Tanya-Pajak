@@ -6,8 +6,15 @@ export default function Middleware() {
   const navigate = useNavigate();
 
   useEffect(() => {
+<<<<<<< HEAD
     try {
       const expiry = 30 * 60 * 1000;
+=======
+    const expiry = 30 * 60 * 1000;
+    const lastAccess = useLocalStorage.get("lastAccess");
+    const email = useLocalStorage.get("email");
+    const token = useLocalStorage.get("token");
+>>>>>>> fd410b4 (update-register)
 
       const lastAccess = useLocalStorage.get("lastAccess");
       const email = useLocalStorage.get("email");
@@ -59,7 +66,13 @@ export default function Middleware() {
     } catch (error) {
       console.error("Middleware error:", error);
       useLocalStorage.remove();
+<<<<<<< HEAD
       navigate("/", { replace: true });
+=======
+      navigate("/");
+    } else {
+      useLocalStorage.set("lastAccess", new Date().toISOString());
+>>>>>>> fd410b4 (update-register)
     }
   }, [navigate]);
 
