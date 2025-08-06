@@ -4,10 +4,20 @@ import { useAppReducer } from "@/hooks/use-app-reducer";
 import { clientAll } from "./ClientService";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/loader";
+<<<<<<< HEAD
+=======
+import { groupAll } from "../../groups/group-components/GroupService";
+import { serviceAll } from "../../service/service-components/ServiceService";
+>>>>>>> 2cd1356 (update-register)
 
 export default function ClientProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [clientState, clientDispatch] = useReducer(appReducer, initialState);
+<<<<<<< HEAD
+=======
+  const [groups, setGroups] = useState([]);
+  const [service, setService] = useState([]);
+>>>>>>> 2cd1356 (update-register)
 
   useEffect(() => {
     clientAll().then((res) => {
@@ -17,6 +27,21 @@ export default function ClientProvider({ children }) {
 
       clientDispatch({ type: actionReducer.FAILURE, payload: res.message });
     });
+<<<<<<< HEAD
+=======
+
+    groupAll().then((res) => {
+      if (res.success) {
+        setGroups(res.data);
+      }
+    });
+
+    serviceAll().then((res) => {
+      if (res.success) {
+        setService(res.data);
+      }
+    });
+>>>>>>> 2cd1356 (update-register)
   }, []);
 
   if (clientState.loading) {
@@ -41,6 +66,11 @@ export default function ClientProvider({ children }) {
       value={{
         clientState,
         clientAction: actionReducer,
+<<<<<<< HEAD
+=======
+        clientGroup: groups,
+        services: service,
+>>>>>>> 2cd1356 (update-register)
       }}
     >
       <clientDispatchContext.Provider value={clientDispatch}>

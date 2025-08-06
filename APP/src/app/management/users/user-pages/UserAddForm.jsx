@@ -54,6 +54,10 @@ export default function UserAddForm({ onClose }) {
       formData.append("email", event.target.email.value);
       formData.append("password", event.target.password.value);
       formData.append("role", event.target.role.value);
+<<<<<<< HEAD
+=======
+      formData.append("team", event.target.team.value);
+>>>>>>> 2cd1356 (update-register)
 
       await userCreate(formData).then((response) => {
         if (response.success) {
@@ -125,7 +129,31 @@ export default function UserAddForm({ onClose }) {
                 error={errors.password}
               />
               <div className="grid grid-cols-4 items-center gap-4">
+<<<<<<< HEAD
                 <Label>Role</Label>
+=======
+                <Label>Group</Label>
+                <Select
+                  name="team"
+                  onValueChange={(value) => {
+                    handleChange("team", Number(value));
+                  }}
+                >
+                  <SelectTrigger className="col-span-3 rounded-md border">
+                    <SelectValue placeholder="Select Group" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {userGroup.map((team) => (
+                      <SelectItem value={String(team.id)} key={team.id}>
+                        {team.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label>Level</Label>
+>>>>>>> 2cd1356 (update-register)
                 <Select
                   name="role"
                   onValueChange={(value) => {
@@ -133,11 +161,19 @@ export default function UserAddForm({ onClose }) {
                   }}
                 >
                   <SelectTrigger className="col-span-3 rounded-md border">
-                    <SelectValue placeholder="Select Role" />
+                    <SelectValue placeholder="Select Level" />
                   </SelectTrigger>
                   <SelectContent>
+<<<<<<< HEAD
                     <SelectItem value="0">Admin</SelectItem>
                     <SelectItem value="1">User</SelectItem>
+=======
+                    {userLevel.map((level) => (
+                      <SelectItem value={String(level.code)} key={level.code}>
+                        {level.name}
+                      </SelectItem>
+                    ))}
+>>>>>>> 2cd1356 (update-register)
                   </SelectContent>
                 </Select>
               </div>

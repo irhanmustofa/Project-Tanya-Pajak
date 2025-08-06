@@ -7,5 +7,8 @@ export const authEndpoint = {
   logout: `${base_url}/auth/logout`,
   signup: `${base_url}/register`,
   verify: (token) => `${base_url}/register/verify/${token}`,
+<<<<<<< HEAD
   setAuthentication: `${base_url}/auth/authentication`,
+=======
+>>>>>>> 2cd1356 (update-register)
 };

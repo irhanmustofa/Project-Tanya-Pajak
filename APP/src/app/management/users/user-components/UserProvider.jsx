@@ -4,6 +4,10 @@ import { userAll } from "./UserService";
 import { useAppReducer } from "@/hooks/use-app-reducer";
 import Loader from "@/components/custom/loader";
 import Error from "@/components/custom/error";
+<<<<<<< HEAD
+=======
+import { groupAll } from "../../groups/group-components/GroupService";
+>>>>>>> 2cd1356 (update-register)
 
 export default function UserProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
@@ -11,6 +15,17 @@ export default function UserProvider({ children }) {
 
   useEffect(() => {
     userAll().then((res) => {
+<<<<<<< HEAD
+=======
+      if (res.success) {
+        userDispatch({ type: actionReducer.SUCCESS, payload: res.data });
+      }
+
+      userDispatch({ type: actionReducer.FAILURE, payload: res.message });
+    });
+
+    groupAll().then((res) => {
+>>>>>>> 2cd1356 (update-register)
       if (res.success) {
         userDispatch({ type: actionReducer.SUCCESS, payload: res.data });
       }
