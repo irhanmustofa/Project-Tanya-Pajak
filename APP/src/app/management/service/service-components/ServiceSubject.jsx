@@ -13,48 +13,64 @@ import {
 
 import {
   LucideFileUp,
+  LucideFileDown,
   LucideFilePen,
+  LucideUserRoundPlus,
   LucideFileText,
   LucideFileSpreadsheet,
-  LucideSettings,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
-import { useUser } from "./UserProvider";
-import UserAddForm from "@/app/management/users/user-pages/UserAddForm";
+import { useService } from "./ServiceProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
-import { statusType, userLevel } from "@/helpers/variables";
+import ServiceAddForm from "@/app/management/service/service-pages/ServiceAddForm";
+import ServiceImportForm from "@/app/management/service/service-pages/ServiceImportForm";
+import { serviceDivision, serviceUnit, statusType } from "@/helpers/variables";
 
-export default function UserSubject() {
-  const { ExportPDF } = useExportPDF();
+export default function ServiceSubject() {
   const [openAdd, setOpenAdd] = useState(false);
+  const [openImport, setOpenImport] = useState(false);
   const [isExportExcel, setIsExportExcel] = useState(false);
   const [isExportPdf, setIsExportPdf] = useState(false);
   const [showExportPdf, setShowExportPdf] = useState(false);
+  const { ExportPDF } = useExportPDF();
   const [dataExport, setDataExport] = useState({
     head: [],
     body: [],
   });
 
-  const { userState } = useUser();
+  const { serviceState } = useService();
 
   useEffect(() => {
     if (isExportExcel || isExportPdf) {
-      if (userState.data.length > 0) {
-        const exportExcel = [];
+      if (serviceState.data.length > 0) {
         setDataExport({ head: [], body: [] });
+        const exportExcel = [];
 
-        dataExport.head = ["Name", "Email", "Level", "Status"];
+        dataExport.head = [
+          "Division",
+          "Code",
+          "Name",
+          "Price",
+          "Unit",
+          "Status",
+        ];
+
         exportExcel.push(dataExport.head);
 
-        userState.data.map((item) =>
+        const data = serviceState.data.sort((a, b) => a.division - b.division);
+
+        data.map((item) =>
           dataExport.body.push([
+            serviceDivision.find((x) => String(x.code) === item.division)
+              ?.name || "",
+            item.code,
             item.name,
-            item.email,
-            userLevel.find((x) => x.code === item.role).name,
-            statusType.find((x) => x.code === item.status).name,
+            Number(item.max_price).toLocaleString("id-ID"),
+            serviceUnit.find((x) => String(x.code) === item.unit)?.name || "",
+            statusType.find((x) => x.code === item.status)?.name || "",
           ])
         );
 
@@ -62,7 +78,7 @@ export default function UserSubject() {
 
         if (isExportExcel) {
           setIsExportExcel(false);
-          useExcelWriter(exportExcel, "Data Users.xlsx");
+          useExcelWriter(exportExcel, "Data Services.xlsx");
         } else if (isExportPdf) {
           setDataExport(dataExport);
           setIsExportPdf(false);
@@ -75,26 +91,30 @@ export default function UserSubject() {
   return (
     <div className="flex justify-between mb-4">
       <h2 className="text-2xl font-semibold">
-        Users <b>Management </b>
+        Services <b>Management </b>
       </h2>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
-            <LucideSettings className="h-4 w-4" />
-            <span className="">User Manager</span>
+            <LucideUserRoundPlus className="h-4 w-4" />
+            <span className="">Services Manager</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="font-light w-36">
-            User Manager
+            Service Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setOpenAdd(true)}>
             <LucideFilePen className="mr-2 h-4 w-4" />
             <span>Add New</span>
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpenImport(true)}>
+            <LucideFileDown className="mr-2 h-4 w-4" />
+            <span>Bulk Import</span>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          {userState.data.length > 0 && (
+          {serviceState.data.length > 0 && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <LucideFileUp className="mr-2 h-4 w-4" />
@@ -116,10 +136,12 @@ export default function UserSubject() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      {openAdd && <UserAddForm onClose={() => setOpenAdd(false)} />}
+      {openAdd && <ServiceAddForm onClose={() => setOpenAdd(false)} />}
+      {openImport && <ServiceImportForm onClose={() => setOpenImport(false)} />}
       {showExportPdf && (
         <ExportPDF
-          title="Data Users"
+          config={{ size: "A4", orientation: "landscape" }}
+          title="Data Services"
           columns={dataExport.head}
           data={dataExport.body}
           onClose={() => setShowExportPdf(false)}
