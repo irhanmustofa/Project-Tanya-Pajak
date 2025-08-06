@@ -1,6 +1,30 @@
 /APP/node_modules
 /API/node_modules
-/APP/dist
 /APP/src/public
+/APP/dist
+/APP/.vite
 error.log
 package-lock.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
