@@ -1,8 +1,8 @@
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import GroupAction from "@/app/management/groups/group-components/GroupAction";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
-import { useGroup } from "./GroupProvider";
+import { statusType } from "@/helpers/variables";
 
 export default function useGroupTableConfig() {
   const groupColumn = useMemo(
@@ -34,15 +34,34 @@ export default function useGroupTableConfig() {
         enableHiding: false,
       },
       {
+        accessorKey: "no",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="No" />
+        ),
+        cell: ({ row }) => <div>{row.index + 1}</div>,
+        enableSorting: false,
+      },
+      {
         accessorKey: "name",
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Name" />
         ),
         cell: ({ row }) => (
-          <div className="w-[150px] capitalize">{row.getValue("name")}</div>
+          <div className="capitalize">{row.getValue("name")}</div>
         ),
       },
-
+      {
+        accessorKey: "status",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Status" />
+        ),
+        cell: ({ row }) => (
+          <div className="capitalize">
+            {row.getValue("status") === 0 ? "Inactive" : "Active"}
+          </div>
+        ),
+        filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      },
       {
         id: "actions",
         header: "Actions",
@@ -53,10 +72,20 @@ export default function useGroupTableConfig() {
   );
 
   const filterFields = useMemo(() => {
+    const filterColumnStatusValue = statusType.map((item) => ({
+      value: item.code,
+      label: item.name,
+    }));
+
     return {
+      filterDate: {
+        active: false,
+        column: "date",
+      },
       filterColumn: {
-        name: {
-          title: "Name",
+        status: {
+          title: "Status",
+          values: filterColumnStatusValue,
         },
       },
     };
