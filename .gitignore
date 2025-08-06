@@ -1,7 +1,8 @@
 /API/node_modules
+/APP/node_modules
 /API/public
-/APP/node_modules\
-/APP/dist
-package-lock.json
-package.json
+/APP/src/public
+/APP/.vite
 error.log
+package-lock.json
+
