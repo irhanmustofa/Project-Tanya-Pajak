@@ -102,13 +102,13 @@ const forgot = async (req, res) => {
   return Response(
     res,
     success({
-      message: "Reset Password Success! Please check your email to reset your password",
+      message:
+        "Reset Password Success! Please check your email to reset your password",
     })
   );
 };
 
 const resetPassword = async (req, res) => {
-
   const result = await forgotPasswordController.resetPassword(req, res);
 
   if (!result.success) {
@@ -116,7 +116,6 @@ const resetPassword = async (req, res) => {
   }
 
   return Response(res, success({ message: "Password reset successful." }));
-
 };
 
 const AuthController = {
