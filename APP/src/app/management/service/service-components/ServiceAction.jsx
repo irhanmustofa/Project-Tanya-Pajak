@@ -10,51 +10,48 @@ import {
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
-import { groupAll, groupEndpoint } from "./GroupService";
+import { serviceAll, serviceEndpoint } from "./ServiceService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useGroup, useGroupDispatch } from "./GroupProvider";
-import GroupUpdateForm from "@/app/management/groups/group-pages/GroupUpdateForm";
-import LoaderOverlay from "@/components/custom/loader-overlay";
+import { useService, useServiceDispatch } from "./ServiceProvider";
+import ServiceUpdateForm from "@/app/management/service/service-pages/ServiceUpdateForm";
 
-export default function GroupAction({ row }) {
-  const dispatch = useDialogDispatch();
-  const groupDispatch = useGroupDispatch();
-  const { groupAction } = useGroup();
-  const { dialogState, dialogAction, DialogDelete } = useDialog();
-
+export default function serviceAction({ row }) {
   const [onUpdate, setOnUpdate] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const serviceDispatch = useServiceDispatch();
+  const { serviceAction } = useService();
+
+  const dispatch = useDialogDispatch();
+  const { dialogState, dialogAction, DialogDelete } = useDialog();
 
   const handleDelete = (id) => {
     dispatch({
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete Group",
+        title: "Delete Service",
         message:
-          "Are you sure you want to delete this group? This action cannot be undone.",
+          "Are you sure you want to delete this service? This action cannot be undone.",
         status: "warning",
-        url: groupEndpoint.delete(id),
+        url: serviceEndpoint.delete(id),
       },
     });
   };
 
-  const handleOnCloseDelete = async (success) => {
+  const handleOnCloseDeelete = (success) => {
     if (!success) return;
 
-    setIsLoading(true);
-    await groupAll().then((res) => {
-      if (res.success) {
-        groupDispatch({ type: groupAction.SUCCESS, payload: res.data });
-      }
-    });
-    setIsLoading(false);
+    setTimeout(() => {
+      serviceAll().then((res) => {
+        if (res.success) {
+          serviceDispatch({ type: serviceAction.SUCCESS, payload: res.data });
+        }
+      });
+    }, 500);
   };
 
   const item = row.original;
   return (
-    <div className="relative">
-      {isLoading && <LoaderOverlay />}
+    <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -76,9 +73,9 @@ export default function GroupAction({ row }) {
         </DropdownMenuContent>
       </DropdownMenu>
       {onUpdate && (
-        <GroupUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
+        <ServiceUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
       )}
-      {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
-    </div>
+      {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDeelete} />}
+    </>
   );
 }
