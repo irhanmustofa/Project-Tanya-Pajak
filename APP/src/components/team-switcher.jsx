@@ -80,9 +80,9 @@ export function TeamSwitcher({ teams }) {
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {activeTeam.name || "Select Client"}
+                  {activeTeam.name}
                 </span>
-                <span className="truncate text-xs">Client</span>
+                <span className="truncate text-xs">{activeTeam.plan}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -92,35 +92,23 @@ export function TeamSwitcher({ teams }) {
             align="start"
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
-            onOpenAutoFocus={(e) => {
-              e.preventDefault();
-            }}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Clients
+              Teams
             </DropdownMenuLabel>
-
-            <div className="px-2 py-1 sticky top-0 bg-background z-10">
-              <div className="relative">
-                <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  ref={(input) => {
-                    if (input) {
-                      setTimeout(() => input.focus(), 100);
-                    }
-                  }}
-                  type="text"
-                  placeholder="Search clients..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className="w-full pl-8 pr-2 py-1 text-sm border rounded bg-background focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-              </div>
-            </div>
-
+            {teams.map((team, index) => (
+              <DropdownMenuItem
+                key={team.name}
+                onClick={() => setActiveTeam(team)}
+                className="gap-2 p-2"
+              >
+                <div className="flex size-6 items-center justify-center rounded-sm border">
+                  <team.logo className="size-4 shrink-0" />
+                </div>
+                {team.name}
+                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            ))}
             <DropdownMenuSeparator />
 
             {debouncedQuery !== "" && filteredTeams.length === 0 ? (
@@ -151,9 +139,7 @@ export function TeamSwitcher({ teams }) {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">
-                Add client
-              </div>
+              <div className="font-medium text-muted-foreground">Add team</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

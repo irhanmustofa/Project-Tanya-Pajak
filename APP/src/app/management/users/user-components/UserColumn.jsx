@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import UserAction from "@/app/management/users/user-components/UserAction";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
-import { roles, statusType } from "@/helpers/variables";
+import { userLevel, statusType } from "@/helpers/variables";
 import { useUser } from "./UserProvider";
 
 export default function useUserTableConfig() {
@@ -13,7 +13,7 @@ export default function useUserTableConfig() {
     if (window.location.pathname === "/user") {
       setFilterColumnTeamValue(
         userGroup.map((item) => ({
-          value: item._id,
+          value: item.id,
           label: item.name,
         }))
       );
@@ -49,12 +49,20 @@ export default function useUserTableConfig() {
         enableHiding: false,
       },
       {
+        accessorKey: "no",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="No" />
+        ),
+        cell: ({ row }) => <div>{row.index + 1}</div>,
+        enableSorting: false,
+      },
+      {
         accessorKey: "name",
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Name" />
         ),
         cell: ({ row }) => (
-          <div className="w-[150px] capitalize">{row.getValue("name")}</div>
+          <div className=" capitalize">{row.getValue("name")}</div>
         ),
       },
       {
@@ -63,7 +71,7 @@ export default function useUserTableConfig() {
           <DatatableColumnHeader column={column} title="Email" />
         ),
         cell: ({ row }) => (
-          <div className="w-[150px] lowercase">{row.getValue("email")}</div>
+          <div className="lowercase">{row.getValue("email")}</div>
         ),
       },
       {
@@ -73,22 +81,21 @@ export default function useUserTableConfig() {
         ),
         cell: ({ row }) => (
           <div>
-            {roles.find((item) => item.code === row.getValue("role"))?.name}
+            {userLevel.find((item) => item.code === row.getValue("role"))?.name}
           </div>
         ),
         filterFn: (row, id, value) => value.includes(row.getValue(id)),
       },
       {
-        accessorKey: "group_id",
+        accessorKey: "team",
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Group" />
+          <DatatableColumnHeader column={column} title="Team" />
         ),
-        cell: ({ row }) => {
-          const group = userGroup.find(
-            (item) => item._id === row.getValue("group_id")
-          );
-          return <div>{group?.name}</div>;
-        },
+        cell: ({ row }) => (
+          <div>
+            {userGroup.find((item) => item.id === row.getValue("team"))?.name}
+          </div>
+        ),
         filterFn: (row, id, value) => value.includes(row.getValue(id)),
       },
       {
@@ -121,7 +128,7 @@ export default function useUserTableConfig() {
       label: item.name,
     }));
 
-    const filterColumnRoleValue = roles.map((item) => ({
+    const filterColumnRoleValue = userLevel.map((item) => ({
       value: item.code,
       label: item.name,
     }));
@@ -140,8 +147,8 @@ export default function useUserTableConfig() {
           title: "Role",
           values: filterColumnRoleValue,
         },
-        group_id: {
-          title: "Group",
+        team: {
+          title: "Team",
           values: filterColumnTeamValue,
         },
       },
