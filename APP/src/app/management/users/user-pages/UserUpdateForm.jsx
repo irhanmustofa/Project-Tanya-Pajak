@@ -43,16 +43,21 @@ export default function UserUpdateForm({ id, onClose }) {
       email: "required|email",
       password: "required|password",
       role: "required|number",
+      team: "required|number",
       status: "required|number",
     },
   });
 
   useEffect(() => {
-    const user = userState.data.find((item) => item._id === id);
+    const user = userState.data.find((item) => item.id === id);
     setInput({
       name: user.name,
       email: user.email,
       role: user.role,
+<<<<<<< HEAD
+=======
+      team: user.team,
+>>>>>>> 2cd1356 (update-register)
       status: user.status,
     });
 
@@ -67,6 +72,10 @@ export default function UserUpdateForm({ id, onClose }) {
       formData.append("name", input.name);
       formData.append("email", input.email);
       formData.append("status", input.status);
+<<<<<<< HEAD
+=======
+      formData.append("team", input.team);
+>>>>>>> 2cd1356 (update-register)
       formData.append("role", input.role);
 
       if (input.password) {
@@ -170,6 +179,51 @@ export default function UserUpdateForm({ id, onClose }) {
                   }}
                   error={errors.password}
                 />
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label>Level</Label>
+                  <Select
+<<<<<<< HEAD
+                    name="role"
+                    onValueChange={(value) => {
+                      setInput({ ...input, role: value });
+                      handleChange("role", value);
+=======
+                    name="team"
+                    onValueChange={(value) => {
+                      setInput({ ...input, team: value });
+                      handleChange("team", value);
+>>>>>>> 2cd1356 (update-register)
+                    }}
+                  >
+                    <SelectTrigger className="col-span-3 rounded-md border">
+                      <SelectValue
+                        placeholder={
+<<<<<<< HEAD
+                          userLevel.find(
+                            (level) => level.code === Number(input.role)
+                          ).name || "Select Level"
+=======
+                          userGroup.find((team) => team.id === input.team)
+                            ?.name || "Select Group"
+>>>>>>> 2cd1356 (update-register)
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+<<<<<<< HEAD
+                      {userLevel.map((level) => (
+                        <SelectItem key={level.code} value={String(level.code)}>
+                          {level.name}
+=======
+                      {userGroup.map((team) => (
+                        <SelectItem key={team.id} value={team.id}>
+                          {team.name}
+>>>>>>> 2cd1356 (update-register)
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label>Level</Label>
                   <Select

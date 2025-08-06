@@ -9,7 +9,6 @@ export const usersEndpoint = {
   update: (id) => `${base_url}/users/${id}`,
   delete: (id) => `${base_url}/users/${id}`,
   email: (email) => `${base_url}/users/email/${email}`,
-  import: `${base_url}/user/import`,
 };
 
 export const userAll = async () => {
@@ -83,22 +82,6 @@ export const userUpdate = async (id, data) => {
   try {
     const request = await HttpRequest.method("PUT")
       .url(usersEndpoint.update(id))
-      .body(data)
-      .send();
-
-    return request;
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message,
-    };
-  }
-};
-
-export const userImport = async (data) => {
-  try {
-    const request = await HttpRequest.method("POST")
-      .url(usersEndpoint.import)
       .body(data)
       .send();
 

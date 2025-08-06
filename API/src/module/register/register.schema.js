@@ -7,6 +7,7 @@ export const registerSchema = () => {
     name: {
       type: String,
       required: true,
+<<<<<<< HEAD
       trim: true,
     },
     company_name: {
@@ -18,6 +19,9 @@ export const registerSchema = () => {
       type: String,
       required: true,
       trim: true,
+=======
+      trim: true
+>>>>>>> 2cd1356 (update-register)
     },
     company_name: {
       type: String,
@@ -27,23 +31,40 @@ export const registerSchema = () => {
     email: {
       type: String,
       required: true,
+<<<<<<< HEAD
       trim: true,
       unique: false,
     },
     password: {
       type: String,
       required: true,
+=======
+      unique: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: true
+>>>>>>> 2cd1356 (update-register)
     },
     token: {
       type: String,
       required: true,
       unique: true,
+<<<<<<< HEAD
       trim: true,
+=======
+      trim: true
+>>>>>>> 2cd1356 (update-register)
     },
     status: {
       type: Number,
       required: true,
+<<<<<<< HEAD
       default: 0,
+=======
+      default: 0
+>>>>>>> 2cd1356 (update-register)
     },
     expired: {
       type: Date,
