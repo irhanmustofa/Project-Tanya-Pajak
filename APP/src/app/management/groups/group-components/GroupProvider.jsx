@@ -1,14 +1,13 @@
-import { useReducer, useContext, useEffect, useState } from "react";
+import { useReducer, useContext, useEffect } from "react";
 import { groupContext, groupDispatchContext } from "./GroupContext";
 import { groupAll } from "./GroupService";
 import { useAppReducer } from "@/hooks/use-app-reducer";
+import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/loader";
-import Error from "@/components/custom/error";
 
 export default function GroupProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [groupState, groupDispatch] = useReducer(appReducer, initialState);
-  const [groups, setGroups] = useState([]);
 
   useEffect(() => {
     groupAll().then((res) => {
@@ -25,13 +24,26 @@ export default function GroupProvider({ children }) {
   }
 
   if (groupState.error && groupState.error !== "Data Not Found") {
-    return <Error message={groupState.error} />;
+    return (
+      <div className="flex flex-col justify-center items-center gap-5">
+        <div className="flex justify-center items-center text-3xl font-semibold">
+          An error has occurred
+        </div>
+        <Button
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          Retry
+        </Button>
+      </div>
+    );
   }
 
+  const groupAction = actionReducer;
+
   return (
-    <groupContext.Provider
-      value={{ groupState, groupAction: actionReducer, groupGroup: groups }}
-    >
+    <groupContext.Provider value={{ groupState, groupAction }}>
       <groupDispatchContext.Provider value={groupDispatch}>
         {children}
       </groupDispatchContext.Provider>
