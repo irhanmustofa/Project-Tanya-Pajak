@@ -74,7 +74,7 @@ export default function UserAction({ row }) {
             <LucideEdit className="mr-2 h-4 w-4" />
             <Label>Update</Label>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDelete(item._id)}>
+          <DropdownMenuItem onClick={() => handleDelete(item.id)}>
             <LucideTrash className="mr-2 h-4 w-4" />
             <Label>Delete</Label>
           </DropdownMenuItem>
@@ -82,7 +82,7 @@ export default function UserAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <UserUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
