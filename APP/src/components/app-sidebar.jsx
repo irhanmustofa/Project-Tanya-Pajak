@@ -1,6 +1,10 @@
 import React, { Suspense } from "react"; // Tambahkan React import
 import { Link } from "react-router-dom";
 import { NavMain } from "@/components/nav-main";
+<<<<<<< HEAD
+=======
+// import { NavProjects } from "@/components/nav-projects";
+>>>>>>> 2cd1356 (update-register)
 import { NavUser } from "@/components/nav-user";
 import {
   SidebarMenu,
@@ -21,8 +25,11 @@ import DialogLogout from "@/dialogs/DialogLogout";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { LucideLayoutDashboard } from "lucide-react";
 import logo from "@/public/vite.svg";
+<<<<<<< HEAD
 import { TeamSwitcher } from "./team-switcher";
 import { CompanySetting } from "./company-setting";
+=======
+>>>>>>> 2cd1356 (update-register)
 
 export function AppSidebar({ ...props }) {
   const { dialogState, dialogAction } = useDialog();
@@ -46,6 +53,7 @@ export function AppSidebar({ ...props }) {
                 <img src={logo} alt="logo" className="w-10" />
               </Link>
               <SidebarGroupLabel className="ml-2 text-xl">
+<<<<<<< HEAD
                 Tanya Pajak
               </SidebarGroupLabel>
             </div>
@@ -56,6 +64,13 @@ export function AppSidebar({ ...props }) {
             </Suspense>
           </SidebarHeader>
 
+=======
+                CRM Dashboard
+              </SidebarGroupLabel>
+            </div>
+            {/* <TeamSwitcher teams={teams} /> */}
+          </SidebarHeader>
+>>>>>>> 2cd1356 (update-register)
           <SidebarContent
             style={{
               overflowY: "scroll",
@@ -76,8 +91,13 @@ export function AppSidebar({ ...props }) {
               </SidebarMenu>
             </SidebarGroup>
             <NavMain items={sidebars} />
+<<<<<<< HEAD
           </SidebarContent>
 
+=======
+            {/* <NavProjects projects={projects} /> */}
+          </SidebarContent>
+>>>>>>> 2cd1356 (update-register)
           <SidebarFooter>
             <NavUser
               user={users}

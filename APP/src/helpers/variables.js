@@ -78,8 +78,15 @@ export const quotationStatus = [
 ];
 
 export const userLevel = [
-  { code: 0, name: "Admin" },
-  { code: 1, name: "User" },
+  { code: 0, name: "Super Admin" },
+  { code: 1, name: "Admin" },
+  { code: 2, name: "Finance" },
+  { code: 3, name: "Marketing" },
+  { code: 7, name: "Human Resource" },
+  { code: 8, name: "Legal" },
+  { code: 4, name: "Supervisor" },
+  { code: 5, name: "Team Head" },
+  { code: 6, name: "Staff" },
 ];
 
 export const clientType = [
