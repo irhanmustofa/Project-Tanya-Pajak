@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { MoreHorizontal, LucideEdit, LucideTrash } from "lucide-react";
@@ -10,56 +9,49 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { clientAll, clientsEndpoint } from "./ClientService";
+import { useState } from "react";
+import { serviceAll, serviceEndpoint } from "./ServiceService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useClient, useClientDispatch } from "./ClientProvider";
-import LoaderOverlay from "@/components/custom/loader-overlay";
-import ClientFormTabsUpdate from "../client-pages/client-update-form/ClientFormTabsUpdate";
+import { useService, useServiceDispatch } from "./ServiceProvider";
+import ServiceUpdateForm from "@/app/management/service/service-pages/ServiceUpdateForm";
 
-export default function ClientAction({ row }) {
-  const dispatch = useDialogDispatch();
-  const clientDispatch = useClientDispatch();
-  const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { clientAction } = useClient();
-
+export default function serviceAction({ row }) {
   const [onUpdate, setOnUpdate] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const serviceDispatch = useServiceDispatch();
+  const { serviceAction } = useService();
+
+  const dispatch = useDialogDispatch();
+  const { dialogState, dialogAction, DialogDelete } = useDialog();
 
   const handleDelete = (id) => {
     dispatch({
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete Client",
+        title: "Delete Service",
         message:
-          "Are you sure you want to delete this client? This action cannot be undone.",
+          "Are you sure you want to delete this service? This action cannot be undone.",
         status: "warning",
-        url: clientsEndpoint.delete(id),
+        url: serviceEndpoint.delete(id),
       },
     });
   };
 
-  const handleOnCloseDelete = async (success) => {
+  const handleOnCloseDeelete = (success) => {
     if (!success) return;
 
-    setIsLoading(true);
-
-    await clientAll().then((res) => {
-      if (res.success) {
-        clientDispatch({ type: clientAction.SUCCESS, payload: res.data });
-      }
-    });
-
-    setIsLoading(false);
-    window.location.reload();
+    setTimeout(() => {
+      serviceAll().then((res) => {
+        if (res.success) {
+          serviceDispatch({ type: serviceAction.SUCCESS, payload: res.data });
+        }
+      });
+    }, 500);
   };
 
   const item = row.original;
-
   return (
-    <div className="relative">
-      {isLoading && <LoaderOverlay />}
-
+    <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -74,21 +66,16 @@ export default function ClientAction({ row }) {
             <LucideEdit className="mr-2 h-4 w-4" />
             <Label>Update</Label>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDelete(item._id)}>
+          <DropdownMenuItem onClick={() => handleDelete(item.id)}>
             <LucideTrash className="mr-2 h-4 w-4" />
             <Label>Delete</Label>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
       {onUpdate && (
-        <ClientFormTabsUpdate
-          id={item._id}
-          onClose={() => setOnUpdate(false)}
-        />
+        <ServiceUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
       )}
-
-      {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
-    </div>
+      {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDeelete} />}
+    </>
   );
 }
