@@ -1,5 +1,6 @@
 /API/node_modules
+/API/public
 /APP/node_modules
-error.log
+/APP/dist
 package-lock.json
-.gitignore
+error.log
