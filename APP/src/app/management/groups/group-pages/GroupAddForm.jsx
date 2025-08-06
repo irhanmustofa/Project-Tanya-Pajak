@@ -5,28 +5,17 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { InputHorizontal } from "@/components/custom/input-custom";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { useState, useTransition } from "react";
 import { useValidateInput } from "@/hooks/use-validate-input";
 import {
   groupAll,
   groupCreate,
 } from "@/app/management/groups/group-components/GroupService";
-import {
-  useGroup,
-  useGroupDispatch,
-} from "@/app/management/groups/group-components/GroupProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { roles } from "@/helpers/variables";
+import { useGroupDispatch } from "../group-components/GroupProvider";
+import { useAppReducer } from "@/hooks/use-app-reducer";
 
 export default function GroupAddForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -35,11 +24,11 @@ export default function GroupAddForm({ onClose }) {
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const groupDispatch = useGroupDispatch();
-  const { groupAction, groupGroup } = useGroup();
+  const { actionReducer } = useAppReducer();
 
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
-      name: "required|min:3",
+      name: "required|string|min:3",
     },
   });
 
@@ -56,16 +45,17 @@ export default function GroupAddForm({ onClose }) {
             type: dialogAction.DIALOG_INFO,
             payload: {
               show: true,
-              title: "Add Group Success",
-              message: "Group added successfully",
+              title: "Add Client Group Success",
+              message: "Client Group added successfully",
               status: "success",
             },
           });
 
           groupAll().then((res) => {
-            if (res.success) {
-              groupDispatch({ type: groupAction.SUCCESS, payload: res.data });
-            }
+            groupDispatch({
+              type: actionReducer.SUCCESS,
+              payload: res.data,
+            });
           });
 
           handleOnClose();
@@ -74,11 +64,12 @@ export default function GroupAddForm({ onClose }) {
             type: dialogAction.DIALOG_INFO,
             payload: {
               show: true,
-              title: "Add group Failed",
+              title: "Add Client Group Failed",
               message: response.message,
               status: "error",
             },
           });
+
           handleOnClose();
         }
       });
@@ -91,12 +82,19 @@ export default function GroupAddForm({ onClose }) {
   };
 
   return (
-    <div className="relative">
+    <>
       {dialogState.isOpen && <DialogInfo />}
-      <Dialog open={isOpen} onOpenChange={handleOnClose}>
+      <Dialog
+        open={isOpen}
+        onOpenChange={() => {
+          setIsOpen(false), onClose();
+        }}
+      >
         <DialogContent className="sm:max-w-[425px]">
-          <DialogTitle>Input New Group</DialogTitle>
-          <DialogDescription>Add a new group to the system.</DialogDescription>
+          <DialogTitle>Input New Client Group</DialogTitle>
+          <DialogDescription>
+            Add a new client group to the system.
+          </DialogDescription>
           <form onSubmit={inputHandler}>
             <div className="grid gap-4 py-4">
               <InputHorizontal
@@ -109,12 +107,12 @@ export default function GroupAddForm({ onClose }) {
             </div>
             <DialogFooter>
               <Button type="submit" disabled={!valid} pending={isPending}>
-                Submit
+                Save Data
               </Button>
             </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
