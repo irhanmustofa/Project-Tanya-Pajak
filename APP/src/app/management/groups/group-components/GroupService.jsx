@@ -1,20 +1,21 @@
 import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
 
-export const groupsEndpoint = {
-  all: `${base_url}/group`,
-  create: `${base_url}/group`,
-  deleteSome: `${base_url}/group/delete`,
-  get: (id) => `${base_url}/group/${id}`,
-  update: (id) => `${base_url}/group/${id}`,
-  delete: (id) => `${base_url}/group/${id}`,
+export const groupEndpoint = {
+  all: `${base_url}/client-group`,
+  create: `${base_url}/client-group`,
+  deleteSome: `${base_url}/client-group/delete`,
+  get: (id) => `${base_url}/client-group/${id}`,
+  update: (id) => `${base_url}/client-group/${id}`,
+  delete: (id) => `${base_url}/client-group/${id}`,
 };
 
 export const groupAll = async () => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(groupsEndpoint.all)
+      .url(groupEndpoint.all)
       .send();
+
     return request;
   } catch (error) {
     return {
@@ -27,8 +28,9 @@ export const groupAll = async () => {
 export const groupFirst = async (id) => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(groupsEndpoint.get(id))
+      .url(groupEndpoint.get(id))
       .send();
+
     return request;
   } catch (error) {
     return {
@@ -41,7 +43,7 @@ export const groupFirst = async (id) => {
 export const groupCreate = async (data) => {
   try {
     const request = await HttpRequest.method("POST")
-      .url(groupsEndpoint.create)
+      .url(groupEndpoint.create)
       .body(data)
       .send();
 
@@ -57,7 +59,7 @@ export const groupCreate = async (data) => {
 export const groupUpdate = async (id, data) => {
   try {
     const request = await HttpRequest.method("PUT")
-      .url(groupsEndpoint.update(id))
+      .url(groupEndpoint.update(id))
       .body(data)
       .send();
 
