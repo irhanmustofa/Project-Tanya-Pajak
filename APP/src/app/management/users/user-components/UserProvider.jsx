@@ -5,7 +5,6 @@ import { useAppReducer } from "@/hooks/use-app-reducer";
 import Loader from "@/components/custom/loader";
 import Error from "@/components/custom/error";
 import { groupAll } from "../../groups/group-components/GroupService";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function UserProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
@@ -13,25 +12,13 @@ export default function UserProvider({ children }) {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    userAll()
-      .then((res) => {
-        if (res.success) {
-          const currentUserEmail = useLocalStorage.get("email");
-          const filteredUsers = res.data.filter(
-            (user) => user.email !== currentUserEmail
-          );
+    userAll().then((res) => {
+      if (res.success) {
+        userDispatch({ type: actionReducer.SUCCESS, payload: res.data });
+      }
 
-          userDispatch({ type: actionReducer.SUCCESS, payload: filteredUsers });
-        } else {
-          userDispatch({ type: actionReducer.FAILURE, payload: res.message });
-        }
-      })
-      .catch((error) => {
-        userDispatch({
-          type: actionReducer.FAILURE,
-          payload: error.message || "Failed to fetch users",
-        });
-      });
+      userDispatch({ type: actionReducer.FAILURE, payload: res.message });
+    });
 
     groupAll().then((res) => {
       if (res.success) {

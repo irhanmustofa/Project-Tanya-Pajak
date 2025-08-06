@@ -1,19 +1,23 @@
 import { useGroup } from "../group-components/GroupProvider";
 import DataTables from "@/components/datatables/Datatables";
 import useGroupTableConfig from "../group-components/GroupColumn";
-import UserSubject from "../group-components/GroupSubject";
+import GroupSubject from "../group-components/GroupSubject";
 
 export default function GroupTable() {
   const { groupState } = useGroup();
   const { groupColumn, filterFields } = useGroupTableConfig();
 
+  const sortedData = [...groupState.data].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
   return (
     <>
-      <UserSubject />
+      <GroupSubject />
 
       <DataTables
         columns={groupColumn}
-        data={groupState.data}
+        data={sortedData}
         filterFields={filterFields}
       />
     </>
