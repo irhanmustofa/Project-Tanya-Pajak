@@ -27,7 +27,11 @@ export function DatatableToolbar({ table, filterFields }) {
       );
     }
   }, [table.getFilteredSelectedRowModel().rows.length]);
+<<<<<<< HEAD
   console.log("DatatableToolbar idSelector:", idSelector);
+=======
+
+>>>>>>> 2cd1356 (update-register)
   const handleDelete = () => {
     dispatch({
       type: dialogAction.DIALOG_DELETE_SOME,
