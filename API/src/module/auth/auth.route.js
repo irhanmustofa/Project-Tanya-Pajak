@@ -7,7 +7,5 @@ authRouter.get("/authorization", controller.authorization);
 authRouter.post("/authentication", controller.authentication);
 authRouter.post("/logout", controller.logout);
 authRouter.post("/login", controller.login);
-authRouter.post("/forgot", controller.forgot);
-authRouter.put("/:token", controller.resetPassword);
 
 export default authRouter;
