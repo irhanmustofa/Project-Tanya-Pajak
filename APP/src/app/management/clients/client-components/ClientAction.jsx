@@ -21,6 +21,12 @@ import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useClient, useClientDispatch } from "./ClientProvider";
 import { clientAll, clientEndpoint } from "./ClientService";
 import ClientUpdateForm from "@/app/management/clients/client-pages/ClientUpdateForm";
+<<<<<<< HEAD
+=======
+import ClientObservationForm from "@/app/management/clients/client-pages/ClientObservationForm";
+import QuotationAddForm from "@/app/marketing/quotation/quotation-pages/QuotationAddForm";
+import ClientHistory from "../client-pages/ClientHistory";
+>>>>>>> 2cd1356 (update-register)
 
 export default function ClientAction({ row }) {
   const [openQuotation, setOpenQuotation] = useState(false);
@@ -95,9 +101,31 @@ export default function ClientAction({ row }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+<<<<<<< HEAD
       {onUpdate && (
         <ClientUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
       )}
+=======
+      {openQuotation && (
+        <QuotationAddForm
+          onClose={() => setOpenQuotation(false)}
+          client={clientState.data.find((client) => client.id === item.id)}
+          service={services}
+        />
+      )}
+      {onUpdate && (
+        <ClientUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
+      )}
+      {onHistory && (
+        <ClientHistory id={item.id} onClose={() => setOnHistory(false)} />
+      )}
+      {onObservation && (
+        <ClientObservationForm
+          id={item.id}
+          onClose={() => setOnObservation(false)}
+        />
+      )}
+>>>>>>> 2cd1356 (update-register)
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
     </>
   );
