@@ -22,6 +22,7 @@ const appReducer = (state, action) => {
 
     case actionReducer.FAILURE:
       return { ...state, loading: false, error: action.payload };
+
     default:
       return state;
   }
