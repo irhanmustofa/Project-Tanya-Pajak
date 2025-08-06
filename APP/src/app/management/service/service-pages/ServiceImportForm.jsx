@@ -1,0 +1,239 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState, useEffect, useTransition } from "react";
+import { useExcelReader } from "@/hooks/use-excel-reader";
+import { useExcelWriter } from "@/hooks/use-excel-writer";
+import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
+import {
+  serviceImport,
+  serviceAll,
+} from "../service-components/ServiceService";
+import {
+  useService,
+  useServiceDispatch,
+} from "../service-components/ServiceProvider";
+
+export default function ServiceImportForm({ onClose }) {
+  const [isOpen, setIsOpen] = useState(true);
+  const [disabled, setDisabled] = useState(true);
+  const [file, setFile] = useState("");
+  const [excelContent, setExcelContent] = useState([]);
+  const [isPending, startTrasition] = useTransition();
+
+  const { dialogAction, dialogState, DialogInfo } = useDialog();
+  const dialogDispatch = useDialogDispatch();
+  const { serviceAction } = useService();
+  const serviceDispatch = useServiceDispatch();
+
+  const { content } = useExcelReader(file || undefined);
+
+  const hanldeDownloadTemplate = () => {
+    useExcelWriter(
+      [
+        [
+          "Division",
+          "Type",
+          "Code",
+          "Name",
+          "Description",
+          "Includes",
+          "Results",
+          "Max Price",
+          "Min Price",
+          "Unit",
+        ],
+        [
+          "Tax",
+          "Single",
+          "TAX-001",
+          "Monthly Tax",
+          "Monthly Tax Service",
+          "",
+          "",
+          1000,
+          1000,
+          "Monthly",
+        ],
+        [
+          "Accounting",
+          "Package",
+          "ACC-001",
+          "Monthly Accounting",
+          "Monthly Accounting Service",
+          "",
+          "",
+          1000,
+          1000,
+          "Yearly",
+        ],
+        [
+          "Legal",
+          "Single",
+          "LEG-001",
+          "Haki",
+          "Haki Service",
+          "",
+          "",
+          1000,
+          1000,
+          "Pax",
+        ],
+      ],
+      "TemplateImportServices.xlsx"
+    );
+  };
+
+  useEffect(() => {
+    if (file) {
+      setDisabled(false);
+      setExcelContent(content);
+    } else {
+      setDisabled(true);
+    }
+  }, [file, content]);
+
+  const loadFile = (event) => {
+    const file = event.target.files[0];
+    setFile(file);
+  };
+
+  const handleImportData = (event) => {
+    event.preventDefault();
+
+    startTrasition(() => {
+      const inputData = {};
+
+      let factory = {
+        division: "0",
+        type: 0,
+        code: "",
+        name: "",
+        description: "",
+        includes: "",
+        results: "",
+        maxPrice: 0,
+        minPrice: 0,
+        unit: "0",
+      };
+
+      for (let i = 0; i < excelContent.length; i++) {
+        const inputType =
+          excelContent[i]["Type"].toLowerCase() == "single" ? "0" : "1";
+        const inputDivision =
+          excelContent[i]["Division"].toLowerCase() == "tax"
+            ? "0"
+            : excelContent[i]["Division"].toLowerCase() == "accounting"
+            ? "1"
+            : excelContent[i]["Division"].toLowerCase() == "legal"
+            ? "2"
+            : "0";
+
+        const inputUnit =
+          excelContent[i]["Unit"].toLowerCase() == "monthly"
+            ? "0"
+            : excelContent[i]["Unit"].toLowerCase() == "yearly"
+            ? "1"
+            : excelContent[i]["Unit"].toLowerCase() == "hourly"
+            ? "2"
+            : excelContent[i]["Unit"].toLowerCase() == "pax"
+            ? "3"
+            : "0";
+
+        factory = {
+          division: inputDivision,
+          code: excelContent[i]["Code"] || "",
+          description: excelContent[i]["Description"] || "",
+          type: inputType,
+          name: excelContent[i]["Name"] || "",
+          includes: excelContent[i]["Includes"] || "",
+          results: excelContent[i]["Results"] || "",
+          max_price: excelContent[i]["Max Price"] || 0,
+          min_price: excelContent[i]["Min Price"] || 0,
+          unit: inputUnit,
+        };
+
+        inputData[i] = factory;
+      }
+
+      serviceImport(inputData).then((response) => {
+        if (response.success) {
+          dialogDispatch({
+            type: dialogAction.DIALOG_INFO,
+            payload: {
+              isOpen: true,
+              title: "Import Data Service",
+              message: "Import Data Service Successfully",
+              status: "success",
+            },
+          });
+
+          serviceAll().then((res) => {
+            serviceDispatch({ type: serviceAction.SUCCESS, payload: res.data });
+          });
+        } else {
+          dialogDispatch({
+            type: dialogAction.DIALOG_INFO,
+            payload: {
+              isOpen: true,
+              title: "Import Data Service",
+              message: "Import Data Service Failed!\n" + response.message,
+              status: "error",
+            },
+          });
+        }
+      });
+    });
+
+    if (!dialogAction.isOpen) onClose();
+  };
+
+  return (
+    <>
+      {dialogState.isOpen && <DialogInfo />}
+      <Dialog
+        open={isOpen}
+        onOpenChange={() => {
+          setIsOpen(false), onClose();
+        }}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogTitle>Import New Service</DialogTitle>
+          <DialogDescription>Add some Service to the system.</DialogDescription>
+          <form onSubmit={handleImportData}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label>Excel File</Label>
+                <Input
+                  type="file"
+                  name="excel"
+                  className="col-span-3 rounded-md border"
+                  onChange={loadFile}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between mt-10">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={hanldeDownloadTemplate}
+              >
+                Template Excel
+              </Button>
+              <Button type="submit" disabled={disabled} pending={isPending}>
+                Upload Data
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
