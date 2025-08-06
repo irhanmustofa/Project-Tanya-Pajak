@@ -17,7 +17,6 @@ import {
   LucideFileText,
   LucideFileSpreadsheet,
   LucideSettings,
-  LucideFileDown,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -27,7 +26,6 @@ import { useUser } from "./UserProvider";
 import UserAddForm from "@/app/management/users/user-pages/UserAddForm";
 import { useExportPDF } from "@/hooks/use-export-pdf";
 import { statusType, userLevel } from "@/helpers/variables";
-import UserImportForm from "../user-pages/UserImportForm";
 
 export default function UserSubject() {
   const { ExportPDF } = useExportPDF();
@@ -39,7 +37,6 @@ export default function UserSubject() {
     head: [],
     body: [],
   });
-  const [openImport, setOpenImport] = useState(false);
 
   const { userState } = useUser();
 
@@ -96,10 +93,6 @@ export default function UserSubject() {
             <LucideFilePen className="mr-2 h-4 w-4" />
             <span>Add New</span>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem onClick={() => setOpenImport(true)}>
-            <LucideFileDown className="mr-2 h-4 w-4" />
-            <span>Import</span>
-          </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           {userState.data.length > 0 && (
             <DropdownMenuSub>
@@ -124,7 +117,6 @@ export default function UserSubject() {
         </DropdownMenuContent>
       </DropdownMenu>
       {openAdd && <UserAddForm onClose={() => setOpenAdd(false)} />}
-      {openImport && <UserImportForm onClose={() => setOpenImport(false)} />}
       {showExportPdf && (
         <ExportPDF
           title="Data Users"

@@ -1,6 +1,5 @@
 import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export const usersEndpoint = {
   all: `${base_url}/user`,
@@ -10,8 +9,6 @@ export const usersEndpoint = {
   update: (id) => `${base_url}/user/${id}`,
   delete: (id) => `${base_url}/user/${id}`,
   email: (email) => `${base_url}/user/email/${email}`,
-  updatePassword: `${base_url}/user/update-password`,
-  import: `${base_url}/user/import`,
 };
 
 export const userAll = async () => {
@@ -34,6 +31,7 @@ export const userFirst = async (id) => {
     const request = await HttpRequest.method("GET")
       .url(usersEndpoint.get(id))
       .send();
+
     return request;
   } catch (error) {
     return {
@@ -78,41 +76,6 @@ export const userUpdate = async (id, data) => {
   try {
     const request = await HttpRequest.method("PUT")
       .url(usersEndpoint.update(id))
-      .body(data)
-      .send();
-
-    return request;
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message,
-    };
-  }
-};
-
-export const updatePassword = async (data) => {
-  try {
-    const request = await HttpRequest.method("POST")
-      .url(usersEndpoint.updatePassword)
-      .headers({
-        email: useLocalStorage.get("email"),
-      })
-      .body(data)
-      .send();
-
-    return request;
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message,
-    };
-  }
-};
-
-export const userImport = async (data) => {
-  try {
-    const request = await HttpRequest.method("POST")
-      .url(usersEndpoint.import)
       .body(data)
       .send();
 
