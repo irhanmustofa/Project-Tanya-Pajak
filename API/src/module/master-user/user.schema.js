@@ -4,17 +4,10 @@ import { createConnection } from "../../database/mongo/mongo.connection.js";
 export const userSchema = () => {
   const collection = mongoConfig.collection.users;
   const schema = {
-    group_id: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -23,6 +16,14 @@ export const userSchema = () => {
     role: {
       type: Number,
       default: 0,
+    },
+    expired: {
+      required: true,
+      type: Date,
+    },
+    token: {
+      required: true,
+      type: String,
     },
     status: {
       type: Number,

@@ -3,10 +3,10 @@ import Response, {
   forbidden,
   success,
 } from "../../app/response.js";
-import { authConfig } from "../../config/config.js";
 import { createToken } from "../../utils/functions.js";
 import authRepositories from "./auth.repositories.js";
 import { authorizationSchema } from "./auth.schema.js";
+import authRegister from "./controllers/auth.register.js";
 import authenticationProcess from "./controllers/authentication.process.js";
 import setLogin from "./controllers/set.login.js";
 
@@ -86,9 +86,14 @@ const logout = async (req, res) => {
   );
 };
 
+const register = async (req, res) => {
+  return Response(res, await authRegister(req));
+};
+
 const AuthController = {
   login,
   logout,
+  register,
   authentication,
   authorization,
 };
