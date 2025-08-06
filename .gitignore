@@ -1,6 +1,6 @@
 /API/node_modules
-/APP/node_modules
 /API/public
+/APP/node_modules
 /APP/src/public
 /APP/dist
 /APP/.vite
