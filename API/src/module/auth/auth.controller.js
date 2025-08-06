@@ -21,11 +21,7 @@ const login = async (req, res) => {
     return Response(res, badRequest("some required fields are missing."));
   }
 
-<<<<<<< HEAD
   const result = await setLogin({ email, password, company_npwp, device });
-=======
-  const result = await setLogin({ email, password, device });
->>>>>>> 0333528 (update files)
   if (!result.success) {
     return Response(res, {
       message: result.message || "Login failed.",
