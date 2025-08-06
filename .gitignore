@@ -1,0 +1,6 @@
+/API/node_modules
+/APP/node_modules
+error.log
+package.json
+package-lock.json
+.gitignore
