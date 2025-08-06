@@ -6,9 +6,8 @@ import InputLogin from "@/app/auth/login/input-login";
 
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 
-const LoginForm = ({ className, onLoginSuccess, ...props }) => {
+const LoginForm = ({ className, ...props }) => {
   const [success, setSuccess] = useState(undefined);
   const [otp, setOtp] = useState("");
   const [valid, setValid] = useState(false);
@@ -18,9 +17,7 @@ const LoginForm = ({ className, onLoginSuccess, ...props }) => {
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const navigate = useNavigate();
 
-  const handleSuccessInputOTP = (token) => {
-    useLocalStorage.set("token", token);
-    useLocalStorage.set("lastAccess", new Date().toISOString());
+  const handleSuccessInputOTP = () => {
     dialogDispatch({
       type: dialogAction.DIALOG_INFO,
       payload: {
@@ -38,11 +35,11 @@ const LoginForm = ({ className, onLoginSuccess, ...props }) => {
     }, 1500);
   };
 
-  useEffect(() => {
-    if (valid === true) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [valid, navigate]);
+  if (valid === true) {
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1000);
+  }
 
   useEffect(() => {
     if (success?.success === true) {
