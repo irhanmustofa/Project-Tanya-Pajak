@@ -230,5 +230,5 @@ export const jenisAlamat = [
   { jenis: "Alamat Korespondensi", kode: "JA-1" },
   { jenis: "Alamat Lokasi Aset", kode: "JA-2" },
   { jenis: "Alamat Sesuai E-KTP", kode: "JA-3" },
-  { jenis: "Alamat tEMPAT kEGIATAN Usaha", kode: "JA-4" },
+  { jenis: "Alamat Tempat Kegiatan Usaha", kode: "JA-4" },
 ];
