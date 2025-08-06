@@ -54,8 +54,10 @@ class HttpRequest {
 
     if (token) {
       if (Date.now() > lastAccess) {
-        useLocalStorage.remove();
-        window.location.href = href("/");
+        if (!useLocalStorage.isAdmin()) {
+          useLocalStorage.remove();
+          window.location.href = href("/");
+        }
       } else {
         useLocalStorage.set("lastAccess", Date.now() + 1000 * 60 * 30);
       }

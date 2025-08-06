@@ -2,18 +2,12 @@ import HttpRequest from "@/api/http-request";
 import { authEndpoint } from "@/app/auth/auth-endpoint";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
-export const register = async (data = {}) => {
-  const name = data.name;
-  const company_name = data.company_name;
-  const email = data.email;
-  const password = data.password;
-
+export const register = async (data) => {
   try {
     const request = await HttpRequest.method("POST")
       .url(authEndpoint.signup)
-      .body({ name, company_name, email, password })
+      .body(data)
       .send();
-    console.log(request);
     return request;
   } catch (error) {
     console.error(error);
@@ -21,7 +15,6 @@ export const register = async (data = {}) => {
 };
 
 export const verify = async (token) => {
-  console.log("Verifying token:", token);
   try {
     const request = await HttpRequest.method("GET")
       .url(authEndpoint.verify(token))
@@ -33,13 +26,10 @@ export const verify = async (token) => {
 };
 
 export const login = async (formData) => {
-  const email = formData.get("email");
-  const password = formData.get("password");
-
   try {
     const request = await HttpRequest.method("POST")
       .url(authEndpoint.login)
-      .body({ email, password })
+      .body(formData)
       .send();
 
     return request;
@@ -69,16 +59,12 @@ export const verifyOtp = async (otp) => {
 
 export const resetPassword = async ({ data, token }) => {
   const password = data.get("password");
-  const confirmPassword = data.get("password_confirmation");
-  console.log("Resetting password with token:", token);
-  console.log("Password:", password);
-  console.log("Confirm Password:", confirmPassword);
+  const confirmPassword = data.get("confirmPassword");
   try {
     const request = await HttpRequest.method("PUT")
       .url(authEndpoint.setReset(token))
       .body({ password, confirmPassword })
       .send();
-    console.log("Reset request:", request);
     return request;
   } catch (error) {
     console.error("Reset error:", error);
@@ -87,12 +73,10 @@ export const resetPassword = async ({ data, token }) => {
 };
 
 export const forgot = async (formData) => {
-  const email = formData.get("email");
-
   try {
     const request = await HttpRequest.method("POST")
       .url(authEndpoint.forgot)
-      .body({ email })
+      .body(formData)
       .send();
 
     return request;

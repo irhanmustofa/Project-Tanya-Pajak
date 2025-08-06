@@ -17,11 +17,13 @@ import { EyeClosed, EyeIcon } from "lucide-react";
 const InputLogin = ({ setSuccess, setOtp }) => {
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState("");
+  const [company_npwp, setCompanyNpwp] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const { errors, valid, handleChange } = useValidateInput({
     schema: {
       email: "required|email",
+      company_npwp: "required|min:3",
       password: "required|password",
     },
   });
@@ -76,6 +78,18 @@ const InputLogin = ({ setSuccess, setOtp }) => {
                     handleChange("email", e.target.value);
                   }}
                   error={errors.email}
+                />
+                <InputVertical
+                  title="Company NPWP"
+                  name="company_npwp"
+                  type="number"
+                  value={company_npwp}
+                  placeholder="Company NPWP"
+                  onChange={(e) => {
+                    setCompanyNpwp(e.target.value);
+                    handleChange("company_npwp", e.target.value);
+                  }}
+                  error={errors.company_npwp}
                 />
                 <div className="relative">
                   <InputVertical

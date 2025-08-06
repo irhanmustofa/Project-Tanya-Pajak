@@ -14,11 +14,16 @@ export const registerSchema = () => {
       required: true,
       trim: true,
     },
+    company_npwp: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     email: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
+      unique: false,
     },
     password: {
       type: String,

@@ -6,6 +6,7 @@ export default class Register {
     const baseRules = {
       name: "required|string|min:3|max:100",
       company_name: "required|string|min:3|max:100",
+      company_npwp: "required|string",
       email: "required|email",
       password: "password|min:8",
     };
