@@ -17,19 +17,20 @@ import {
   LucideFileText,
   LucideFileSpreadsheet,
   LucideSettings,
+  LucideFileDown,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
-import { useUser } from "./UserProvider";
-import UserAddForm from "@/app/management/users/user-pages/UserAddForm";
+import { useClient } from "./ClientProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
-import { statusType, userLevel } from "@/helpers/variables";
-import { usePermissions } from "@/hooks/use-permissions";
+import { statusType } from "@/helpers/variables";
+import ClientImportForm from "../client-pages/ClientImportForm";
+import ClientFormTabs from "../client-pages/client-add-form/ClientFormTabs";
+import ClientImportData from "../client-pages/ClientImportData";
 
-export default function UserSubject() {
-  const { checkPermission } = usePermissions();
+export default function ClientSubject() {
   const { ExportPDF } = useExportPDF();
   const [openAdd, setOpenAdd] = useState(false);
   const [isExportExcel, setIsExportExcel] = useState(false);
@@ -39,23 +40,24 @@ export default function UserSubject() {
     head: [],
     body: [],
   });
+  const [openImport, setOpenImport] = useState(false);
+  const [importData, setImportData] = useState(false);
 
-  const { userState } = useUser();
+  const { clientState } = useClient();
 
   useEffect(() => {
     if (isExportExcel || isExportPdf) {
-      if (userState.data.length > 0) {
+      if (clientState.data.length > 0) {
         const exportExcel = [];
         setDataExport({ head: [], body: [] });
 
         dataExport.head = ["Name", "Email", "Level", "Status"];
         exportExcel.push(dataExport.head);
 
-        userState.data.map((item) =>
+        clientState.data.map((item) =>
           dataExport.body.push([
             item.name,
             item.email,
-            userLevel.find((x) => x.code === item.role).name,
             statusType.find((x) => x.code === item.status).name,
           ])
         );
@@ -64,7 +66,7 @@ export default function UserSubject() {
 
         if (isExportExcel) {
           setIsExportExcel(false);
-          useExcelWriter(exportExcel, "Data Users.xlsx");
+          useExcelWriter(exportExcel, "Data Clients.xlsx");
         } else if (isExportPdf) {
           setDataExport(dataExport);
           setIsExportPdf(false);
@@ -77,28 +79,48 @@ export default function UserSubject() {
   return (
     <div className="flex justify-between mb-4">
       <h2 className="text-2xl font-semibold">
-        Users <b>Management </b>
+        Clients <b>Management </b>
       </h2>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
             <LucideSettings className="h-4 w-4" />
-            <span className="">User Manager</span>
+            <span className="">Client Manager</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="font-light w-36">
-            User Manager
+            Client Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {checkPermission("users.create") && (
-            <DropdownMenuItem onClick={() => setOpenAdd(true)}>
-              <LucideFilePen className="mr-2 h-4 w-4" />
-              <span>Add New</span>
-            </DropdownMenuItem>
-          )}
+          <DropdownMenuItem onClick={() => setOpenAdd(true)}>
+            <LucideFilePen className="mr-2 h-4 w-4" />
+            <span>Add New</span>
+          </DropdownMenuItem>
+          {/* <DropdownMenuItem onClick={() => setOpenImport(true)}>
+            <LucideFileDown className="mr-2 h-4 w-4" />
+            <span>Import</span>
+          </DropdownMenuItem> */}
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <LucideFileUp className="mr-2 h-4 w-4" />
+              Import
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem onClick={() => setImportData(true)}>
+                  <LucideFileText className="mr-2 h-4 w-4" />
+                  <span>Import Data</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setOpenImport(true)}>
+                  <LucideFileSpreadsheet className="mr-2 h-4 w-4" />
+                  <span>Import Detail</span>
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
           <DropdownMenuSeparator />
-          {userState.data.length > 0 && (
+          {clientState.data.length > 0 && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <LucideFileUp className="mr-2 h-4 w-4" />
@@ -120,10 +142,12 @@ export default function UserSubject() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      {openAdd && <UserAddForm onClose={() => setOpenAdd(false)} />}
+      {openAdd && <ClientFormTabs onClose={() => setOpenAdd(false)} />}
+      {openImport && <ClientImportForm onClose={() => setOpenImport(false)} />}
+      {importData && <ClientImportData onClose={() => setImportData(false)} />}
       {showExportPdf && (
         <ExportPDF
-          title="Data Users"
+          title="Data Clients"
           columns={dataExport.head}
           data={dataExport.body}
           onClose={() => setShowExportPdf(false)}
