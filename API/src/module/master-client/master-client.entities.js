@@ -1,63 +1,91 @@
 import Validator from "../../database/database.validator.js";
 
 export default class Client {
-    constructor(input) {
-        const {
-            group_id,
-            company_name,
-            address_company,
-            no_npwp,
-            no_pkp,
-            director_name,
-            no_ktp_director,
-            address_director,
-            rups_akhir_tahun,
-            logo,
-            legalitas_perusahaan,
-            status = 1
-        } = input;
+  constructor(input) {
+    const {
+      client_id,
+      nama,
+      npwp,
+      kegiatan_utama,
+      jenis_wp,
+      bentuk_badan_hukum,
+      status_npwp,
+      tanggal_daftar,
+      tanggal_aktivasi,
+      status_pkp,
+      tanggal_pengukuhan_pkp,
+      kantor_wilayah_djp,
+      kantor_pelayanan_pajak,
+      seksi_pengawasan,
+      kode_klu,
+      deskripsi_klu,
+      alamat,
+      kontak,
+    } = input;
 
-        const data = {
-            group_id,
-            company_name,
-            address_company,
-            no_npwp,
-            no_pkp,
-            director_name,
-            no_ktp_director,
-            address_director,
-            status
-        };
+    const data = {
+      client_id,
+      nama,
+      npwp,
+      kegiatan_utama,
+      jenis_wp,
+      bentuk_badan_hukum,
+      status_npwp,
+      tanggal_daftar,
+      tanggal_aktivasi,
+      status_pkp,
+      tanggal_pengukuhan_pkp,
+      kantor_wilayah_djp,
+      kantor_pelayanan_pajak,
+      seksi_pengawasan,
+      kode_klu,
+      deskripsi_klu,
+      alamat,
+      kontak,
+    };
 
-        const baseRules = {
-            group_id: "required|string|min:3",
-            company_name: "required|string|min:3|max:100",
-            address_company: "required|string",
-            no_npwp: "required|string",
-            no_pkp: "required|string",
-            director_name: "required|string",
-            no_ktp_director: "required|string",
-            address_director: "required|string",
-            status: "required|number|min:0"
-        };
+    const baseRules = {
+      client_id: "required|string|min:6",
+      nama: "required|string|min:5",
+      npwp: "string|min:16",
+      kegiatan_utama: "string",
+      jenis_wp: "number",
+      bentuk_badan_hukum: "number",
+      status_npwp: "number",
+      tanggal_daftar: "string",
+      tanggal_aktivasi: "string",
+      status_pkp: "number",
+      tanggal_pengukuhan_pkp: "string",
+      kantor_wilayah_djp: "number",
+      kpp: "number",
+      seksi_pengawasan: "number",
+      kode_klu: "string",
+      deskripsi_klu: "string",
+    };
 
-        const validator = new Validator(data, baseRules);
-        const result = validator.getResult();
+    const validator = new Validator(data, baseRules);
+    const result = validator.getResult();
 
-        this.group_id = group_id;
-        this.company_name = company_name;
-        this.address_company = address_company;
-        this.no_npwp = no_npwp;
-        this.no_pkp = no_pkp;
-        this.director_name = director_name;
-        this.no_ktp_director = no_ktp_director;
-        this.address_director = address_director;
-        this.rups_akhir_tahun = rups_akhir_tahun || "";
-        this.logo = logo || "";
+    this.client_id = client_id;
+    this.nama = nama;
+    this.npwp = npwp;
+    this.kegiatan_utama = kegiatan_utama;
+    this.jenis_wp = jenis_wp;
+    this.bentuk_badan_hukum = bentuk_badan_hukum;
+    this.status_npwp = status_npwp;
+    this.tanggal_daftar = tanggal_daftar;
+    this.tanggal_aktivasi = tanggal_aktivasi;
+    this.status_pkp = status_pkp;
+    this.tanggal_pengukuhan_pkp = tanggal_pengukuhan_pkp;
+    this.kantor_wilayah_djp = kantor_wilayah_djp;
+    this.kantor_pelayanan_pajak = kantor_pelayanan_pajak;
+    this.seksi_pengawasan = seksi_pengawasan;
+    this.kode_klu = kode_klu;
+    this.deskripsi_klu = deskripsi_klu;
 
-        this.legalitas_perusahaan = legalitas_perusahaan || [];
+    this.alamat = alamat || [];
+    this.kontak = kontak || [];
 
-        this.status = status;
-        if (result.error.length > 0) this.errors = result.error;
-    }
+    if (result.error.length > 0) this.errors = result.error;
+  }
 }
