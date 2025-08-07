@@ -60,11 +60,6 @@ export const authorizationSchema = () => {
 export const tryLoginSchema = () => {
   const collection = mongoConfig.collection.try_logins;
   const schema = {
-    client_id: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     email: {
       type: String,
       required: true,

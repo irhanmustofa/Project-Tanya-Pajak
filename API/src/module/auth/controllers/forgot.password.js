@@ -36,12 +36,9 @@ const forgotPassword = async (req, res) => {
   });
 
   if (!getUserActive.success) {
-    return Response(
-      res,
-      badRequest({
-        message: "User not found or inactive.",
-      })
-    );
+    return forbidden({
+      message: "User not found or inactive.",
+    });
   }
 
   const code = randomString(50);
@@ -83,13 +80,10 @@ const forgotPassword = async (req, res) => {
     });
   }
 
-  return Response(
-    res,
-    success({
-      message:
-        "Reset Password Success! Please check your email to reset your password",
-    })
-  );
+  return success({
+    message:
+      "Reset Password Success! Please check your email to reset your password",
+  });
 };
 
 const resetPassword = async (req, res) => {
@@ -101,22 +95,16 @@ const resetPassword = async (req, res) => {
   });
 
   if (!getResetData.success || getResetData.data.length === 0) {
-    return Response(
-      res,
-      badRequest({
-        message: "Invalid or expired reset token.",
-      })
-    );
+    return forbidden({
+      message: "Invalid or expired reset token.",
+    });
   }
 
   const resetData = getResetData.data[0];
   if (resetData.expired < new Date()) {
-    return Response(
-      res,
-      badRequest({
-        message: "Reset token has expired.",
-      })
-    );
+    return badRequest({
+      message: "Reset token has expired.",
+    });
   }
   const clientId = resetData.client_id;
 
@@ -127,12 +115,9 @@ const resetPassword = async (req, res) => {
     });
 
     if (!getUsersWithEmail.success) {
-      return Response(
-        res,
-        notFound({
-          message: "User not found.",
-        })
-      );
+      return error({
+        message: "Failed to find users with this email.",
+      });
     }
 
     const id = getUsersWithEmail.data[0]._id;
@@ -155,15 +140,14 @@ const resetPassword = async (req, res) => {
       token: token,
     });
 
-    return Response(
-      res,
-      success({
-        message: "Password reset successful.",
-      })
-    );
+    return success({
+      message: `Password reset successfully for ${updatedCount} account(s) with this email.`,
+    });
   } catch (e) {
     ErrorHandler({ message: "Failed to reset password", error: e.message });
-    return Response(res, error({ message: "Failed to reset password." }));
+    return error({
+      message: "Failed to reset password.",
+    });
   }
 };
 
