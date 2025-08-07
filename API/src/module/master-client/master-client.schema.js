@@ -111,13 +111,8 @@ export const masterClientSchema = () => {
     timestamps: true,
   };
 
-  const options = {
-    _id: false,
-    timestamps: true,
-  };
   return createConnection({
     collection,
-    options,
     schema,
     options,
   });

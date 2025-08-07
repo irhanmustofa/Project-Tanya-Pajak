@@ -1,6 +1,5 @@
 import Response, { badRequest } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
-import { moveFile } from "../../../utils/uploadHandler.js";
 import MasterClient from "../master-client.entities.js";
 import { masterClientSchema } from "../master-client.schema.js";
 
