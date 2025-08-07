@@ -2,25 +2,28 @@ import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
-export const usersEndpoint = {
-  all: `${base_url}/users`,
-  create: `${base_url}/users`,
-  deleteSome: `${base_url}/users/delete`,
-  get: (id) => `${base_url}/users/${id}`,
-  update: (id) => `${base_url}/users/${id}`,
-  delete: (id) => `${base_url}/users/${id}`,
-  email: (email) => `${base_url}/users/email/${email}`,
+export const bukusEndpoint = {
+  all: `${base_url}/buku`,
+  create: `${base_url}/buku`,
+  deleteSome: `${base_url}/buku/delete`,
+  get: (id) => `${base_url}/buku/${id}`,
+  getBuku: (buku) => `${base_url}/buku/${buku}`,
+  update: (id) => `${base_url}/buku/${id}`,
+  delete: (id) => `${base_url}/buku/${id}`,
+  import: `${base_url}/buku/import`,
 };
 
-export const userAll = async () => {
+export const bukuAll = async (params = {}) => {
   try {
+    const query = new URLSearchParams(params).toString();
+    const url = query ? `${bukusEndpoint.all}?${query}` : bukusEndpoint.all;
     const request = await HttpRequest.method("GET")
-      .url(usersEndpoint.all)
+      .url(url)
       .headers({
-        clientid: useLocalStorage.get("clientId"),
+        clientId: useLocalStorage.get("clientId"),
       })
       .send();
-    console.log("User All Request:", request);
+
     return request;
   } catch (error) {
     return {
@@ -30,10 +33,13 @@ export const userAll = async () => {
   }
 };
 
-export const userFirst = async (id) => {
+export const bukuDelete = async (id) => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(usersEndpoint.get(id))
+      .url(bukusEndpoint.delete(id))
+      .headers({
+        clientId: useLocalStorage.get("clientId"),
+      })
       .send();
 
     return request;
@@ -45,12 +51,11 @@ export const userFirst = async (id) => {
   }
 };
 
-export const userByEmail = async (email) => {
+export const bukuFirst = async (id) => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(usersEndpoint.email(email))
+      .url(bukusEndpoint.get(id))
       .send();
-
     return request;
   } catch (error) {
     return {
@@ -60,14 +65,14 @@ export const userByEmail = async (email) => {
   }
 };
 
-export const userCreate = async (data) => {
+export const bukuCreate = async (data) => {
   try {
     const request = await HttpRequest.method("POST")
-      .url(usersEndpoint.create)
-      .body(data)
+      .url(bukusEndpoint.create)
       .headers({
-        clientid: useLocalStorage.get("clientId"),
+        clientId: useLocalStorage.get("clientId"),
       })
+      .body(data)
       .send();
 
     return request;
@@ -79,10 +84,13 @@ export const userCreate = async (data) => {
   }
 };
 
-export const userUpdate = async (id, data) => {
+export const bukuUpdate = async (id, data) => {
   try {
     const request = await HttpRequest.method("PUT")
-      .url(usersEndpoint.update(id))
+      .url(bukusEndpoint.update(id))
+      .headers({
+        clientId: useLocalStorage.get("clientId"),
+      })
       .body(data)
       .send();
 
@@ -95,13 +103,15 @@ export const userUpdate = async (id, data) => {
   }
 };
 
-export const userImport = async (data) => {
+export const bukuImport = async (data) => {
   try {
     const request = await HttpRequest.method("POST")
-      .url(usersEndpoint.import)
+      .url(bukusEndpoint.import)
+      .headers({
+        clientId: useLocalStorage.get("clientId"),
+      })
       .body(data)
       .send();
-
     return request;
   } catch (error) {
     return {

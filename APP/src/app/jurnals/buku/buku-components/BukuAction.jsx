@@ -10,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { bukuAll, bukusEndpoint } from "./BukuService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
+import { useBuku, useBukuDispatch } from "./BukuProvider";
 import LoaderOverlay from "@/components/custom/loader-overlay";
+import BukuUpdateForm from "../buku-pages/BukuUpdateForm";
 
-export default function UserAction({ row }) {
+export default function BukuAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
-  const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const bukuDispatch = useBukuDispatch();
+  const { dialogState, dialogAction, DialogDelete, DialogInfo } = useDialog();
+  const { bukuAction, params } = useBuku();
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Buku",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this Buku? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: bukusEndpoint.delete(id),
       },
     });
   };
@@ -44,11 +44,11 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
+    await bukuAll(params).then((res) => {
       if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
+        bukuDispatch({ type: bukuAction.SUCCESS, payload: res.data || [] });
       } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
+        bukuDispatch({ type: bukuAction.SUCCESS, payload: [] });
       }
     });
 
@@ -56,6 +56,7 @@ export default function UserAction({ row }) {
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
@@ -82,10 +83,11 @@ export default function UserAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <BukuUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
+      {dialogState.isOpen && <DialogInfo />}
     </div>
   );
 }
