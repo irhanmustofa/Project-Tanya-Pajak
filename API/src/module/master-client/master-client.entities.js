@@ -16,7 +16,6 @@ export default class Client {
       kantor_pelayanan_pajak,
       seksi_pengawasan,
       kode_klu,
-      deskripsi_klu,
       alamat,
       kontak,
     } = input;
@@ -35,7 +34,6 @@ export default class Client {
       kantor_pelayanan_pajak,
       seksi_pengawasan,
       kode_klu,
-      deskripsi_klu,
       alamat,
       kontak,
     };
@@ -54,7 +52,6 @@ export default class Client {
       kantor_pelayanan_pajak: "number",
       seksi_pengawasan: "number",
       kode_klu: "string",
-      deskripsi_klu: "string",
     };
 
     const validator = new Validator(data, baseRules);
