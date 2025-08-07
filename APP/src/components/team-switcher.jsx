@@ -18,6 +18,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useState, useEffect, useCallback } from "react";
+import ClientFormTabs from "@/app/management/clients/profile/client-pages/client-add-form/ClientFormTabs";
 import { base_url } from "@/api/http-endpoints";
 
 export function TeamSwitcher({ teams = [] }) {
