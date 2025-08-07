@@ -25,19 +25,19 @@ const forgotPassword = async (req, res) => {
 
   const getClient = await masterClientRepository.getByFilter({
     company_npwp: company_npwp,
-    status: 1
+    status: 1,
   });
   const clientId = getClient.data.length > 0 ? getClient.data[0]._id : null;
 
   const getUserActive = await userRepository.getByFilter({
     email: email,
     client_id: clientId,
-    status: 1
+    status: 1,
   });
 
   if (!getUserActive.success) {
     return forbidden({
-      message: "User not found or inactive."
+      message: "User not found or inactive.",
     });
   }
 
@@ -50,16 +50,16 @@ const forgotPassword = async (req, res) => {
       .subject(`Reset Password Link`)
       .body(
         "Click the link below to reset your password: " +
-        APPURL +
-        "/reset/" +
-        code
+          APPURL +
+          "/reset/" +
+          code
       );
 
     await mailer.send();
   } catch (error) {
     console.error("Failed to send email:", error);
     return error({
-      message: "Failed to send reset email."
+      message: "Failed to send reset email.",
     });
   }
 
@@ -76,12 +76,13 @@ const forgotPassword = async (req, res) => {
       error: createResetData.message,
     });
     return error({
-      message: "Failed to process reset request."
+      message: "Failed to process reset request.",
     });
   }
 
   return success({
-    message: "Reset Password Success! Please check your email to reset your password"
+    message:
+      "Reset Password Success! Please check your email to reset your password",
   });
 };
 
@@ -95,14 +96,14 @@ const resetPassword = async (req, res) => {
 
   if (!getResetData.success || getResetData.data.length === 0) {
     return forbidden({
-      message: "Invalid or expired reset token."
+      message: "Invalid or expired reset token.",
     });
   }
 
   const resetData = getResetData.data[0];
   if (resetData.expired < new Date()) {
     return badRequest({
-      message: "Reset token has expired."
+      message: "Reset token has expired.",
     });
   }
   const clientId = resetData.client_id;
@@ -115,7 +116,7 @@ const resetPassword = async (req, res) => {
 
     if (!getUsersWithEmail.success) {
       return error({
-        message: "Failed to find users with this email."
+        message: "Failed to find users with this email.",
       });
     }
 
@@ -127,9 +128,12 @@ const resetPassword = async (req, res) => {
     });
 
     if (!updateResult.success) {
-      return Response(res, badRequest({
-        message: "Failed to update password."
-      }));
+      return Response(
+        res,
+        badRequest({
+          message: "Failed to update password.",
+        })
+      );
     }
 
     await forgotRepository.deleteForgotPassword({
@@ -137,19 +141,19 @@ const resetPassword = async (req, res) => {
     });
 
     return success({
-      message: `Password reset successfully for ${updatedCount} account(s) with this email.`
+      message: `Password reset successfully for ${updatedCount} account(s) with this email.`,
     });
   } catch (e) {
     ErrorHandler({ message: "Failed to reset password", error: e.message });
     return error({
-      message: "Failed to reset password."
+      message: "Failed to reset password.",
     });
   }
 };
 
 const forgotPasswordController = {
   forgotPassword,
-  resetPassword
+  resetPassword,
 };
 
 export default forgotPasswordController;

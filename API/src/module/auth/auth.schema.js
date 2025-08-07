@@ -113,3 +113,30 @@ export const forgotPasswordSchema = () => {
     schema,
   });
 };
+
+export const forgotPasswordSchema = () => {
+  const collection = mongoConfig.collection.forgot_password;
+  const schema = {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+    token: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+    expired: {
+      type: Date,
+      default: Date.now,
+    },
+  };
+
+  return createConnection({
+    collection,
+    schema,
+  });
+}
