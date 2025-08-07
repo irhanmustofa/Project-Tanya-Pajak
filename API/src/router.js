@@ -18,11 +18,10 @@ const noValidate = ["/auth"];
 
 router.use(async (req, res, next) => {
   if (!noValidate.some((path) => req.path.startsWith(path))) {
-    const is_valid = await validatingUser(req.headers);
-
-    if (!is_valid.success) {
-      return Response(res, is_valid);
-    }
+    // const is_valid = await validatingUser(req.headers);
+    // if (!is_valid.success) {
+    //   return Response(res, is_valid);
+    // }
   }
 
   next();

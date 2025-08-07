@@ -42,11 +42,11 @@ const router = createBrowserRouter([
   { path: "/forgot", element: <ForgotPage /> },
   { path: "/reset/:token", element: <ResetPage /> },
   {
-    element: (
-      <ProtectedRoute>
-        <Outlet />
-      </ProtectedRoute>
-    ),
+    // element: (
+    //   <ProtectedRoute>
+    //     <Outlet />
+    //   </ProtectedRoute>
+    // ),
     children: [
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/user", element: <Users /> },

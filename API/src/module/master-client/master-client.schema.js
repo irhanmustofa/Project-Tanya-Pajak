@@ -4,7 +4,7 @@ import { createConnection } from "../../database/mongo/mongo.connection.js";
 export const masterClientSchema = () => {
   const collection = mongoConfig.collection.master_client;
   const schema = {
-    client_id: { type: String, required: true },
+    client_id: { type: String, required: true, unique: true },
     nama: { type: String, required: true },
     npwp: { type: String },
     kegiatan_utama: { type: String },

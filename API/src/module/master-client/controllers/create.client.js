@@ -1,20 +1,20 @@
 import { error } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
+import MasterClient from "../master-client.entities.js";
 import { masterClientSchema } from "../master-client.schema.js";
 
 export default async function createClient(req) {
-  const wrapper = new MongodbWrapper(masterClientSchema());
-  var alamat = [],
-    kontak = [];
   try {
-    if (req.body?.alamat) {
-      console.log("alamat:", req.body.alamat);
+    const wrapper = new MongodbWrapper(masterClientSchema());
+    const masterClient = new MasterClient(req.body);
+
+    if (masterClient.errors) {
+      return badRequest({ message: masterClient.errors.join(", ") });
     }
-    return { success: true, message: "amjayyy" };
+    console.log("body:", masterClient);
+    return await wrapper.create(masterClient);
   } catch (err) {
-    console.error("create client error:", err);
-    return error({
-      message: err.message,
-    });
+    console.log("create client error:", err);
+    return error({ message: "An error occurred while the system was running" });
   }
 }
