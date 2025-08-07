@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { MoreHorizontal, LucideEdit, LucideTrash } from "lucide-react";
+import {
+  MoreHorizontal,
+  LucideEdit,
+  LucideTrash,
+  LucideEye,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -10,19 +15,21 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
 import LoaderOverlay from "@/components/custom/loader-overlay";
+import { useJurnalUmum, useJurnalUmumDispatch } from "./JurnalUmumProvider";
+import { jurnalUmumEndpoint, jurnalUmumGetBuku } from "./JurnalUmumService";
+import JurnalUmumUpdateForm from "../jurnal-umum-pages/JurnalUmumUpdateForm";
+import JurnalUmumJurnalId from "../jurnal-umum-pages/JurnalUmumJurnalId";
 
-export default function UserAction({ row }) {
+export default function JurnalUmumAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
+  const jurnalUmumDispatch = useJurnalUmumDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const { JurnalUmumAction } = useJurnalUmum();
 
   const [onUpdate, setOnUpdate] = useState(false);
+  const [onJurnal, setOnJurnal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = (id) => {
@@ -30,11 +37,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Data",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this data? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: jurnalUmumEndpoint.delete(id),
       },
     });
   };
@@ -44,11 +51,12 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
+    await jurnalUmumGetBuku().then((res) => {
       if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
+        jurnalUmumDispatch({
+          type: JurnalUmumAction.SUCCESS,
+          payload: res.data,
+        });
       }
     });
 
@@ -56,6 +64,7 @@ export default function UserAction({ row }) {
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
@@ -70,6 +79,10 @@ export default function UserAction({ row }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setOnJurnal(true)}>
+            <LucideEye className="mr-2 h-4 w-4" />
+            <Label>View Jurnal</Label>
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOnUpdate(true)}>
             <LucideEdit className="mr-2 h-4 w-4" />
             <Label>Update</Label>
@@ -80,9 +93,14 @@ export default function UserAction({ row }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <JurnalUmumUpdateForm
+          id={item._id}
+          onClose={() => setOnUpdate(false)}
+        />
+      )}
+      {onJurnal && (
+        <JurnalUmumJurnalId id={item._id} onClose={() => setOnJurnal(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
