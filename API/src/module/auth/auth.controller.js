@@ -118,10 +118,15 @@ const resetPassword = async (req, res) => {
   return Response(res, success({ message: "Password reset successful." }));
 };
 
+const verification = async (req, res) => {
+  return Response(res, await authVerification(req));
+};
+
 const AuthController = {
   login,
   logout,
   authentication,
+  verification,
   authorization,
   forgot,
   resetPassword,
