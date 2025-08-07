@@ -18,16 +18,14 @@ const getById = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  return Response(res, createClient(req));
+  return Response(res, await createClient(req));
 };
 
-const update = updateClient;
-const remove = async (req, res) => {
-  const client = await wrapper.getByFilter({ _id: req.params.id });
-  if (client.data[0]?.logo) {
-    await unlinkFile(client.data[0].logo);
-  }
+const update = async (req, res) => {
+  return Response(res, await updateClient(req));
+};
 
+const remove = async (req, res) => {
   return Response(res, await wrapper.delete(req.params.id));
 };
 

@@ -1,4 +1,7 @@
-import { InputHorizontal } from "@/components/custom/input-custom";
+import {
+  InputHorizontal,
+  InputVertical,
+} from "@/components/custom/input-custom";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useState, useRef, useEffect, use } from "react";
@@ -17,20 +20,34 @@ export default function InformasiPerusahaan({ formData, setFormData }) {
   const { clientGroup } = useClient();
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    if (formData.logo && formData.logo instanceof File) {
-      const previewUrl = URL.createObjectURL(formData.logo);
-      setPreview(previewUrl);
+  const jenisWpOption = [
+    { kode: "1", jenis_wp: "BADAN" },
+    { kode: "2", jenis_wp: "ORANG PRIBADI" },
+  ];
 
-      return () => {
-        if (previewUrl.startsWith("blob:")) {
-          URL.revokeObjectURL(previewUrl);
-        }
-      };
-    } else {
-      setPreview("");
-    }
-  }, [formData.logo]);
+  const badanHukumOption = [
+    { kode: "1", badan_hukum: "Perseroan Terbatas (PT)" },
+    { kode: "2", badan_hukum: "Perseroan Perorangan" },
+    { kode: "3", badan_hukum: "Perusahaan Persero (Persero)" },
+    { kode: "4", badan_hukum: "Perusahaan Perum (Perum)" },
+    { kode: "5", badan_hukum: "Koperasi" },
+    { kode: "6", badan_hukum: "Yayasan" },
+  ];
+
+  const statusNpwpOption = [
+    { status: "Aktif", kode: "1" },
+    { status: "Non Aktif", kode: "0" },
+  ];
+
+  const kppOption = [
+    { kode: "1", kantor: "KPP Pratama Jakarta Matraman (001)" },
+    { kode: "2", kantor: "KPP Pratama Jakarta Pulogadung (003)" },
+    { kode: "3", kantor: "KPP Pratama Jakarta Cakung Satu (004)" },
+    { kode: "4", kantor: "KPP Pratama Jakarta Kramat Jati (005)" },
+    { kode: "5", kantor: "KPP Pratama Jakarta Cakung Dua (006)" },
+    { kode: "6", kantor: "KPP Pratama Jakarta Duren Sawit (008)" },
+    { kode: "7", kantor: "KPP Pratama Jakarta Pasar Rebo (009)" },
+  ];
 
   const handleChange = (name, value) => {
     console.log("handleChange:", name, value);
@@ -61,89 +78,169 @@ export default function InformasiPerusahaan({ formData, setFormData }) {
 
   return (
     <div className="grid gap-4">
-      {useLocalStorage.get("groupId") == "ADM00" && (
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label>Group</Label>
-          <Select
-            name="group_id"
-            onValueChange={(value) => {
-              handleChange("group_id", value);
-            }}
-          >
-            <SelectTrigger className="col-span-3 rounded-md border">
-              <SelectValue placeholder="Select Group" />
+      <InputHorizontal
+        title="Nama Perusahaan"
+        name="nama"
+        value={formData.nama}
+        onChange={(e) => handleChange("nama", e.target.value)}
+      />
+      <InputHorizontal
+        title="Nomor NPWP"
+        name="npwp"
+        value={formData.npwp}
+        onChange={(e) => handleChange("npwp", e.target.value)}
+      />
+      <InputHorizontal
+        title="Kegiatan Utama"
+        name="kegiatan_utama"
+        value={formData.kegiatan_utama}
+        onChange={(e) => handleChange("kegiatan_utama", e.target.value)}
+      />
+
+      <div className="grid grid-cols-4 gap-2">
+        <div className="col-span-1">
+          <h1>Jenis Wajib Pajak</h1>
+        </div>
+        <div className="col-span-3">
+          <Select name="jenis_wp" value={"" || undefined}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih" />
             </SelectTrigger>
             <SelectContent>
-              {clientGroup.map((group) => (
-                <SelectItem value={String(group._id)} key={group._id}>
-                  {group.name}
-                </SelectItem>
-              ))}
+              {jenisWpOption.map((item, key) => {
+                return (
+                  <SelectItem key={key} value={String(item.kode)}>
+                    {item.jenis_wp}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </div>
-      )}
-      <InputHorizontal
-        title="Nama Perusahaan"
-        name="company_name"
-        value={formData.company_name}
-        onChange={(e) => handleChange("company_name", e.target.value)}
-      />
-      <div>
-        <Label>Alamat Perusahaan</Label>
-        <Textarea
-          name="address_company"
-          value={formData.address_company}
-          onChange={(e) => handleChange("address_company", e.target.value)}
-        />
       </div>
+
+      <div className="grid grid-cols-4 gap-2">
+        <div className="col-span-1">
+          <h1>Bentuk Badan Hukum</h1>
+        </div>
+        <div className="col-span-3">
+          <Select name="bentuk_badan_hukum" value={"" || undefined}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih" />
+            </SelectTrigger>
+            <SelectContent>
+              {badanHukumOption.map((item, key) => {
+                return (
+                  <SelectItem key={key} value={String(item.kode)}>
+                    {item.badan_hukum}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-2">
+        <div className="col-span-1">
+          <h1>Status NPWP</h1>
+        </div>
+        <div className="col-span-3">
+          <Select name="status_npwp" value={"" || undefined}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih" />
+            </SelectTrigger>
+            <SelectContent>
+              {statusNpwpOption.map((item, key) => {
+                return (
+                  <SelectItem key={key} value={String(item.kode)}>
+                    {item.status}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <InputHorizontal
-        title="Nomor NPWP"
-        name="no_npwp"
-        value={formData.no_npwp}
-        onChange={(e) => handleChange("no_npwp", e.target.value)}
-      />
-      <InputHorizontal
-        title="Nomor PKP"
-        name="no_pkp"
-        value={formData.no_pkp}
-        onChange={(e) => handleChange("no_pkp", e.target.value)}
+        title="Tanggal Pengukuhan PKP"
+        name="tanggal_pengukuhan_pkp"
+        type="date"
+        value={formData.tanggal_pengukuhan_pkp}
+        onChange={(e) => handleChange("tanggal_pengukuhan_pkp", e.target.value)}
       />
 
-      <div className="border border-gray-200 p-4 rounded-lg">
-        <InputHorizontal
-          title="Logo Perusahaan"
-          type="file"
-          name="logo"
-          accept="image/*"
-          onChange={handleFileChange}
-          ref={fileInputRef}
-        />
+      <div className="grid grid-cols-4 gap-2">
+        <div className="col-span-1">
+          <h1>Status PKP</h1>
+        </div>
+        <div className="col-span-3">
+          <Select name="status_pkp" value={"" || undefined}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih" />
+            </SelectTrigger>
+            <SelectContent>
+              {statusNpwpOption.map((item, key) => {
+                return (
+                  <SelectItem key={key} value={String(item.kode)}>
+                    {item.status}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
-        <div className="mt-4">
-          {preview ? (
-            <div className="space-y-2">
-              <Label className="text-sm text-gray-600">Preview Logo:</Label>
-              <div className="flex items-start gap-4">
-                <img
-                  src={preview}
-                  alt="Preview Logo"
-                  className="w-32 h-32 object-cover rounded-md border border-gray-300"
-                />
-                <button
-                  type="button"
-                  onClick={removePreview}
-                  className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                >
-                  Hapus
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center text-gray-500 text-sm">
-              No Image Selected
-            </div>
-          )}
+      <InputHorizontal
+        title="Kantor Wilayah DJP"
+        name="kantor_wilayah_djp"
+        value={formData.kantor_wilayah_djp}
+        onChange={(e) => handleChange("kantor_wilayah_djp", e.target.value)}
+      />
+
+      <div className="grid grid-cols-4 gap-2">
+        <div className="col-span-1">
+          <h1>KPP</h1>
+        </div>
+        <div className="col-span-3">
+          <Select name="kpp" value={"" || undefined}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih" />
+            </SelectTrigger>
+            <SelectContent>
+              {kppOption.map((item, key) => {
+                return (
+                  <SelectItem key={key} value={String(item.kode)}>
+                    {item.kantor}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-2">
+        <div className="col-span-1">
+          <h1>Seksi Pengawasan</h1>
+        </div>
+        <div className="col-span-3">
+          <Select name="seksi_pengawasan" value={"" || undefined}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pilih" />
+            </SelectTrigger>
+            <SelectContent>
+              {statusNpwpOption.map((item, key) => {
+                return (
+                  <SelectItem key={key} value={String(item.kode)}>
+                    {item.status}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>
