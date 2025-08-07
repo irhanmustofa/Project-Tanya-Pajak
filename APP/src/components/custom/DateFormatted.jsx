@@ -1,5 +1,5 @@
 export const dateShort = (date) => {
-  return date.toLocaleDateString("id-ID", {
+  return new Date(date).toLocaleDateString("id-ID", {
     year: "numeric",
     month: "short",
     day: "2-digit",
@@ -7,7 +7,7 @@ export const dateShort = (date) => {
 };
 
 export const dateLong = (date) => {
-  return date.toLocaleDateString("id-ID", {
+  return new Date(date).toLocaleDateString("id-ID", {
     year: "numeric",
     month: "long",
     day: "2-digit",
@@ -33,7 +33,7 @@ export const dateStrip = (date) => {
 };
 
 export const dateSlash = (date) => {
-  return date.toLocaleDateString("id-ID", {
+  return new Date(date).toLocaleDateString("id-ID", {
     day: "2-digit",
     year: "numeric",
     month: "2-digit",
