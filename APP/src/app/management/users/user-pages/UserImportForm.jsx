@@ -12,17 +12,10 @@ import { useState, useEffect, useTransition } from "react";
 import { useExcelReader } from "@/hooks/use-excel-reader";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import {
-  tarifCitImport,
-  tarifCitAll,
-} from "../tarif-cit-components/TarifCitService";
-import {
-  useTarifCit,
-  useTarifCitDispatch,
-} from "../tarif-cit-components/TarifCitProvider";
-import { dateToday } from "@/components/custom/DateFormatted";
+import { userImport, userAll } from "../user-components/UserService";
+import { useUser, useUserDispatch } from "../user-components/UserProvider";
 
-export default function tarifCitImportForm({ onClose }) {
+export default function UserImportForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
   const [disabled, setDisabled] = useState(true);
   const [file, setFile] = useState("");
@@ -31,20 +24,19 @@ export default function tarifCitImportForm({ onClose }) {
 
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const dialogDispatch = useDialogDispatch();
-  const { periodeLaporanAction } = useTarifCit();
-  const tarifCitDispatch = useTarifCitDispatch();
+  const { userAction } = useUser();
+  const userDispatch = useUserDispatch();
 
   const { content } = useExcelReader(file || undefined);
 
   const hanldeDownloadTemplate = () => {
     useExcelWriter(
       [
-        ["SPT", "Periode", "Tarif PPh", "View SPT"],
-        ["1", dateToday().getFullYear() + "-12-31", "3", "View SPT"],
-        ["2", dateToday().getFullYear() + "-12-31", "3", "View SPT"],
-        ["3", dateToday().getFullYear() + "-12-31", "1", "View SPT"],
+        ["Email", "Name", "Password"],
+        ["test@test.com", "Test User", "password123"],
+        ["jibril@gmail.com", "Test User", "password123"],
       ],
-      "TemplateImportTarifCit.xlsx"
+      "TemplateImportUsers.xlsx"
     );
   };
 
@@ -69,8 +61,8 @@ export default function tarifCitImportForm({ onClose }) {
         type: dialogAction.DIALOG_INFO,
         payload: {
           isOpen: true,
-          title: "Import Tarif Perhitungan CIT Laporan",
-          message: "Import Tarif Perhitungan CIT Laporan Failed!",
+          title: "Import Data User",
+          message: "Import Data User Failed! No users to import.",
           status: "error",
         },
       });
@@ -78,52 +70,40 @@ export default function tarifCitImportForm({ onClose }) {
     }
     startTrasition(() => {
       const inputData = excelContent.map((item) => ({
-        spt: item["spt"] || item["SPT"] || "",
-        periode: item["periode"] || item["Periode"] || "",
-        tarif_pph: item["tarif pph"] || item["Tarif PPh"] || "",
-        view_spt_ts: item["view spt"] || item["View SPT"] || "",
+        name: item["name"] || item["Name"] || "",
+        email: item["email"] || item["Email"] || "",
+        password: item["password"] || item["Password"] || "",
       }));
 
-      tarifCitImport(inputData).then((response) => {
+      userImport(inputData).then((response) => {
         if (response.success) {
           dialogDispatch({
             type: dialogAction.DIALOG_INFO,
             payload: {
               isOpen: true,
-              title: "Import Tarif Perhitungan CIT Laporan",
-              message: "Import Tarif Perhitungan CIT Laporan Successfully",
+              title: "Import Data User",
+              message: "Import Data User Successfully",
               status: "success",
             },
           });
 
-          tarifCitAll().then((res) => {
-            if (res.success) {
-              tarifCitDispatch({
-                type: periodeLaporanAction.SUCCESS,
-                payload: res.data,
-              });
-            }
+          userAll().then((res) => {
+            userDispatch({ type: userAction.SUCCESS, payload: res.data });
           });
         } else {
           dialogDispatch({
             type: dialogAction.DIALOG_INFO,
             payload: {
               isOpen: true,
-              title: "Import Perhitungan Tarif CIT Laporan",
-              message:
-                "Import Perhitungan Tarif CIT Laporan Failed!\n" +
-                response.message,
+              title: "Import Data User",
+              message: "Import Data User Failed!\n" + response.message,
               status: "error",
             },
           });
         }
-        handleOnClose();
       });
     });
-  };
 
-  const handleOnClose = () => {
-    setIsOpen(false);
     onClose();
   };
 
@@ -137,10 +117,8 @@ export default function tarifCitImportForm({ onClose }) {
         }}
       >
         <DialogContent className="sm:max-w-[425px]">
-          <DialogTitle>Import New Tarif Perhitungan CIT</DialogTitle>
-          <DialogDescription>
-            Add some Tarif Perhitungan CIT to the system.
-          </DialogDescription>
+          <DialogTitle>Import New User</DialogTitle>
+          <DialogDescription>Add some user to the system.</DialogDescription>
           <form onSubmit={handleImportData}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
