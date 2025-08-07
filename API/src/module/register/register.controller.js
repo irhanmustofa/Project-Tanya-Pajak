@@ -8,13 +8,19 @@ import { APPURL } from "../../config/config.js";
 import { userSchema } from "../master-user/user.schema.js";
 import { masterClientSchema } from "../master-client/master-client.schema.js";
 import Client from "../master-client/master-client.entities.js";
+<<<<<<< HEAD
 import { akunSchema } from "../akun/akun.schema.js";
 import Akun from "../akun/akun.entities.js";
+=======
+>>>>>>> 8662eb5 (update-register-auth)
 
 const registerWrapper = new MongodbWrapper(registerSchema());
 const userWrapper = new MongodbWrapper(userSchema());
 const clientWrapper = new MongodbWrapper(masterClientSchema());
+<<<<<<< HEAD
 const akunWrapper = new MongodbWrapper(akunSchema());
+=======
+>>>>>>> 8662eb5 (update-register-auth)
 
 const sendVerificationEmail = async (email, token) => {
   try {
@@ -32,6 +38,7 @@ const sendVerificationEmail = async (email, token) => {
 };
 
 const registration = async (req, res) => {
+<<<<<<< HEAD
   const { name, company_name, company_npwp, email, password } = req.body;
   const token = randomString(30);
   const expired = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 jam
@@ -61,6 +68,56 @@ const registration = async (req, res) => {
             res,
             badRequest("Failed to send verification email!")
           );
+=======
+    console.log("Registration request received:", req.body);
+    const { name, company_name, email, password } = req.body;
+    const getDataRegistered = await registerWrapper.getByFilter({ 'email': email });
+
+
+
+    if (getDataRegistered.success) {
+        if (getDataRegistered.data[0].status === 0) {
+            const token = randomString(30);
+            const updateData = await registerWrapper.update(getDataRegistered.data[0]._id, {
+                name: name,
+                company_name: company_name,
+                email: email,
+                password: password,
+                token: token,
+                status: 0,
+                expired: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            });
+
+            const emailResponse = await sendVerificationEmail(email, token);
+            if (!emailResponse || emailResponse.accepted.length === 0) {
+                return Response(res, badRequest("Failed to send verification email!"));
+            }
+
+            return Response(res, success({ message: "Registration updated successfully. Please check your email!", data: updateData }));
+        } else {
+            return Response(res, badRequest({ message: "Email already registered and verified!" }));
+        }
+    } else {
+        const newRegistration = new Register(req.body);
+        if (!newRegistration || newRegistration.errors) {
+            return Response(res, badRequest({ message: newRegistration.errors.join(", ") }));
+        }
+
+        const token = randomString(30);
+        const createdRegistration = await registerWrapper.create({
+            name: newRegistration.name,
+            company_name: newRegistration.company_name,
+            email: newRegistration.email,
+            password: newRegistration.password,
+            token: token,
+            status: 0,
+            expired: new Date(Date.now() + 24 * 60 * 60 * 1000)
+        });
+
+        const emailResponse = await sendVerificationEmail(email, token);
+        if (!emailResponse || emailResponse.accepted.length === 0) {
+            return Response(res, badRequest({ message: "Failed to send verification email! Please try again." }));
+>>>>>>> 8662eb5 (update-register-auth)
         }
 
         return Response(
@@ -190,11 +247,50 @@ const verification = async (req, res) => {
 
     const addNewUser = await userWrapper.create(newUser);
 
+<<<<<<< HEAD
     if (!addNewUser.success) {
       return Response(
         res,
         badRequest({ message: "Failed to create user account!" })
       );
+=======
+        if (!updateRegister.success) {
+            return Response(res, badRequest({ message: "Failed to update registration status!" }));
+        }
+
+        const existingUser = await userWrapper.getByFilter({ email: registerData.email });
+        if (existingUser.success) {
+            return Response(res, badRequest({ message: "User with this email already exists!" }));
+        }
+        const clientId = generateId();
+        const newClient = new Client({
+            _id: clientId,
+            company_name: registerData.company_name,
+            status: 1,
+        });
+        const addNewClient = await clientWrapper.create(newClient);
+        if (!addNewClient.success) {
+            return Response(res, badRequest({ message: "Failed to create client account!" }));
+        }
+        const newUser = new Register({
+            client_id: clientId,
+            name: registerData.name,
+            email: registerData.email,
+            password: registerData.password,
+            role: 0,
+            status: 1,
+        });
+
+        const addNewUser = await userWrapper.create(newUser);
+
+        if (!addNewUser.success) {
+            return Response(res, badRequest({ message: "Failed to create user account!" }));
+        }
+
+        return Response(res, success({
+            message: "Verification successful! Your account has been activated."
+        }));
+>>>>>>> 8662eb5 (update-register-auth)
     }
 
     const newAkun = new Akun({
