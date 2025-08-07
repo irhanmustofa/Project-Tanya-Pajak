@@ -26,7 +26,7 @@ const authenticationProcess = async (data) => {
     return forbidden({ message: "Unauthenticated user" });
   }
 
-  const { expired, group_id, client_id } = getAuthentication.data[0];
+  const { expired, client_id } = getAuthentication.data[0];
 
   if (getAuthentication.data[0].otp !== otp) {
     return badRequest({ message: "Invalid OTP." });
@@ -42,6 +42,7 @@ const authenticationProcess = async (data) => {
     email,
     device,
     token,
+    client_id,
     expired: new Date(Date.now() + authConfig.expirationOtp),
   });
 
@@ -58,7 +59,6 @@ const authenticationProcess = async (data) => {
     message: "Authentication successful.",
     data: {
       token,
-      group_id,
       client_id,
     },
   });

@@ -4,8 +4,8 @@ import { createConnection } from "../../database/mongo/mongo.connection.js";
 export const masterClientSchema = () => {
   const collection = mongoConfig.collection.master_client;
   const schema = {
-    client_id: { type: String, required: true, unique: true },
-    nama: { type: String, required: true },
+    _id: { type: String, required: true, unique: true },
+    company_name: { type: String, required: true },
     npwp: { type: String },
     kegiatan_utama: { type: String },
     jenis_wp: { type: Number },
@@ -45,10 +45,12 @@ export const masterClientSchema = () => {
     ],
     kode_klu: { type: String },
     deskripsi_klu: { type: String },
+    status: { required: true, type: Number, default: 1 },
   };
 
   return createConnection({
     collection,
     schema,
+    options,
   });
 };

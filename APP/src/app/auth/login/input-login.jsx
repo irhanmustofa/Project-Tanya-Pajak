@@ -15,7 +15,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { EyeClosed, EyeIcon } from "lucide-react";
 
 const InputLogin = ({ setSuccess, setOtp }) => {
-  const [isPending, startTrasition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -27,7 +27,7 @@ const InputLogin = ({ setSuccess, setOtp }) => {
   });
 
   const handleLogin = async (formData) => {
-    startTrasition(async () => {
+    startTransition(async () => {
       const login = await loginService(formData);
 
       if (!login.success) {

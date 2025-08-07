@@ -7,15 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
+import DialogProvider, {
+  useDialog,
+  useDialogDispatch,
+} from "@/dialogs/DialogProvider";
 import { useValidateInput } from "@/hooks/use-validate-input";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "../auth-service";
 
-const ResetForm = () => {
+const ResetPage = () => {
   const [isPending, startTransition] = useTransition();
+  const [resetSuccess, setResetSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
@@ -34,7 +38,7 @@ const ResetForm = () => {
   const { errors, valid, handleChange } = useValidateInput({
     schema: {
       password: "required|password",
-      password_confirmation: "required|confirmed:password",
+      password_confirmation: "required|password",
     },
   });
 
@@ -83,7 +87,7 @@ const ResetForm = () => {
           });
 
           const response = await resetPassword({ data: resetFormData, token });
-          console.log("Reset response:", response);
+          console.log("Reset response Page:", response);
 
           if (response?.success) {
             dialogDispatch({
@@ -108,7 +112,6 @@ const ResetForm = () => {
               type: dialogAction.DIALOG_INFO,
               payload: {
                 isOpen: true,
-                dialog: "info",
                 message:
                   response?.message ||
                   "Password reset failed. Please try again.",
@@ -123,7 +126,6 @@ const ResetForm = () => {
             type: dialogAction.DIALOG_INFO,
             payload: {
               isOpen: true,
-              dialog: "info",
               message: "Something went wrong. Please try again.",
               title: "Error",
               status: "error",
@@ -137,7 +139,6 @@ const ResetForm = () => {
         type: dialogAction.DIALOG_INFO,
         payload: {
           isOpen: true,
-          dialog: "info",
           message: "An unexpected error occurred.",
           title: "Error",
           status: "error",
@@ -147,7 +148,7 @@ const ResetForm = () => {
   };
 
   return (
-    <>
+    <DialogProvider>
       {dialogState.message && <DialogInfo />}
       <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
         <div className="w-full max-w-sm md:max-w-3xl">
@@ -155,7 +156,7 @@ const ResetForm = () => {
             <Card className="overflow-hidden w-[400px] min-w-sm">
               <CardHeader>
                 <CardTitle className="text-2xl">New Password</CardTitle>
-                <CardDescription>Enter your new password</CardDescription>
+                <CardDescription>Entry your new password</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-6">
                 <form onSubmit={handleReset}>
@@ -229,8 +230,8 @@ const ResetForm = () => {
           </div>
         </div>
       </div>
-    </>
+    </DialogProvider>
   );
 };
 
-export default ResetForm;
+export default ResetPage;

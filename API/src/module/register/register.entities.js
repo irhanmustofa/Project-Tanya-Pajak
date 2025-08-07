@@ -5,6 +5,7 @@ export default class Register {
     constructor(input) {
         const baseRules = {
             name: "required|string|min:3|max:100",
+            company_name: "required|string|min:3|max:100",
             email: "required|email",
             password: "password|min:8",
         };
@@ -14,6 +15,7 @@ export default class Register {
         }
 
         const validator = new Validator(input, baseRules);
+
         const result = validator.getResult();
 
         if (input.password !== undefined)

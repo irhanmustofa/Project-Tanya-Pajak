@@ -9,5 +9,7 @@ export const mongoConfig = {
     try_logins: "try_logins",
     master_client: "master_client",
     register: "register",
+    master_akun: "master_akun",
+    forgot_password: "forgot_password",
   },
 };

@@ -41,6 +41,7 @@ const setLogin = async (body) => {
   };
 
   const isPasswordValid = passwordCompare(password, data.password);
+  console.log("isPasswordValid", isPasswordValid);
   if (!isPasswordValid) {
     const getTryLogin = await tryLoginRepository.getTryLogin(email);
     const limit = authConfig.limitLogin;
@@ -124,20 +125,15 @@ const setLogin = async (body) => {
       });
     }
   }
+  const clientId = data.client_id;
 
-  const groupid = data.group_id;
-  const filter =
-    groupid === adminconfig.groupid
-      ? { status: 1 }
-      : { group_id: groupid, status: 1 };
+  const filter = { client_id: clientId, status: 1 };
 
-  const getClient = await clientRepository.getByFilter(filter);
+  // const getClient = await clientRepository.getByFilter(filter);
 
-  if (!getClient.success || getClient.data.length === 0) {
-    return notFound({ message: "Client not found or inactive." });
-  }
-
-  const clientId = getClient.data[0]._id;
+  // if (!getClient.success || getClient.data.length === 0) {
+  //   return notFound({ message: "Client not found or inactive." });
+  // }
 
   try {
     const newOtp = randomInt(6).toString();
@@ -145,7 +141,6 @@ const setLogin = async (body) => {
       email,
       device,
       otp: newOtp,
-      group_id: groupid,
       client_id: clientId,
       expired: new Date(Date.now() + authConfig.expirationOtp),
     });
@@ -169,7 +164,6 @@ const setLogin = async (body) => {
     return success({
       message: "Login successfully. OTP sent to your email.",
       data: {
-        group_id: groupid,
         _id: clientId,
       },
     });
