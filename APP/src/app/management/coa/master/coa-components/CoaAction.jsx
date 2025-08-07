@@ -10,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { coaAll, coaEndpoint } from "./CoaService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
+import { useCoa, useCoaDispatch } from "./CoaProvider";
+import UserUpdateForm from "@/app/management/coa/master/coa-pages/coaUpdate";
 import LoaderOverlay from "@/components/custom/loader-overlay";
 
-export default function UserAction({ row }) {
+export default function CoaAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
+  const coaDispatch = useCoaDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const { coaAction } = useCoa();
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete COA",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this COA? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: coaEndpoint.delete(id),
       },
     });
   };
@@ -44,11 +44,9 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
+    await coaAll().then((res) => {
       if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
+        coaDispatch({ type: coaAction.SUCCESS, payload: res.data });
       }
     });
 
@@ -56,6 +54,7 @@ export default function UserAction({ row }) {
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}

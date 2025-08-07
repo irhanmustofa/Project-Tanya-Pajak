@@ -10,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { groupAll, groupsEndpoint } from "./GroupService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
+import { useGroup, useGroupDispatch } from "./GroupProvider";
+import GroupUpdateForm from "@/app/management/groups/group-pages/GroupUpdateForm";
 import LoaderOverlay from "@/components/custom/loader-overlay";
 
-export default function UserAction({ row }) {
+export default function GroupAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
+  const groupDispatch = useGroupDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const { groupAction } = useGroup();
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Group",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this group? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: groupsEndpoint.delete(id),
       },
     });
   };
@@ -44,11 +44,9 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
+    await groupAll().then((res) => {
       if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
+        groupDispatch({ type: groupAction.SUCCESS, payload: res.data });
       }
     });
 
@@ -56,6 +54,7 @@ export default function UserAction({ row }) {
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
@@ -82,7 +81,7 @@ export default function UserAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <GroupUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}

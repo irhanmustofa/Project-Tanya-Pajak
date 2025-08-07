@@ -10,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { tarifCitAll, tarifCitEndpoint } from "./TarifCitService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
+import { useTarifCit, useTarifCitDispatch } from "./TarifCitProvider";
+import TarifCitUpdateForm from "@/app/management/clients/tarif-cit/tarif-cit-pages/TarifCitUpdateForm";
 import LoaderOverlay from "@/components/custom/loader-overlay";
 
-export default function UserAction({ row }) {
+export default function TarifCitAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
+  const tarifCitDispatch = useTarifCitDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const { tarifCitAction } = useTarifCit();
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Periode Laporan",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this Periode Laporan? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: tarifCitEndpoint.delete(id),
       },
     });
   };
@@ -44,11 +44,12 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
+    await tarifCitAll().then((res) => {
       if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
+        tarifCitDispatch({
+          type: tarifCitAction.SUCCESS,
+          payload: res.data,
+        });
       }
     });
 
@@ -56,6 +57,7 @@ export default function UserAction({ row }) {
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
@@ -82,7 +84,7 @@ export default function UserAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <TarifCitUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}

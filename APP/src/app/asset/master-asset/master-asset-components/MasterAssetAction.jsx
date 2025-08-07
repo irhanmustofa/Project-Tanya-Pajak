@@ -10,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { masterAssetAll, masterAssetsEndpoint } from "./MasterAssetService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
+import { useMasterAsset, useMasterAssetDispatch } from "./MasterAssetProvider";
 import LoaderOverlay from "@/components/custom/loader-overlay";
+import MasterAssetUpdateForm from "@/app/asset/master-asset/master-asset-pages/masterAssetUpdateForm";
 
-export default function UserAction({ row }) {
+export default function MasterAssetAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
+  const masterAssetDispatch = useMasterAssetDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const { masterAssetAction } = useMasterAsset();
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Master Asset",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this Master Asset? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: masterAssetsEndpoint.delete(id),
       },
     });
   };
@@ -44,18 +44,23 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
-      if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
-      }
-    });
+    const res = await masterAssetAll();
+    if (res.success) {
+      masterAssetDispatch({
+        type: masterAssetAction.SUCCESS,
+        payload: res.data,
+      });
+    }
+    // jika data kosong, dispatch dengan payload kosong
+    else {
+      masterAssetDispatch({ type: masterAssetAction.SUCCESS, payload: [] });
+    }
 
     setIsLoading(false);
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
@@ -80,9 +85,11 @@ export default function UserAction({ row }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <MasterAssetUpdateForm
+          id={item._id}
+          onClose={() => setOnUpdate(false)}
+        />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}

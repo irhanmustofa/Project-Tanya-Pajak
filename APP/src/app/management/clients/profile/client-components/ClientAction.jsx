@@ -10,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { clientAll, clientsEndpoint } from "./ClientService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
+import { useClient, useClientDispatch } from "./ClientProvider";
 import LoaderOverlay from "@/components/custom/loader-overlay";
+import ClientFormTabsUpdate from "../client-pages/client-update-form/ClientFormTabsUpdate";
 
-export default function UserAction({ row }) {
+export default function ClientAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
+  const clientDispatch = useClientDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const { clientAction } = useClient();
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Client",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this client? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: clientsEndpoint.delete(id),
       },
     });
   };
@@ -44,18 +44,18 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
+    await clientAll().then((res) => {
       if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
+        clientDispatch({ type: clientAction.SUCCESS, payload: res.data });
       }
     });
 
     setIsLoading(false);
+    window.location.reload();
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
@@ -82,7 +82,10 @@ export default function UserAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <ClientFormTabsUpdate
+          id={item._id}
+          onClose={() => setOnUpdate(false)}
+        />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}

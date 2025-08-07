@@ -10,17 +10,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { userAll, usersEndpoint } from "./UserService";
+import { jenisAssetAll, jenisAssetEndpoint } from "./JenisAssetService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { useUser, useUserDispatch } from "./UserProvider";
-import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
+import { useJenisAsset, useJenisAssetDispatch } from "./JenisAssetProvider";
+import CoaHeadUpdateForm from "@/app/management/coa/jenis-asset/jenis-asset-pages/JenisAssetUpdate";
 import LoaderOverlay from "@/components/custom/loader-overlay";
 
-export default function UserAction({ row }) {
+export default function JenisAssetAction({ row }) {
   const dispatch = useDialogDispatch();
-  const userDispatch = useUserDispatch();
+  const jenisAssetDispatch = useJenisAssetDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { userAction } = useUser();
+  const { jenisAssetAction } = useJenisAsset();
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,11 @@ export default function UserAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete User",
+        title: "Delete Jenis Asset",
         message:
-          "Are you sure you want to delete this user? This action cannot be undone.",
+          "Are you sure you want to delete this Jenis Asset? This action cannot be undone.",
         status: "warning",
-        url: usersEndpoint.delete(id),
+        url: jenisAssetEndpoint.delete(id),
       },
     });
   };
@@ -44,11 +44,12 @@ export default function UserAction({ row }) {
 
     setIsLoading(true);
 
-    await userAll().then((res) => {
+    await jenisAssetAll().then((res) => {
       if (res.success) {
-        userDispatch({ type: userAction.SUCCESS, payload: res.data });
-      } else {
-        userDispatch({ type: userAction.ERROR, payload: res.message });
+        jenisAssetDispatch({
+          type: jenisAssetAction.SUCCESS,
+          payload: res.data,
+        });
       }
     });
 
@@ -56,6 +57,7 @@ export default function UserAction({ row }) {
   };
 
   const item = row.original;
+
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
@@ -82,7 +84,7 @@ export default function UserAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <UserUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
+        <CoaHeadUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
