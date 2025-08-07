@@ -32,9 +32,9 @@ const login = async (req, res) => {
     success({
       message: "Login successful.",
       data: {
-        role: result.data.role,
+        token: createToken(),
+        group_id: result.data.group_id,
         client_id: result.data._id,
-        name: result.data.name,
       },
     })
   );
