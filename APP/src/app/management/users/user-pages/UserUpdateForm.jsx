@@ -35,7 +35,7 @@ export default function UserUpdateForm({ id, onClose }) {
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const userDispatch = useUserDispatch();
-  const { userAction, userGroup, userState } = useUser();
+  const { userAction, userState } = useUser();
 
   const { errors, handleChange } = useValidateInput({
     schema: {
@@ -43,18 +43,16 @@ export default function UserUpdateForm({ id, onClose }) {
       email: "required|email",
       password: "required|password",
       role: "required|number",
-      team: "required|number",
       status: "required|number",
     },
   });
 
   useEffect(() => {
-    const user = userState.data.find((item) => item.id === id);
+    const user = userState.data.find((item) => item._id === id);
     setInput({
       name: user.name,
       email: user.email,
       role: user.role,
-      team: user.team,
       status: user.status,
     });
 
@@ -69,7 +67,6 @@ export default function UserUpdateForm({ id, onClose }) {
       formData.append("name", input.name);
       formData.append("email", input.email);
       formData.append("status", input.status);
-      formData.append("team", input.team);
       formData.append("role", input.role);
 
       if (input.password) {
@@ -173,32 +170,6 @@ export default function UserUpdateForm({ id, onClose }) {
                   }}
                   error={errors.password}
                 />
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label>Group</Label>
-                  <Select
-                    name="team"
-                    onValueChange={(value) => {
-                      setInput({ ...input, team: value });
-                      handleChange("team", value);
-                    }}
-                  >
-                    <SelectTrigger className="col-span-3 rounded-md border">
-                      <SelectValue
-                        placeholder={
-                          userGroup.find((team) => team.id === input.team)
-                            ?.name || "Select Group"
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {userGroup.map((team) => (
-                        <SelectItem key={team.id} value={team.id}>
-                          {team.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label>Level</Label>
                   <Select

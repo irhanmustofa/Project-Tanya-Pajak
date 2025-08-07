@@ -26,8 +26,10 @@ import { useUser } from "./UserProvider";
 import UserAddForm from "@/app/management/users/user-pages/UserAddForm";
 import { useExportPDF } from "@/hooks/use-export-pdf";
 import { statusType, userLevel } from "@/helpers/variables";
+import { usePermissions } from "@/hooks/use-permissions";
 
 export default function UserSubject() {
+  const { checkPermission } = usePermissions();
   const { ExportPDF } = useExportPDF();
   const [openAdd, setOpenAdd] = useState(false);
   const [isExportExcel, setIsExportExcel] = useState(false);
@@ -89,10 +91,12 @@ export default function UserSubject() {
             User Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOpenAdd(true)}>
-            <LucideFilePen className="mr-2 h-4 w-4" />
-            <span>Add New</span>
-          </DropdownMenuItem>
+          {checkPermission("users.create") && (
+            <DropdownMenuItem onClick={() => setOpenAdd(true)}>
+              <LucideFilePen className="mr-2 h-4 w-4" />
+              <span>Add New</span>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           {userState.data.length > 0 && (
             <DropdownMenuSub>
