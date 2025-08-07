@@ -28,7 +28,10 @@ const setLogin = async (body) => {
   if (!getClient.success) return forbidden({ message: "Client not found" });
   const clientId = getClient.data[0]?._id;
 
-  const getData = await userRepository.getByFilter({ email: email, client_id: clientId });
+  const getData = await userRepository.getByFilter({
+    email: email,
+    client_id: clientId,
+  });
 
   if (!getData.success) {
     return forbidden({ message: "User not found." });
@@ -38,7 +41,6 @@ const setLogin = async (body) => {
   if (data.status !== 1) {
     return forbidden({ message: "User not active." });
   }
-  // console.log("res:", data);
 
   const resetInput = {
     email,
@@ -131,8 +133,6 @@ const setLogin = async (body) => {
       });
     }
   }
-
-
 
   if (!getClient.success || getClient.data.length === 0) {
     return notFound({ message: "Client not found or inactive." });

@@ -8,7 +8,7 @@ const wrapper = new MongodbWrapper(userSchema());
 const getAll = async (req, res) => {
   const filter = {
     client_id: req.headers.clientid,
-    email: { $ne: req.headers.email }
+    email: { $ne: req.headers.email },
   };
 
   return Response(res, await wrapper.getByFilter(filter));
@@ -17,10 +17,16 @@ const getAll = async (req, res) => {
 const create = async (req, res) => {
   const { clientid } = req.headers;
 
-  const existingUser = await wrapper.getByFilter({ email: req.body.email, client_id: clientid });
+  const existingUser = await wrapper.getByFilter({
+    email: req.body.email,
+    client_id: clientid,
+  });
 
   if (existingUser.success && existingUser.data.length > 0) {
-    return Response(res, badRequest({ message: "User with this email already exists." }));
+    return Response(
+      res,
+      badRequest({ message: "User with this email already exists." })
+    );
   }
 
   const user = new User(req.body);
@@ -29,7 +35,6 @@ const create = async (req, res) => {
   }
 
   return Response(res, await wrapper.create({ ...user, client_id: clientid }));
-
 };
 
 const update = async (req, res) => {
