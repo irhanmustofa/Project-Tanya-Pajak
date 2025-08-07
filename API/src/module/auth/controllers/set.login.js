@@ -41,7 +41,6 @@ const setLogin = async (body) => {
   if (data.status !== 1) {
     return forbidden({ message: "User not active." });
   }
-  // console.log("res:", data);
 
   const resetInput = {
     client_id: clientId,
