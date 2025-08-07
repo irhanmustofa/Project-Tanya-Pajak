@@ -10,6 +10,8 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 
 const InputOTPControlled = ({ otp, onValid }) => {
   const [value, setValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const handleOtp = async () => {
