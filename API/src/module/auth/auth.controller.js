@@ -6,8 +6,6 @@ import Response, {
 import { createToken } from "../../utils/functions.js";
 import authRepositories from "./auth.repositories.js";
 import { authorizationSchema } from "./auth.schema.js";
-import authRegister from "./controllers/auth.register.js";
-import authVerification from "./controllers/auth.verification.js";
 import authenticationProcess from "./controllers/authentication.process.js";
 import forgotPasswordController from "./controllers/forgot.password.js";
 import setLogin from "./controllers/set.login.js";
@@ -34,9 +32,9 @@ const login = async (req, res) => {
     success({
       message: "Login successful.",
       data: {
-        role: result.data.role,
+        token: createToken(),
+        group_id: result.data.group_id,
         client_id: result.data._id,
-        name: result.data.name,
       },
     })
   );
@@ -120,16 +118,10 @@ const resetPassword = async (req, res) => {
   return Response(res, success({ message: "Password reset successful." }));
 };
 
-const verification = async (req, res) => {
-  return Response(res, await authVerification(req));
-};
-
 const AuthController = {
   login,
   logout,
-  register,
   authentication,
-  verification,
   authorization,
   forgot,
   resetPassword,
