@@ -8,15 +8,15 @@ export const authenticationSchema = () => {
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     device: {
       type: String,
-      required: true
+      required: true,
     },
     otp: {
       type: String,
-      required: true
+      required: true,
     },
     expired: {
       type: Date,
@@ -39,11 +39,11 @@ export const authorizationSchema = () => {
     },
     token: {
       type: String,
-      required: true
+      required: true,
     },
     device: {
       type: String,
-      required: true
+      required: true,
     },
     expired: {
       type: Date,
@@ -64,11 +64,11 @@ export const tryLoginSchema = () => {
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     hits: {
       type: Number,
-      default: 0
+      default: 0,
     },
     expired: {
       type: Date,
@@ -89,13 +89,13 @@ export const forgotPasswordSchema = () => {
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     token: {
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     expired: {
       type: Date,
@@ -107,4 +107,4 @@ export const forgotPasswordSchema = () => {
     collection,
     schema,
   });
-}
+};

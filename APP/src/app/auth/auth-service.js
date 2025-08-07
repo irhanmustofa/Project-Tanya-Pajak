@@ -56,7 +56,7 @@ export const verifyOtp = async (otp) => {
       .url(authEndpoint.setAuthentication)
       .headers({
         email: email,
-        device: device
+        device: device,
       })
       .body({ otp })
       .send();
@@ -65,7 +65,7 @@ export const verifyOtp = async (otp) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export const resetPassword = async ({ data, token }) => {
   const password = data.get("password");

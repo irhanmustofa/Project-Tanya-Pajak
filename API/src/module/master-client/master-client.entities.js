@@ -3,8 +3,8 @@ import Validator from "../../database/database.validator.js";
 export default class Client {
   constructor(input) {
     const {
-      client_id,
-      nama,
+      _id,
+      company_name,
       npwp,
       kegiatan_utama,
       jenis_wp,
@@ -24,8 +24,8 @@ export default class Client {
     } = input;
 
     const data = {
-      client_id,
-      nama,
+      _id,
+      company_name,
       npwp,
       kegiatan_utama,
       jenis_wp,
@@ -45,8 +45,8 @@ export default class Client {
     };
 
     const baseRules = {
-      client_id: "required|string|min:6",
-      nama: "required|string|min:5",
+      _id: "required|string",
+      company_name: "required|string|min:3|max:100",
       npwp: "string|min:16",
       kegiatan_utama: "string",
       jenis_wp: "number",
@@ -66,8 +66,8 @@ export default class Client {
     const validator = new Validator(data, baseRules);
     const result = validator.getResult();
 
-    this.client_id = client_id;
-    this.nama = nama;
+    this._id = _id;
+    this.company_name = company_name;
     this.npwp = npwp;
     this.kegiatan_utama = kegiatan_utama;
     this.jenis_wp = jenis_wp;

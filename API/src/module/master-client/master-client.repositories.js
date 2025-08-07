@@ -7,9 +7,15 @@ export default class masterClientRepositories {
     this.model = model;
   }
 
-  async all() {
+  async all(groupid) {
+    if (groupid === adminconfig.groupid) {
+      // if group admin
+      return await MongodbORM.collection(this.model).get();
+    }
 
-    return await MongodbORM.collection(this.model).all();
+    return await MongodbORM.collection(this.model)
+      .where("group_id", "=", groupid)
+      .get();
   }
 
   async getByFilter(filter) {
@@ -26,6 +32,7 @@ export default class masterClientRepositories {
 
     if (result.success) {
       const lastData = await MongodbORM.collection(this.model)
+        .where("group_id", "=", data.group_id)
         .orderBy("created_at", "asc")
         .first();
       newId = lastData.data[0]._id;
