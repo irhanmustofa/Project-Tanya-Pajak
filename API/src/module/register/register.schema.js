@@ -14,6 +14,11 @@ export const registerSchema = () => {
       required: true,
       trim: true,
     },
+    company_name: {
+      type: String,
+      required: true,
+      trim: true
+    },
     email: {
       type: String,
       required: true,
