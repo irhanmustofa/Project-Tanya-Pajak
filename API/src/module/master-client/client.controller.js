@@ -17,7 +17,9 @@ const getById = async (req, res) => {
   return Response(res, result);
 };
 
-const create = createClient;
+const create = async (req, res) => {
+  return Response(res, createClient(req));
+};
 
 const update = updateClient;
 const remove = async (req, res) => {
