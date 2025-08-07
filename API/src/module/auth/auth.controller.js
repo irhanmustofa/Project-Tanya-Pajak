@@ -7,6 +7,7 @@ import { createToken } from "../../utils/functions.js";
 import authRepositories from "./auth.repositories.js";
 import { authorizationSchema } from "./auth.schema.js";
 import authRegister from "./controllers/auth.register.js";
+import authVerification from "./controllers/auth.verification.js";
 import authenticationProcess from "./controllers/authentication.process.js";
 import setLogin from "./controllers/set.login.js";
 
@@ -15,13 +16,11 @@ const authorizationRepository = new authRepositories(authorizationSchema());
 const login = async (req, res) => {
   const { email, password } = req.body;
   const { device } = req.headers;
-
   if (!email || !password || !device) {
     return Response(res, badRequest("some required fields are missing."));
   }
 
   const result = await setLogin({ email, password, device });
-
   if (!result.success) {
     return Response(res, result);
   }
@@ -90,11 +89,16 @@ const register = async (req, res) => {
   return Response(res, await authRegister(req));
 };
 
+const verification = async (req, res) => {
+  return Response(res, await authVerification(req));
+};
+
 const AuthController = {
   login,
   logout,
   register,
   authentication,
+  verification,
   authorization,
 };
 

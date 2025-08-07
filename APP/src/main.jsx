@@ -21,7 +21,6 @@ import DialogProvider from "@/dialogs/DialogProvider";
 import QRCodeViewer from "./app/auth/wa-qr/QRCodeViewer";
 import NotFound from "./app/NotFound";
 import ProtectedRoute from "./app/ProtectedRoute";
-import Clients from "./app/management/clients/profile/Clients";
 
 const router = createBrowserRouter([
   { path: "/", element: <LoginPage /> },
@@ -38,7 +37,6 @@ const router = createBrowserRouter([
     children: [
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/user", element: <Users /> },
-      { path: "/client", element: <Clients /> },
     ],
   },
   { path: "*", element: <NotFound /> },

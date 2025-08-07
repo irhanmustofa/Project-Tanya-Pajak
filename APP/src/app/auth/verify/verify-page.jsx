@@ -2,6 +2,8 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { dialogContext } from "@/dialogs/DialogContext";
 import { verify } from "@/app/auth/auth-service";
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function VerifyPage() {
   const navigate = useNavigate();
@@ -57,13 +59,26 @@ export const DialogVerify = ({ setSuccess, onClose }) => {
   return (
     <>
       {flashState.message && (
-        <DialogInfo
-          show={true}
-          title={flashState.title}
-          message={flashState.message}
-          status={flashState.type}
-          onClose={onClose}
-        />
+        <div className="grid w-full h-screen items-start gap-4 justify-center bg-slate-400">
+          <Alert variant="destructive" className="content-center">
+            {/* <CheckCircle2Icon /> */}
+            <AlertCircleIcon />
+            <AlertTitle>
+              {flashState.type == "success" ? "Success! " : "Failed! "}
+              {flashState.message}
+            </AlertTitle>
+            <AlertDescription>
+              This is an alert with icon, title and description.
+            </AlertDescription>
+          </Alert>
+        </div>
+        // <DialogInfo
+        //   show={true}
+        //   title={flashState.title}
+        //   message={flashState.message}
+        //   status={flashState.type}
+        //   onClose={onClose}
+        // />
       )}
     </>
   );
