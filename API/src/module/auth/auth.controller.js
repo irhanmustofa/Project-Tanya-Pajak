@@ -13,14 +13,13 @@ import setLogin from "./controllers/set.login.js";
 const authorizationRepository = new authRepositories(authorizationSchema());
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, company_npwp } = req.body;
   const { device } = req.headers;
   if (!email || !password || !device) {
     return Response(res, badRequest("some required fields are missing."));
   }
 
-  const result = await setLogin({ email, password, device });
-  console.log(result);
+  const result = await setLogin({ email, password, company_npwp, device });
   if (!result.success) {
     return Response(res, {
       message: result.message || "Login failed.",
@@ -110,9 +109,6 @@ const forgot = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
-  console.log("Resetting password with params:", req.params);
-  console.log("Request body:", req.body);
-
   const result = await forgotPasswordController.resetPassword(req, res);
 
   if (!result.success) {

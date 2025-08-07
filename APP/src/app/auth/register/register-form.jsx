@@ -7,7 +7,6 @@ import { dialogContext } from "@/dialogs/DialogContext";
 import { useValidateInput } from "@/hooks/use-validate-input";
 import svgImage from "@/public/register.svg";
 import { Link, useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { EyeClosed, EyeIcon, RefreshCcw } from "lucide-react";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 
@@ -20,24 +19,18 @@ const generateCaptcha = () => {
   }
   return result;
 };
-=======
-import { EyeClosed, EyeIcon } from "lucide-react";
-import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
->>>>>>> 2cd1356 (update-register)
 
 export function RegisterForm() {
   const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
-<<<<<<< HEAD
   const [captcha, setCaptcha] = useState(generateCaptcha());
-=======
->>>>>>> 2cd1356 (update-register)
 
   const [register, setRegister] = useState({
     name: "",
     company_name: "",
+    company_npwp: "",
     email: "",
     password: "",
     captcha: "",
@@ -47,6 +40,7 @@ export function RegisterForm() {
     schema: {
       name: "required|min:3",
       company_name: "required|min:3",
+      company_npwp: "required|min:3",
       email: "required|email",
       password: "required|password",
       captcha: "required",
@@ -66,7 +60,7 @@ export function RegisterForm() {
           status: "error",
         },
       });
-      // Refresh captcha
+
       setCaptcha(generateCaptcha());
       setRegister({ ...register, captcha: "" });
       handleChange("captcha", "");
@@ -78,10 +72,10 @@ export function RegisterForm() {
     const response = await registerService({
       name: register.name,
       company_name: register.company_name,
+      company_npwp: register.company_npwp,
       email: register.email,
       password: register.password,
     });
-    console.log("response", response);
     if (response.success) {
       setIsPending(false);
       dialogDispatch({
@@ -125,6 +119,8 @@ export function RegisterForm() {
     if (register.name) handleChange("name", register.name);
     if (register.company_name)
       handleChange("company_name", register.company_name);
+    if (register.company_npwp)
+      handleChange("company_npwp", register.company_npwp);
     if (register.email) handleChange("email", register.email);
     if (register.password) handleChange("password", register.password);
     if (register.captcha) handleChange("captcha", register.captcha);
@@ -142,11 +138,8 @@ export function RegisterForm() {
             valid={valid}
             errors={errors}
             handleChange={handleChange}
-<<<<<<< HEAD
             refreshCaptcha={refreshCaptcha}
             captcha={captcha}
-=======
->>>>>>> 2cd1356 (update-register)
           />
         </BodyContent>
       </Card>
@@ -195,11 +188,8 @@ const FormInput = ({
   errors,
   valid,
   handleChange,
-<<<<<<< HEAD
   refreshCaptcha,
   captcha,
-=======
->>>>>>> 2cd1356 (update-register)
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -222,6 +212,16 @@ const FormInput = ({
             error={errors.company_name}
             onChange={(e) =>
               setRegister({ ...register, company_name: e.target.value })
+            }
+          />
+          <InputVertical
+            title="Company NPWP"
+            name="company_npwp"
+            type="number"
+            placeholder="Company NPWP"
+            error={errors.company_npwp}
+            onChange={(e) =>
+              setRegister({ ...register, company_npwp: e.target.value })
             }
           />
           <InputVertical
@@ -254,13 +254,12 @@ const FormInput = ({
               {showPassword ? <EyeClosed /> : <EyeIcon />}
             </button>
           </div>
-<<<<<<< HEAD
 
           <div className="space-y-2 flex flex-col">
             <label className="text-sm font-medium">CAPTCHA</label>
             <div className="flex gap-3 items-center">
               <div
-                className="bg-gray-100 border rounded px-4 py-2 font-mono text-lg font-bold tracking-wider select-none"
+                className="bg-gray-100 dark:bg-gray-800 border rounded px-4 py-2 font-mono text-lg font-bold tracking-wider select-none"
                 style={{
                   userSelect: "none",
                   WebkitUserSelect: "none",
@@ -297,8 +296,6 @@ const FormInput = ({
             />
           </div>
 
-=======
->>>>>>> 2cd1356 (update-register)
           <Button
             type="submit"
             className="w-full mt-4"
