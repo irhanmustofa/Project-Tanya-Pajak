@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { verify } from "@/app/auth/auth-service";
-import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function VerifyPage() {
   const navigate = useNavigate();
