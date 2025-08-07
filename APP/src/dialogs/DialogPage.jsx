@@ -176,11 +176,7 @@ export const DialogDeleteSomePage = ({ onClose }) => {
         .url(dialogState.url)
         .body(dialogState.data)
         .send();
-<<<<<<< HEAD
       console.log("Delete some data response:", response);
-=======
-
->>>>>>> 2cd1356 (update-register)
       if (response.success) {
         dispatch({
           type: dialogAction.DIALOG_INFO,
@@ -282,7 +278,6 @@ export const DialogLogoutPage = () => {
   const handleLogout = () => {
     try {
       (async () => {
-<<<<<<< HEAD
         await HttpRequest.method("POST").url(authEndpoint.logout).send();
         useLocalStorage.reset();
         dispatch({
@@ -298,12 +293,6 @@ export const DialogLogoutPage = () => {
           dispatch({ type: dialogAction.RESET });
           navigate("/");
         }, 1000);
-=======
-        await HttpRequest.method("GET").url(authEndpoint.logout).send();
-        useLocalStorage.reset();
-        dispatch({ type: dialogAction.RESET });
-        navigate("/");
->>>>>>> 2cd1356 (update-register)
       })();
     } catch (error) {
       console.error("Error logging out:", error);

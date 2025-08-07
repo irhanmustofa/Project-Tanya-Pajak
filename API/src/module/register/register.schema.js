@@ -23,6 +23,11 @@ export const registerSchema = () => {
       trim: true
 >>>>>>> 2cd1356 (update-register)
     },
+    company_name: {
+      type: String,
+      required: true,
+      trim: true
+    },
     email: {
       type: String,
       required: true,
