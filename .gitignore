@@ -1,6 +1,8 @@
 /APP/node_modules
 /API/node_modules
 /APP/src/public
+/APP/public
+/API/public
 /APP/dist
 /APP/.vite
 error.log
