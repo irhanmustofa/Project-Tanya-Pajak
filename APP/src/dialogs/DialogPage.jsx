@@ -278,7 +278,6 @@ export const DialogLogoutPage = () => {
   const handleLogout = () => {
     try {
       (async () => {
-<<<<<<< HEAD
         await HttpRequest.method("POST").url(authEndpoint.logout).send();
         useLocalStorage.reset();
         dispatch({
@@ -294,12 +293,6 @@ export const DialogLogoutPage = () => {
           dispatch({ type: dialogAction.RESET });
           navigate("/");
         }, 1000);
-=======
-        await HttpRequest.method("GET").url(authEndpoint.logout).send();
-        useLocalStorage.reset();
-        dispatch({ type: dialogAction.RESET });
-        navigate("/");
->>>>>>> fd410b4 (update-register)
       })();
     } catch (error) {
       console.error("Error logging out:", error);
