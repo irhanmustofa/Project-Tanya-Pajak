@@ -1,4 +1,8 @@
-import Response, { badRequest, success, unauthorized } from "../app/response.js";
+import Response, {
+  badRequest,
+  success,
+  unauthorized,
+} from "../app/response.js";
 import { authConfig } from "../config/config.js";
 import MongodbWrapper from "../database/mongo/mongo.wrapper.js";
 import authRepositories from "../module/auth/auth.repositories.js";
@@ -49,13 +53,13 @@ export const validatingUser = async (headers) => {
 };
 
 export const checkPermission = (requiredPermissions) => {
-  console.log('Checking permissions:');
+  console.log("Checking permissions:");
   const userWrapper = new MongodbWrapper(userSchema());
   return async (req, res, next) => {
     try {
       const user = await userWrapper.getByFilter({
         email: req.headers.email,
-        client_id: req.headers.clientid
+        client_id: req.headers.clientid,
       });
 
       if (!user.success || !user.data || user.data.length === 0) {
@@ -73,8 +77,8 @@ export const checkPermission = (requiredPermissions) => {
 
       const userPermissions = userData.permissions || userData.permission || [];
 
-      console.log('Required permissions:', permissionsToCheck);
-      console.log('User permissions:', userPermissions);
+      console.log("Required permissions:", permissionsToCheck);
+      console.log("User permissions:", userPermissions);
 
       const hasPermission = permissionsToCheck.every((perm) =>
         userPermissions.includes(perm)
@@ -84,12 +88,14 @@ export const checkPermission = (requiredPermissions) => {
         return next();
       }
 
-      return Response(res, badRequest({
-        message: 'You do not have permission to access this resource.'
-      }));
-
+      return Response(
+        res,
+        badRequest({
+          message: "You do not have permission to access this resource.",
+        })
+      );
     } catch (error) {
-      console.error('Permission check error:', error);
+      console.error("Permission check error:", error);
       return Response(res, badRequest({ message: "Permission check failed" }));
     }
   };
