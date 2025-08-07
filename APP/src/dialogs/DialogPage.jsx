@@ -278,10 +278,21 @@ export const DialogLogoutPage = () => {
   const handleLogout = () => {
     try {
       (async () => {
-        await HttpRequest.method("GET").url(authEndpoint.logout).send();
+        await HttpRequest.method("POST").url(authEndpoint.logout).send();
         useLocalStorage.reset();
-        dispatch({ type: dialogAction.RESET });
-        navigate("/");
+        dispatch({
+          type: dialogAction.DIALOG_INFO,
+          payload: {
+            isOpen: true,
+            title: "Logout",
+            message: "Logout successful",
+            status: "success",
+          },
+        });
+        setTimeout(() => {
+          dispatch({ type: dialogAction.RESET });
+          navigate("/");
+        }, 1000);
       })();
     } catch (error) {
       console.error("Error logging out:", error);

@@ -7,35 +7,69 @@ import { dialogContext } from "@/dialogs/DialogContext";
 import { useValidateInput } from "@/hooks/use-validate-input";
 import svgImage from "@/public/register.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { EyeClosed, EyeIcon } from "lucide-react";
+import { EyeClosed, EyeIcon, RefreshCcw } from "lucide-react";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
+
+const generateCaptcha = () => {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < 5; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+};
 
 export function RegisterForm() {
   const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
+  const [captcha, setCaptcha] = useState(generateCaptcha());
 
   const [register, setRegister] = useState({
     name: "",
+    company_name: "",
     email: "",
     password: "",
+    captcha: "",
   });
 
   const { errors, valid, handleChange } = useValidateInput({
     schema: {
       name: "required|min:3",
+      company_name: "required|min:3",
       email: "required|email",
       password: "required|password",
+      captcha: "required",
     },
   });
 
   const registerHandler = async (event) => {
     event.preventDefault();
+
+    if (register.captcha !== captcha) {
+      dialogDispatch({
+        type: dialogAction.DIALOG_INFO,
+        payload: {
+          isOpen: true,
+          message: "CAPTCHA code is incorrect. Please try again.",
+          title: "Error",
+          status: "error",
+        },
+      });
+      // Refresh captcha
+      setCaptcha(generateCaptcha());
+      setRegister({ ...register, captcha: "" });
+      handleChange("captcha", "");
+      return;
+    }
+
     setIsPending(true);
 
     const response = await registerService({
       name: register.name,
+      company_name: register.company_name,
       email: register.email,
       password: register.password,
     });
@@ -66,13 +100,26 @@ export function RegisterForm() {
           status: "error",
         },
       });
+
+      setCaptcha(generateCaptcha());
+      setRegister({ ...register, captcha: "" });
+      handleChange("captcha", "");
     }
+  };
+
+  const refreshCaptcha = () => {
+    setCaptcha(generateCaptcha());
+    setRegister({ ...register, captcha: "" });
+    handleChange("captcha", "");
   };
 
   useEffect(() => {
     if (register.name) handleChange("name", register.name);
+    if (register.company_name)
+      handleChange("company_name", register.company_name);
     if (register.email) handleChange("email", register.email);
     if (register.password) handleChange("password", register.password);
+    if (register.captcha) handleChange("captcha", register.captcha);
   }, [register]);
 
   return (
@@ -87,6 +134,8 @@ export function RegisterForm() {
             valid={valid}
             errors={errors}
             handleChange={handleChange}
+            refreshCaptcha={refreshCaptcha}
+            captcha={captcha}
           />
         </BodyContent>
       </Card>
@@ -135,6 +184,8 @@ const FormInput = ({
   errors,
   valid,
   handleChange,
+  refreshCaptcha,
+  captcha,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -148,6 +199,16 @@ const FormInput = ({
             placeholder="Your Name"
             error={errors.name}
             onChange={(e) => setRegister({ ...register, name: e.target.value })}
+          />
+          <InputVertical
+            title="Company Name"
+            name="company_name"
+            type="text"
+            placeholder="Company Name"
+            error={errors.company_name}
+            onChange={(e) =>
+              setRegister({ ...register, company_name: e.target.value })
+            }
           />
           <InputVertical
             title="Email"
@@ -179,6 +240,48 @@ const FormInput = ({
               {showPassword ? <EyeClosed /> : <EyeIcon />}
             </button>
           </div>
+
+          <div className="space-y-2 flex flex-col">
+            <label className="text-sm font-medium">CAPTCHA</label>
+            <div className="flex gap-3 items-center">
+              <div
+                className="bg-gray-100 border rounded px-4 py-2 font-mono text-lg font-bold tracking-wider select-none"
+                style={{
+                  userSelect: "none",
+                  WebkitUserSelect: "none",
+                  MozUserSelect: "none",
+                  msUserSelect: "none",
+                }}
+                onContextMenu={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
+              >
+                {captcha}
+              </div>
+
+              <button
+                type="button"
+                onClick={refreshCaptcha}
+                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
+                title="Refresh CAPTCHA"
+              >
+                <RefreshCcw size={18} />
+              </button>
+            </div>
+
+            <InputVertical
+              title=""
+              name="captcha"
+              type="text"
+              placeholder="Enter CAPTCHA code"
+              value={register.captcha}
+              onChange={(e) => {
+                setRegister({ ...register, captcha: e.target.value });
+                handleChange("captcha", e.target.value);
+              }}
+              error={errors.captcha}
+            />
+          </div>
+
           <Button
             type="submit"
             className="w-full mt-4"

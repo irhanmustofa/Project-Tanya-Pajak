@@ -5,6 +5,10 @@ export default class authRepositories {
     this.model = model;
   }
 
+  async getByFilter(filter) {
+    return await MongodbORM.collection(this.model).where(filter).first();
+  }
+
   async setAuthentication(authentication) {
     const existingAuthentication = await MongodbORM.collection(this.model)
       .where("email", "=", authentication.email)
@@ -86,5 +90,23 @@ export default class authRepositories {
       .delete();
 
     return { success: true, message: "Logout successful" };
+  }
+
+  async setForgotPassword(forgotPassword) {
+    const existingForgotPassword = await MongodbORM.collection(this.model)
+      .where("email", "=", forgotPassword.email)
+      .first();
+
+    if (!existingForgotPassword.success) {
+      return await MongodbORM.collection(this.model).create(forgotPassword);
+    }
+
+    return await MongodbORM.collection(this.model)
+      .where("email", "=", forgotPassword.email)
+      .update(forgotPassword);
+  }
+
+  async deleteForgotPassword(filter) {
+    return await MongodbORM.collection(this.model).where(filter).hardDelete();
   }
 }
