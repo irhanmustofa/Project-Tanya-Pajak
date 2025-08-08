@@ -12,6 +12,7 @@ export const userClientAll = async () => {
       .url(userClientsEndpoint.all)
       .headers({
         email: useLocalStorage.get("email"),
+        clientId: useLocalStorage.get("clientId"),
       })
       .send();
     return request;
