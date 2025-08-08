@@ -17,10 +17,7 @@ import { EyeClosed, EyeIcon } from "lucide-react";
 const InputLogin = ({ setSuccess, setOtp }) => {
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState("");
-<<<<<<< HEAD
   const [company_npwp, setCompanyNpwp] = useState("");
-=======
->>>>>>> 2cd1356 (update-register)
   const [showPassword, setShowPassword] = useState(false);
 
   const { errors, valid, handleChange } = useValidateInput({
@@ -34,7 +31,6 @@ const InputLogin = ({ setSuccess, setOtp }) => {
   const handleLogin = async (formData) => {
     startTransition(async () => {
       const login = await loginService(formData);
-
       if (!login.success) {
         setSuccess({
           success: false,
@@ -44,17 +40,10 @@ const InputLogin = ({ setSuccess, setOtp }) => {
               : login.message,
         });
       } else {
-<<<<<<< HEAD
         useLocalStorage.set("clientId", login.data.client_id);
         useLocalStorage.set("email", formData.get("email"));
         useLocalStorage.set("name", login.data.name);
         useLocalStorage.set("role", login.data.role);
-=======
-        useLocalStorage.set("token", login.token);
-        useLocalStorage.set("email", formData.get("email"));
-        useLocalStorage.set("name", login.name);
-        useLocalStorage.set("role", login.role);
->>>>>>> 2cd1356 (update-register)
         useLocalStorage.set("sb", "true");
         useLocalStorage.set(
           "lastAccess",
@@ -90,7 +79,6 @@ const InputLogin = ({ setSuccess, setOtp }) => {
                   }}
                   error={errors.email}
                 />
-<<<<<<< HEAD
                 <InputVertical
                   title="Company NPWP"
                   name="company_npwp"
@@ -103,8 +91,6 @@ const InputLogin = ({ setSuccess, setOtp }) => {
                   }}
                   error={errors.company_npwp}
                 />
-=======
->>>>>>> 2cd1356 (update-register)
                 <div className="relative">
                   <InputVertical
                     title="Password"

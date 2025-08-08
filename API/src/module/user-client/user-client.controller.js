@@ -31,6 +31,7 @@ const getUserClient = async (req, res) => {
         role: user.role,
         status: user.status,
         company_name: client?.company_name || null,
+        permission: user.permission,
       };
     });
 

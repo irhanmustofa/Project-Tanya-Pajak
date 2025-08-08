@@ -4,19 +4,15 @@ import { userAll } from "./UserService";
 import { useAppReducer } from "@/hooks/use-app-reducer";
 import Loader from "@/components/custom/loader";
 import Error from "@/components/custom/error";
-<<<<<<< HEAD
-=======
-import { groupAll } from "../../groups/group-components/GroupService";
->>>>>>> 2cd1356 (update-register)
+import { dataPermissions } from "@/layouts/UserClientService";
 
 export default function UserProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [userState, userDispatch] = useReducer(appReducer, initialState);
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     userAll().then((res) => {
-<<<<<<< HEAD
-=======
       if (res.success) {
         userDispatch({ type: actionReducer.SUCCESS, payload: res.data });
       }
@@ -24,17 +20,14 @@ export default function UserProvider({ children }) {
       userDispatch({ type: actionReducer.FAILURE, payload: res.message });
     });
 
-    groupAll().then((res) => {
->>>>>>> 2cd1356 (update-register)
+    dataPermissions().then((res) => {
       if (res.success) {
-        userDispatch({ type: actionReducer.SUCCESS, payload: res.data });
+        setPermissions(res.data);
+      } else {
+        userDispatch({ type: actionReducer.FAILURE, payload: res.message });
       }
-
-      userDispatch({ type: actionReducer.FAILURE, payload: res.message });
     });
   }, []);
-
-  console.log("UserProvider", userState);
 
   if (userState.loading) {
     return <Loader />;
@@ -45,7 +38,9 @@ export default function UserProvider({ children }) {
   }
 
   return (
-    <userContext.Provider value={{ userState, userAction: actionReducer }}>
+    <userContext.Provider
+      value={{ userState, userAction: actionReducer, permissions }}
+    >
       <userDispatchContext.Provider value={userDispatch}>
         {children}
       </userDispatchContext.Provider>
