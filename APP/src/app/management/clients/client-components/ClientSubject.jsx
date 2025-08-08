@@ -13,25 +13,26 @@ import {
 
 import {
   LucideFileUp,
+  LucideFileDown,
   LucideFilePen,
   LucideFileText,
   LucideFileSpreadsheet,
   LucideSettings,
-  LucideFileDown,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
-import { usePeriodeLaporan } from "./PeriodeLaporanProvider";
-import PeriodeLaporanAddForm from "@/app/management/clients/periode-laporan/periode-laporan-pages/PeriodeLaporanAddForm";
+import { useClient } from "./ClientProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
-import PeriodeLaporanImportForm from "@/app/management/clients/periode-laporan/periode-laporan-pages/PeriodeLaporanImportForm";
-import { dateLong, dateShort } from "@/components/custom/DateFormatted";
+import { clientType, clientStatus } from "@/helpers/variables";
+import ClientAddForm from "@/app/management/clients/client-pages/ClientAddForm";
+import ClientImportForm from "@/app/management/clients/client-pages/ClientImportForm";
 
-export default function UserSubject() {
+export default function ClientSubject() {
   const { ExportPDF } = useExportPDF();
   const [openAdd, setOpenAdd] = useState(false);
+  const [openImport, setOpenImport] = useState(false);
   const [isExportExcel, setIsExportExcel] = useState(false);
   const [isExportPdf, setIsExportPdf] = useState(false);
   const [showExportPdf, setShowExportPdf] = useState(false);
@@ -39,34 +40,45 @@ export default function UserSubject() {
     head: [],
     body: [],
   });
-  const [openImport, setOpenImport] = useState(false);
 
-  const { periodeLaporanState } = usePeriodeLaporan();
+  const { clientState } = useClient();
 
   useEffect(() => {
     if (isExportExcel || isExportPdf) {
-      if (periodeLaporanState.data.length > 0) {
+      if (clientState.data.length > 0) {
         const exportExcel = [];
         setDataExport({ head: [], body: [] });
 
         dataExport.head = [
-          "Tahun Buku",
-          "Periode",
-          "Periode Awal",
-          "Periode Akhir",
-          "Tanggal & Tempat(TTD SPT)",
+          "Type",
+          "Name",
+          "PIC",
+          "Address",
+          "City",
+          "Company",
+          "Status",
+          "Email",
+          "Phone",
+          "Refferal",
         ];
-        exportExcel.push(dataExport.head);
 
-        periodeLaporanState.data.map((item) =>
+        exportExcel.push(dataExport.head);
+        const data = clientState.data.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        data.map((item) =>
           dataExport.body.push([
-            item.tahun_buku,
-            dateShort(new Date(item.periode_awal)) +
-              " - " +
-              dateShort(new Date(item.periode_akhir)),
-            dateShort(new Date(item.periode_awal)),
-            dateShort(new Date(item.periode_akhir)),
-            item.tempat_ttd + ", " + dateLong(new Date(item.tanggal_ttd)),
+            clientType.find((x) => x.code === item.type).name,
+            item.name,
+            item.pic,
+            item.address,
+            item.city,
+            item.company,
+            clientStatus.find((x) => x.code === item.status).name,
+            item.email,
+            item.phone,
+            item.refferal,
           ])
         );
 
@@ -74,7 +86,7 @@ export default function UserSubject() {
 
         if (isExportExcel) {
           setIsExportExcel(false);
-          useExcelWriter(exportExcel, "Data Periode Laporan.xlsx");
+          useExcelWriter(exportExcel, "Data Clients.xlsx");
         } else if (isExportPdf) {
           setDataExport(dataExport);
           setIsExportPdf(false);
@@ -85,32 +97,32 @@ export default function UserSubject() {
   }, [isExportExcel, isExportPdf]);
 
   return (
-    <div className="flex justify-between mb-4">
+    <div className="flex justify-between mb-2">
       <h2 className="text-2xl font-semibold">
-        Periode Laporan <b>Management </b>
+        Clients <b>Management </b>
       </h2>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
             <LucideSettings className="h-4 w-4" />
-            <span className="">Periode Laporan Manager</span>
+            <span className="">Client Manager</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="font-light w-36">
-            Periode Laporan Manager
+            Client Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setOpenAdd(true)}>
             <LucideFilePen className="mr-2 h-4 w-4" />
             <span>Add New</span>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem onClick={() => setOpenImport(true)}>
+          <DropdownMenuItem onClick={() => setOpenImport(true)}>
             <LucideFileDown className="mr-2 h-4 w-4" />
-            <span>Import</span>
-          </DropdownMenuItem> */}
+            <span>Bulk Import</span>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          {periodeLaporanState.data.length > 0 && (
+          {clientState.data.length > 0 && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <LucideFileUp className="mr-2 h-4 w-4" />
@@ -132,16 +144,20 @@ export default function UserSubject() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      {openAdd && <PeriodeLaporanAddForm onClose={() => setOpenAdd(false)} />}
-      {openImport && (
-        <PeriodeLaporanImportForm onClose={() => setOpenImport(false)} />
-      )}
+      {openAdd && <ClientAddForm onClose={() => setOpenAdd(false)} />}
+      {openImport && <ClientImportForm onClose={() => setOpenImport(false)} />}
       {showExportPdf && (
         <ExportPDF
-          title="Data Users"
+          title="Data Clients"
           columns={dataExport.head}
           data={dataExport.body}
-          onClose={() => setShowExportPdf(false)}
+          config={{
+            orientation: "landscape",
+          }}
+          onClose={() => {
+            setDataExport({ head: [], body: [] });
+            setShowExportPdf(false);
+          }}
         />
       )}
     </div>
