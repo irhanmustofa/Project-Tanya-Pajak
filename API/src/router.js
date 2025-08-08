@@ -8,16 +8,11 @@ import userRouter from "./module/master-user/user.route.js";
 import authRouter from "./module/auth/auth.route.js";
 import clientRouter from "./module/master-client/client.route.js";
 import registerRouter from "./module/register/register.route.js";
-<<<<<<< HEAD
 import userClientRouter from "./module/user-client/user.client.route.js";
 import permissionRouter from "./module/permission/permission.route.js";
 import documentRouter from "./module/document/document.route.js";
 
 const noValidate = ["/auth", "/register", "/permission"];
-=======
-
-const noValidate = ["/auth", "/register"];
->>>>>>> 2cd1356 (update-register)
 
 // router.use(async (req, res, next) => {
 //   if (!noValidate.some((path) => req.path.startsWith(path))) {
@@ -28,17 +23,12 @@ const noValidate = ["/auth", "/register"];
 //     }
 //   }
 
-<<<<<<< HEAD
 //   next();
 // });
 
 // PERMISSION
 router.use("/permission", permissionRouter);
 
-=======
-  next();
-});
->>>>>>> 2cd1356 (update-register)
 // REGISTER
 router.use("/register", registerRouter);
 //  AUTH
