@@ -165,6 +165,8 @@ const setLogin = async (body) => {
       message: "Login successfully. OTP sent to your email.",
       data: {
         _id: clientId,
+        role: data.role,
+        name: data.name,
       },
     });
   } catch (e) {

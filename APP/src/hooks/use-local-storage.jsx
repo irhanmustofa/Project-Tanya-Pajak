@@ -1,11 +1,10 @@
-const set = (key, value = null) => {
+const set = (key, value) => {
+  if (value === undefined || value === null) return;
   if (key === "device") {
     value = newDevice();
   }
-
   localStorage.setItem(key, value);
 };
-
 const get = (key) => {
   if (key === "device") {
     return newDevice();
@@ -19,14 +18,12 @@ const destroy = (key) => {
 };
 
 const remove = () => {
-  if (!administrator.includes(localStorage.getItem("email"))) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("name");
-    localStorage.removeItem("sb");
-    localStorage.removeItem("lastAccess");
-    return;
-  }
+  localStorage.removeItem("token");
+  localStorage.removeItem("email");
+  localStorage.removeItem("name");
+  localStorage.removeItem("sb");
+  localStorage.removeItem("lastAccess");
+  return;
 };
 
 const reset = () => {
@@ -53,11 +50,4 @@ const newDevice = () => {
 
   return randomString;
 };
-
-const administrator = [
-  "pa@mytaxindonesia.org",
-  "masdirah.gs@gmail.com",
-  "info@mytaxindonesia.org",
-];
-const isAdmin = () => administrator.includes(localStorage.getItem("email"));
-export const useLocalStorage = { set, get, reset, destroy, remove, isAdmin };
+export const useLocalStorage = { set, get, reset, destroy, remove };
