@@ -13,6 +13,7 @@ import permissionRouter from "./module/permission/permission.route.js";
 import alamatRouter from "./module/alamat-client/alamat.route.js";
 import dataEkonomiRouter from "./module/ekonomi-client/ekonomi-client.route.js";
 import kontakClientRouter from "./module/kontak-client/kontak-client.route.js";
+import documentRouter from "./module/document/document.route.js";
 
 const noValidate = ["/auth", "/register", "/permission"];
 
@@ -45,5 +46,8 @@ router.use("/alamat-client", alamatRouter);
 router.use("/ekonomi-client", dataEkonomiRouter);
 router.use("/kontak-client", kontakClientRouter);
 router.use("/users", userRouter);
+
+// Profile
+router.use("/documents", documentRouter);
 
 export default router;
