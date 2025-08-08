@@ -21,17 +21,20 @@ const InputOTPControlled = ({ otp, onValid }) => {
 
         try {
           const response = await verifyOtp(value);
-
           if (response?.success) {
-            if (response.data?.token) {
-              useLocalStorage.set("token", response.data.token);
+            const { data } = response;
+
+            if (data?.token) {
+              useLocalStorage.set("token", data.token || "");
             }
+
             onValid();
           } else {
             setError(response?.message || "Invalid OTP code");
             setValue("");
           }
         } catch (error) {
+          console.error("OTP verification error:", error);
           setError("Verification failed. Please try again.");
           setValue("");
         } finally {

@@ -4,12 +4,10 @@ import { userAll } from "./UserService";
 import { useAppReducer } from "@/hooks/use-app-reducer";
 import Loader from "@/components/custom/loader";
 import Error from "@/components/custom/error";
-import { groupAll } from "../../groups/group-components/GroupService";
 
 export default function UserProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [userState, userDispatch] = useReducer(appReducer, initialState);
-  const [groups, setGroups] = useState([]);
 
   useEffect(() => {
     userAll().then((res) => {
@@ -18,12 +16,6 @@ export default function UserProvider({ children }) {
       }
 
       userDispatch({ type: actionReducer.FAILURE, payload: res.message });
-    });
-
-    groupAll().then((res) => {
-      if (res.success) {
-        setGroups(res.data);
-      }
     });
   }, []);
 
@@ -36,9 +28,7 @@ export default function UserProvider({ children }) {
   }
 
   return (
-    <userContext.Provider
-      value={{ userState, userAction: actionReducer, userGroup: groups }}
-    >
+    <userContext.Provider value={{ userState, userAction: actionReducer }}>
       <userDispatchContext.Provider value={userDispatch}>
         {children}
       </userDispatchContext.Provider>

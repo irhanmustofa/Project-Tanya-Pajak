@@ -1,8 +1,7 @@
+import React, { Suspense } from "react"; // Tambahkan React import
 import { Link } from "react-router-dom";
 import { NavMain } from "@/components/nav-main";
-// import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-// import { TeamSwitcher } from "@/components/team-switcher";
 import {
   SidebarMenu,
   SidebarMenuItem,
@@ -19,16 +18,16 @@ import {
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { sidebarData } from "@/layouts/SidebarData";
 import DialogLogout from "@/dialogs/DialogLogout";
-
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { LucideLayoutDashboard } from "lucide-react";
 import logo from "@/public/vite.svg";
+import { TeamSwitcher } from "./team-switcher";
 
 export function AppSidebar({ ...props }) {
   const { dialogState, dialogAction } = useDialog();
   const dispatch = useDialogDispatch();
   const { toggleSidebar } = useSidebar();
-  const { users, sidebars } = sidebarData();
+  const { users, sidebars, companyList } = sidebarData();
   const isOpen = useLocalStorage.get("sb") === "true";
 
   const handleClick = () => {
@@ -47,11 +46,16 @@ export function AppSidebar({ ...props }) {
                 <img src={logo} alt="logo" className="w-10" />
               </Link>
               <SidebarGroupLabel className="ml-2 text-xl">
-                CRM Dashboard
+                Tanya Pajak
               </SidebarGroupLabel>
             </div>
-            {/* <TeamSwitcher teams={teams} /> */}
+
+            {/* Wrap dengan Suspense dan error boundary */}
+            <Suspense fallback={<div>Loading...</div>}>
+              <TeamSwitcher teams={companyList} />
+            </Suspense>
           </SidebarHeader>
+
           <SidebarContent
             style={{
               overflowY: "scroll",
@@ -72,8 +76,8 @@ export function AppSidebar({ ...props }) {
               </SidebarMenu>
             </SidebarGroup>
             <NavMain items={sidebars} />
-            {/* <NavProjects projects={projects} /> */}
           </SidebarContent>
+
           <SidebarFooter>
             <NavUser
               user={users}

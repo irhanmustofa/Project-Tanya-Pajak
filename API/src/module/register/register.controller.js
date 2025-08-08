@@ -11,10 +11,13 @@ import { APPURL } from "../../config/config.js";
 import { userSchema } from "../master-user/user.schema.js";
 import { masterClientSchema } from "../master-client/master-client.schema.js";
 import Client from "../master-client/master-client.entities.js";
+import { akunSchema } from "../akun/akun.schema.js";
+import Akun from "../akun/akun.entities.js";
 
 const registerWrapper = new MongodbWrapper(registerSchema());
 const userWrapper = new MongodbWrapper(userSchema());
 const clientWrapper = new MongodbWrapper(masterClientSchema());
+const akunWrapper = new MongodbWrapper(akunSchema());
 
 const sendVerificationEmail = async (email, token) => {
     try {
@@ -121,6 +124,7 @@ const verification = async (req, res) => {
         if (existingUser.success) {
             return Response(res, badRequest({ message: "User with this email already exists!" }));
         }
+
         const clientId = generateId();
         const newClient = new Client({
             _id: clientId,
@@ -128,9 +132,11 @@ const verification = async (req, res) => {
             status: 1,
         });
         const addNewClient = await clientWrapper.create(newClient);
+
         if (!addNewClient.success) {
             return Response(res, badRequest({ message: "Failed to create client account!" }));
         }
+
         const newUser = new Register({
             client_id: clientId,
             name: registerData.name,
@@ -144,6 +150,21 @@ const verification = async (req, res) => {
 
         if (!addNewUser.success) {
             return Response(res, badRequest({ message: "Failed to create user account!" }));
+        }
+
+        const newAkun = new Akun({
+            client_id: clientId,
+            client_service: 0,
+            max_user: 0,
+            client_paket: 0,
+            client_active: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            client_status: 0,
+        });
+
+        const addNewAkun = await akunWrapper.create(newAkun);
+
+        if (!addNewAkun.success) {
+            return Response(res, badRequest({ message: "Failed to create client account details!" }));
         }
 
         return Response(res, success({
