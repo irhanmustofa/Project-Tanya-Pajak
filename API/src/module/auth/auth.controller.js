@@ -30,9 +30,9 @@ const login = async (req, res) => {
     success({
       message: "Login successful.",
       data: {
-        token: createToken(),
-        group_id: result.data.group_id,
+        role: result.data.role,
         client_id: result.data._id,
+        name: result.data.name,
       },
     })
   );
