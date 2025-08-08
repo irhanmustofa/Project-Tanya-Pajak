@@ -147,7 +147,7 @@ export default function ClientFormTabs({ onClose }) {
 
             <div className="overflow-y-auto h-[60vh] px-3 py-2">
               <TabsContent value="perusahaan">
-                <InformasiPerusahaan
+                <InformasiPergitusahaan
                   formData={formData}
                   setFormData={setFormData}
                 />
