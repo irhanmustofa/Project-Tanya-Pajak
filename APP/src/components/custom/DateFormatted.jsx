@@ -25,7 +25,7 @@ export const dateToday = () => {
 };
 
 export const dateStrip = (date) => {
-  return date
+  return new Date(date)
     .toLocaleDateString("ja-JP", {
       day: "2-digit",
       year: "numeric",

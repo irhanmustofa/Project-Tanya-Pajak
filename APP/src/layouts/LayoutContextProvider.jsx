@@ -13,13 +13,9 @@ export const LayoutProvider = ({ children }) => {
       try {
         setLoading(true);
         const res = await userClientAll();
-
-        console.log("LayoutProvider - API response:", res);
-
         if (res.success) {
           setCompanies(res.data);
           setError(null);
-          console.log("LayoutProvider - companies set:", res.data);
         } else {
           setError(res.message);
           setCompanies([]);
@@ -35,8 +31,6 @@ export const LayoutProvider = ({ children }) => {
 
     fetchCompanies();
   }, []);
-
-  console.log("LayoutProvider - current companies:", companies);
 
   return (
     <layoutsContext.Provider

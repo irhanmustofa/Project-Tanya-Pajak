@@ -14,7 +14,6 @@ export const userClientAll = async () => {
         email: useLocalStorage.get("email"),
       })
       .send();
-    console.log("userClientAll - API request sent:", request);
     return request;
   } catch (error) {
     return {

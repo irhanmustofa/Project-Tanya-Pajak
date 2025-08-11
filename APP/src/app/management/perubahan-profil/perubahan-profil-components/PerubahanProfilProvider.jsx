@@ -1,7 +1,7 @@
 import { useReducer, useContext, useEffect, useState } from "react";
 import { clientContext, clientDispatchContext } from "./PerubahanProfilContext";
 import { useAppReducer } from "@/hooks/use-app-reducer";
-import { clientAll, clientFirst } from "./PerubahanProfilService";
+import { clientFirst } from "./PerubahanProfilService";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/loader";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -12,7 +12,6 @@ export default function ClientProvider({ children }) {
   const id = useLocalStorage.get("clientId") ?? "";
   useEffect(() => {
     clientFirst(id).then((res) => {
-      console.log("res", res);
       if (res.success) {
         clientDispatch({ type: actionReducer.SUCCESS, payload: res.data });
       }

@@ -195,3 +195,33 @@ export const kppOption = [
   { kode: "6", kantor: "KPP Pratama Jakarta Duren Sawit (008)" },
   { kode: "7", kantor: "KPP Pratama Jakarta Pasar Rebo (009)" },
 ];
+
+export const kluOption = [
+  {
+    kode: "H50111",
+    deskripsi: "ANGKUTAN LAUT DOMESTIK UMUM LINER UNTUK PENUMPANG",
+  },
+  {
+    kode: "H50112",
+    deskripsi: "ANGKUTAN LAUT DOMESTIK UMUM TRAMPER UNTUK PENUMPANG",
+  },
+  { kode: "J60101", deskripsi: "PENYIARAN RADIO OLEH PEMERINTAH" },
+  { kode: "J61919", deskripsi: "JASA NILAI TAMBAH TELEPONI LAINNYA" },
+  { kode: "J61914", deskripsi: "WARUNG TELEKOMUNIKASI (WARTEL)" },
+  { kode: "K64200", deskripsi: "KEGIATAN PERUSAHAAN HOLDING" },
+  { kode: "K66110", deskripsi: "ADMINISTRASI PASAR UANG (BURSA EFEK)" },
+  { kode: "L68110", deskripsi: "REAL ESTAT YANG DIMILIKI SENDIRI ATAU DISEWA" },
+  {
+    kode: "N77400",
+    deskripsi:
+      "SEWA GUNA USAHA TANPA HAK OPSI ASET NON FINANSIAL, BUKAN KARYA HAK CIPTA",
+  },
+  {
+    kode: "P85230",
+    deskripsi:
+      "JASA PENDIDIKAN MENENGAH KEJURUAN DAN TEKNIK/MADRASAH ALIYAH KEJURUAN PEMERINTAH",
+  },
+  { kode: "P85498", deskripsi: "JASA PENDIDIKAN KERAJINAN DAN INDUSTRI" },
+  { kode: "Q93123", deskripsi: "KELAB RENANG" },
+  { kode: "S95120", deskripsi: "JASA REPARASI PERALATAN KOMUNIKASI" },
+];

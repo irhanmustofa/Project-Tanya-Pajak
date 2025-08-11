@@ -67,7 +67,7 @@ export function TeamSwitcher({ teams = [] }) {
         );
 
   const [openAdd, setOpenAdd] = useState(false);
-  console.log("list", teams);
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>

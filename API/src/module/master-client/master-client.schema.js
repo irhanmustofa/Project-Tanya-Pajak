@@ -6,17 +6,17 @@ export const masterClientSchema = () => {
   const schema = {
     _id: { required: true, type: String },
     company_name: { type: String, required: true },
-    npwp: { type: String },
+    company_npwp: { type: String, unique: true },
     kegiatan_utama: { type: String },
-    jenis_wp: { type: Number },
+    jenis_wp: { type: Number, default: 1 },
     bentuk_badan_hukum: { type: Number },
-    status_npwp: { type: Number },
+    status_npwp: { type: Number, default: 1 },
     tanggal_daftar: { type: Date, default: new Date(Date.now()) },
     tanggal_aktivasi: { type: Date, default: new Date(Date.now()) },
     status_pkp: { type: Number },
     tanggal_pengukuhan_pkp: { type: Date },
     kantor_wilayah_djp: { type: String },
-    kpp: { type: Number },
+    kantor_pelayanan_pajak: { type: Number },
     seksi_pengawasan: { type: Number },
     alamat: [
       {
@@ -44,7 +44,6 @@ export const masterClientSchema = () => {
       },
     ],
     kode_klu: { type: String },
-    deskripsi_klu: { type: String },
     status: { required: true, type: Number, default: 1 },
   };
 

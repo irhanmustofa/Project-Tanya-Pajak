@@ -7,9 +7,11 @@ import {
 import { AppWindowIcon, CodeIcon } from "lucide-react";
 import ProfilTabs from "./ProfilTabs";
 import { useClient } from "../../perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
+import AlamatTabs from "./AlamatTabs";
 
 export default function PerubahanProfilPages() {
-  const { clientState } = useClient();
+  const { clientState, clientAction } = useClient();
+
   return (
     <>
       <h1 className="text-2xl font-medium mb-10">PROFIL WAJIB PAJAK</h1>
@@ -27,11 +29,11 @@ export default function PerubahanProfilPages() {
         </TabsList>
         <TabsContent value="profil">
           <div className=" px-6">
-            <ProfilTabs data={clientState?.data} />
+            <ProfilTabs />
           </div>
         </TabsContent>
         <TabsContent value="alamat">
-          <h1>Alamat</h1>
+          <AlamatTabs />
         </TabsContent>
         <TabsContent value="kontak">
           <h1>Kontak</h1>

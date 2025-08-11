@@ -58,8 +58,6 @@ export const sidebarData = () => {
   const [companyState, setCompanyState] = useState([]);
 
   useEffect(() => {
-    console.log("SidebarData - companies from context:", companies);
-
     if (companies && companies.length > 0) {
       setCompanyState(
         companies.map((company) => ({
@@ -71,7 +69,6 @@ export const sidebarData = () => {
     }
   }, [companies]);
 
-  console.log("SidebarData - companyState:", companyState);
   const companyList = companyState;
 
   const setCompanies = (companyList) => {
