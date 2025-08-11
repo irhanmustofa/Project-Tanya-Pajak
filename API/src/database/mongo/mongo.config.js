@@ -12,5 +12,6 @@ export const mongoConfig = {
     try_logins: "try_logins",
     master_client: "master_client",
     register: "register",
+    permission: "permission",
   },
 };

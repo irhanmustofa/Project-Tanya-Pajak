@@ -18,6 +18,7 @@ const InputForgot = ({ setSuccess }) => {
   const { errors, valid, handleChange } = useValidateInput({
     schema: {
       email: "required|email",
+      company_npwp: "required|min:3",
     },
   });
 
@@ -55,6 +56,14 @@ const InputForgot = ({ setSuccess }) => {
                   placeholder="email@example.com"
                   onChange={(e) => handleChange("email", e.target.value)}
                   error={errors.email}
+                />
+                <InputVertical
+                  title="Company NPWP"
+                  name="company_npwp"
+                  type="number"
+                  placeholder="Company NPWP"
+                  onChange={(e) => handleChange("company_npwp", e.target.value)}
+                  error={errors.company_npwp}
                 />
                 <Button
                   pending={isPending}
