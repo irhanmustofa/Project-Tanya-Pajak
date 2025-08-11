@@ -27,7 +27,6 @@ import { useClient } from "./ClientProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
 import { clientType, clientStatus } from "@/helpers/variables";
 import ClientAddForm from "@/app/management/clients/client-pages/ClientAddForm";
-import ClientImportForm from "@/app/management/clients/client-pages/ClientImportForm";
 
 export default function ClientSubject() {
   const { ExportPDF } = useExportPDF();
@@ -145,7 +144,6 @@ export default function ClientSubject() {
         </DropdownMenuContent>
       </DropdownMenu>
       {openAdd && <ClientAddForm onClose={() => setOpenAdd(false)} />}
-      {openImport && <ClientImportForm onClose={() => setOpenImport(false)} />}
       {showExportPdf && (
         <ExportPDF
           title="Data Clients"
