@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import UserAction from "@/app/management/users/user-components/UserAction";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
-import { roles, statusType } from "@/helpers/variables";
+import { statusType } from "@/helpers/variables";
 import { useUser } from "./UserProvider";
 
 export default function useUserTableConfig() {
@@ -67,18 +67,6 @@ export default function useUserTableConfig() {
         ),
       },
       {
-        accessorKey: "role",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Role" />
-        ),
-        cell: ({ row }) => (
-          <div>
-            {roles.find((item) => item.code === row.getValue("role"))?.name}
-          </div>
-        ),
-        filterFn: (row, id, value) => value.includes(row.getValue(id)),
-      },
-      {
         accessorKey: "group_id",
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Group" />
@@ -121,11 +109,6 @@ export default function useUserTableConfig() {
       label: item.name,
     }));
 
-    const filterColumnRoleValue = roles.map((item) => ({
-      value: item.code,
-      label: item.name,
-    }));
-
     return {
       filterDate: {
         active: false,
@@ -135,10 +118,6 @@ export default function useUserTableConfig() {
         status: {
           title: "Status",
           values: filterColumnStatusValue,
-        },
-        role: {
-          title: "Role",
-          values: filterColumnRoleValue,
         },
         group_id: {
           title: "Group",

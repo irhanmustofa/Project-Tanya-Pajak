@@ -1,25 +1,23 @@
 import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 
-export const clientsEndpoint = {
+export const clientEndpoint = {
   all: `${base_url}/client`,
   create: `${base_url}/client`,
+  import: `${base_url}/client/import`,
+  status: `${base_url}/client/status`,
   deleteSome: `${base_url}/client/delete`,
   get: (id) => `${base_url}/client/${id}`,
   update: (id) => `${base_url}/client/${id}`,
   delete: (id) => `${base_url}/client/${id}`,
-  email: (email) => `${base_url}/client/email/${email}`,
-  updatePassword: `${base_url}/client/update-password`,
-  import: `${base_url}/client/import`,
-  firstClient: `${base_url}/client/first-client`,
 };
 
 export const clientAll = async () => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(clientsEndpoint.all)
+      .url(clientEndpoint.all)
       .send();
+
     return request;
   } catch (error) {
     return {
@@ -32,7 +30,7 @@ export const clientAll = async () => {
 export const clientFirst = async (id) => {
   try {
     const request = await HttpRequest.method("GET")
-      .url(clientsEndpoint.get(id))
+      .url(clientEndpoint.get(id))
       .send();
 
     return request;
@@ -47,45 +45,7 @@ export const clientFirst = async (id) => {
 export const clientCreate = async (data) => {
   try {
     const request = await HttpRequest.method("POST")
-      .url(clientsEndpoint.create)
-      .headers({
-        groupId: useLocalStorage.get("groupId"),
-      })
-      .body(data)
-      .send();
-
-    return request;
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message,
-    };
-  }
-};
-
-export const clientUpdate = async (id, data) => {
-  try {
-    const request = await HttpRequest.method("PUT")
-      .url(clientsEndpoint.update(id))
-      .body(data)
-      .send();
-
-    return request;
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message,
-    };
-  }
-};
-
-export const updatePassword = async (data) => {
-  try {
-    const request = await HttpRequest.method("POST")
-      .url(clientsEndpoint.updatePassword)
-      .headers({
-        email: useLocalStorage.get("email"),
-      })
+      .url(clientEndpoint.create)
       .body(data)
       .send();
 
@@ -101,8 +61,75 @@ export const updatePassword = async (data) => {
 export const clientImport = async (data) => {
   try {
     const request = await HttpRequest.method("POST")
-      .url(clientsEndpoint.import)
+      .url(clientEndpoint.import)
       .body(data)
+      .send();
+
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const clientUpdate = async (id, data) => {
+  try {
+    const request = await HttpRequest.method("PUT")
+      .url(clientEndpoint.update(id))
+      .body(data)
+      .send();
+
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const clientObservationEndpoint = {
+  get: (id) => `${base_url}/client/observation/${id}`,
+  set: (id) => `${base_url}/client/observation/${id}`,
+};
+
+export const clientObservationGet = async (id) => {
+  try {
+    const request = await HttpRequest.method("GET")
+      .url(clientObservationEndpoint.get(id))
+      .send();
+
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const clientObservationSet = async (id, data) => {
+  try {
+    const request = await HttpRequest.method("PUT")
+      .url(clientObservationEndpoint.set(id))
+      .body(data)
+      .send();
+
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const ClientHistory = async (id) => {
+  try {
+    const request = await HttpRequest.method("GET")
+      .url(`${base_url}/client/history/${id}`)
       .send();
     return request;
   } catch (error) {
