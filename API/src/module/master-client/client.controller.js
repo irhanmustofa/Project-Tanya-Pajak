@@ -13,8 +13,6 @@ const all = async (req, res) => {
 
 const getById = async (req, res) => {
   const result = await wrapper.getByFilter({ _id: req.params.id });
-  console.log("result:", result);
-  console.log("id:", req.params.id);
   return Response(res, result);
 };
 

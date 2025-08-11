@@ -1,4 +1,4 @@
-import { error } from "../../../app/response.js";
+import { badRequest, error } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import MasterClient from "../master-client.entities.js";
 import { masterClientSchema } from "../master-client.schema.js";
@@ -11,7 +11,7 @@ export default async function createClient(req) {
     if (masterClient.errors) {
       return badRequest({ message: masterClient.errors.join(", ") });
     }
-    console.log("body:", masterClient);
+
     return await wrapper.create(masterClient);
   } catch (err) {
     console.log("create client error:", err);
