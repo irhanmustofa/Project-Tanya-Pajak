@@ -1,44 +1,41 @@
 import { useReducer, useContext, useEffect, useState } from "react";
-import { clientContext, clientDispatchContext } from "./ClientContext";
-import { clientAll } from "./ClientService";
+import { clientContext, clientDispatchContext } from "./PerubahanProfilContext";
 import { useAppReducer } from "@/hooks/use-app-reducer";
+import { clientAll, clientFirst } from "./PerubahanProfilService";
+import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/loader";
-import Error from "@/components/custom/error";
-import { groupAll } from "@/app/management/groups/group-components/GroupService";
-import { periodeLaporanAll } from "../../periode-laporan/periode-laporan-components/PeriodeLaporanService";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function ClientProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [clientState, clientDispatch] = useReducer(appReducer, initialState);
-  const [groups, setGroups] = useState([]);
-  const [periodeLaporan, setPeriodeLaporan] = useState([]);
-
+  const id = useLocalStorage.get("clientId") ?? "";
   useEffect(() => {
-    clientAll().then((res) => {
+    clientFirst(id).then((res) => {
+      console.log("res", res);
       if (res.success) {
         clientDispatch({ type: actionReducer.SUCCESS, payload: res.data });
       }
 
       clientDispatch({ type: actionReducer.FAILURE, payload: res.message });
     });
-    groupAll().then((res) => {
-      if (res.success) {
-        setGroups(res.data);
-      }
-    });
-    periodeLaporanAll().then((res) => {
-      if (res.success) {
-        setPeriodeLaporan(res.data);
-      }
-    });
   }, []);
 
-  // if (clientState.loading) {
-  //   return <Loader />;
-  // }
+  if (clientState.loading) {
+    return <Loader />;
+  }
 
   if (clientState.error && clientState.error !== "Data Not Found") {
-    return <Error message={clientState.error} />;
+    return (
+      <div className="text-center font-semibold text-lg">
+        <div className="text-center font-semibold text-lg mb-4">
+          Server Connection Error
+        </div>
+        <Button onClick={() => window.location.reload()} variant="outline">
+          Refresh Data
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -46,8 +43,6 @@ export default function ClientProvider({ children }) {
       value={{
         clientState,
         clientAction: actionReducer,
-        clientGroup: groups,
-        clientPeriodeLaporan: periodeLaporan,
       }}
     >
       <clientDispatchContext.Provider value={clientDispatch}>
