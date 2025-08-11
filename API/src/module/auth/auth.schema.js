@@ -122,10 +122,15 @@ export const forgotPasswordSchema = () => {
 export const forgotPasswordSchema = () => {
   const collection = mongoConfig.collection.forgot_password;
   const schema = {
+    client_id: {
+      type: String,
+      required: true,
+      trim: true
+    },
     email: {
       type: String,
       required: true,
-      unique: true,
+      unique: false,
       trim: true
     },
     token: {
