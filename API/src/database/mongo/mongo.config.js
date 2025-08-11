@@ -3,6 +3,9 @@ export const mongoConfig = {
   urlClient: (client_id) =>
     `mongodb+srv://123lainlain:oSKFzkHhUWCGu73q@cluster-0001.cftug9j.mongodb.net/${client_id}?authSource=admin&retryWrites=true&w=majority&appName=Cluster-0001`,
   collection: {
+    register: "register",
+    forgot_password: "forgot_password",
+    client_akun: "client_akun",
     users: "users",
     authentication: "authentication",
     authorization: "authorization",
