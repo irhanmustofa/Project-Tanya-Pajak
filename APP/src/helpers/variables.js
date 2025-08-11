@@ -78,10 +78,6 @@ export const quotationStatus = [
 ];
 
 export const userLevel = [
-<<<<<<< HEAD
-  { code: 0, name: "Admin" },
-  { code: 1, name: "User" },
-=======
   { code: 0, name: "Super Admin" },
   { code: 1, name: "Admin" },
   { code: 2, name: "Finance" },
@@ -91,7 +87,6 @@ export const userLevel = [
   { code: 4, name: "Supervisor" },
   { code: 5, name: "Team Head" },
   { code: 6, name: "Staff" },
->>>>>>> 2cd1356 (update-register)
 ];
 
 export const clientType = [
@@ -171,7 +166,6 @@ export const companyHandler = [
     icon: LucideDollarSign,
   },
 ];
-<<<<<<< HEAD
 
 export const jenisWpOption = [
   { kode: "1", jenis_wp: "BADAN" },
@@ -366,5 +360,3 @@ export const kluOption = [
   { kode: "Q93123", deskripsi: "KELAB RENANG" },
   { kode: "S95120", deskripsi: "JASA REPARASI PERALATAN KOMUNIKASI" },
 ];
-=======
->>>>>>> 2cd1356 (update-register)
