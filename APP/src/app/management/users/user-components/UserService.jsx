@@ -1,8 +1,8 @@
 import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export const usersEndpoint = {
-<<<<<<< HEAD
   all: `${base_url}/users`,
   create: `${base_url}/users`,
   deleteSome: `${base_url}/users/delete`,
@@ -10,15 +10,6 @@ export const usersEndpoint = {
   update: (id) => `${base_url}/users/${id}`,
   delete: (id) => `${base_url}/users/${id}`,
   email: (email) => `${base_url}/users/email/${email}`,
-=======
-  all: `${base_url}/user`,
-  create: `${base_url}/user`,
-  deleteSome: `${base_url}/user/delete`,
-  get: (id) => `${base_url}/user/${id}`,
-  update: (id) => `${base_url}/user/${id}`,
-  delete: (id) => `${base_url}/user/${id}`,
-  email: (email) => `${base_url}/user/email/${email}`,
->>>>>>> 2cd1356 (update-register)
 };
 
 export const userAll = async () => {
