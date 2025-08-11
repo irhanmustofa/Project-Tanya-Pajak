@@ -1,10 +1,6 @@
 import React, { Suspense } from "react"; // Tambahkan React import
 import { Link } from "react-router-dom";
 import { NavMain } from "@/components/nav-main";
-<<<<<<< HEAD
-=======
-// import { NavProjects } from "@/components/nav-projects";
->>>>>>> fd410b4 (update-register)
 import { NavUser } from "@/components/nav-user";
 import {
   SidebarMenu,
@@ -25,20 +21,13 @@ import DialogLogout from "@/dialogs/DialogLogout";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { LucideLayoutDashboard } from "lucide-react";
 import logo from "@/public/vite.svg";
-<<<<<<< HEAD
 import { TeamSwitcher } from "./team-switcher";
-=======
->>>>>>> fd410b4 (update-register)
 
 export function AppSidebar({ ...props }) {
   const { dialogState, dialogAction } = useDialog();
   const dispatch = useDialogDispatch();
   const { toggleSidebar } = useSidebar();
-<<<<<<< HEAD
   const { users, sidebars, companyList } = sidebarData();
-=======
-  const { users, sidebars } = sidebarData();
->>>>>>> fd410b4 (update-register)
   const isOpen = useLocalStorage.get("sb") === "true";
 
   const handleClick = () => {
@@ -57,7 +46,6 @@ export function AppSidebar({ ...props }) {
                 <img src={logo} alt="logo" className="w-10" />
               </Link>
               <SidebarGroupLabel className="ml-2 text-xl">
-<<<<<<< HEAD
                 Tanya Pajak
               </SidebarGroupLabel>
             </div>
@@ -67,14 +55,6 @@ export function AppSidebar({ ...props }) {
               <TeamSwitcher teams={companyList} />
             </Suspense>
           </SidebarHeader>
-
-=======
-                CRM Dashboard
-              </SidebarGroupLabel>
-            </div>
-            {/* <TeamSwitcher teams={teams} /> */}
-          </SidebarHeader>
->>>>>>> fd410b4 (update-register)
           <SidebarContent
             style={{
               overflowY: "scroll",
@@ -95,13 +75,7 @@ export function AppSidebar({ ...props }) {
               </SidebarMenu>
             </SidebarGroup>
             <NavMain items={sidebars} />
-<<<<<<< HEAD
           </SidebarContent>
-
-=======
-            {/* <NavProjects projects={projects} /> */}
-          </SidebarContent>
->>>>>>> fd410b4 (update-register)
           <SidebarFooter>
             <NavUser
               user={users}
