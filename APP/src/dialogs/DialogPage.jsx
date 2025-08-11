@@ -176,7 +176,7 @@ export const DialogDeleteSomePage = ({ onClose }) => {
         .url(dialogState.url)
         .body(dialogState.data)
         .send();
-
+      console.log("Delete some data response:", response);
       if (response.success) {
         dispatch({
           type: dialogAction.DIALOG_INFO,

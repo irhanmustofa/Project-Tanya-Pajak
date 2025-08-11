@@ -30,6 +30,7 @@ export function RegisterForm() {
   const [register, setRegister] = useState({
     name: "",
     company_name: "",
+    company_npwp: "",
     email: "",
     password: "",
     captcha: "",
@@ -39,6 +40,7 @@ export function RegisterForm() {
     schema: {
       name: "required|min:3",
       company_name: "required|min:3",
+      company_npwp: "required|min:3",
       email: "required|email",
       password: "required|password",
       captcha: "required",
@@ -58,7 +60,7 @@ export function RegisterForm() {
           status: "error",
         },
       });
-      // Refresh captcha
+
       setCaptcha(generateCaptcha());
       setRegister({ ...register, captcha: "" });
       handleChange("captcha", "");
@@ -70,10 +72,10 @@ export function RegisterForm() {
     const response = await registerService({
       name: register.name,
       company_name: register.company_name,
+      company_npwp: register.company_npwp,
       email: register.email,
       password: register.password,
     });
-    console.log("response", response);
     if (response.success) {
       setIsPending(false);
       dialogDispatch({
@@ -117,6 +119,8 @@ export function RegisterForm() {
     if (register.name) handleChange("name", register.name);
     if (register.company_name)
       handleChange("company_name", register.company_name);
+    if (register.company_npwp)
+      handleChange("company_npwp", register.company_npwp);
     if (register.email) handleChange("email", register.email);
     if (register.password) handleChange("password", register.password);
     if (register.captcha) handleChange("captcha", register.captcha);
@@ -211,6 +215,16 @@ const FormInput = ({
             }
           />
           <InputVertical
+            title="Company NPWP"
+            name="company_npwp"
+            type="number"
+            placeholder="Company NPWP"
+            error={errors.company_npwp}
+            onChange={(e) =>
+              setRegister({ ...register, company_npwp: e.target.value })
+            }
+          />
+          <InputVertical
             title="Email"
             name="email"
             type="email"
@@ -245,7 +259,7 @@ const FormInput = ({
             <label className="text-sm font-medium">CAPTCHA</label>
             <div className="flex gap-3 items-center">
               <div
-                className="bg-gray-100 border rounded px-4 py-2 font-mono text-lg font-bold tracking-wider select-none"
+                className="bg-gray-100 dark:bg-gray-800 border rounded px-4 py-2 font-mono text-lg font-bold tracking-wider select-none"
                 style={{
                   userSelect: "none",
                   WebkitUserSelect: "none",

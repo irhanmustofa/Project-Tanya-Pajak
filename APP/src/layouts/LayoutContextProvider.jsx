@@ -1,48 +1,53 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { userClientAll } from "@/layouts/UserClientService";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 const layoutsContext = createContext();
 
 export const LayoutProvider = ({ children }) => {
-  const [companies, setCompanies] = useState([]);
+  const [company, setCompany] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCompanies = async () => {
+    const fetchCompany = async () => {
       try {
         setLoading(true);
-        const res = await userClientAll();
 
-        console.log("LayoutProvider - API response:", res);
+        const clientId = useLocalStorage.get("clientId");
 
-        if (res.success) {
-          setCompanies(res.data);
-          setError(null);
-          console.log("LayoutProvider - companies set:", res.data);
-        } else {
-          setError(res.message);
-          setCompanies([]);
+        if (!clientId) {
+          setError("Client ID not found in localStorage");
+          setLoading(false);
+          return;
         }
-      } catch (error) {
-        console.error("LayoutProvider - Error fetching companies:", error);
-        setError("Failed to fetch companies");
-        setCompanies([]);
+
+        const response = await userClientAll(clientId);
+
+        if (response.success) {
+          setCompany(response.data[0]);
+          setError(null);
+        } else {
+          setError(response.message || "Failed to fetch company");
+          setCompany([]);
+        }
+      } catch (err) {
+        console.error("LayoutProvider - Error:", err);
+        setError(err.message || "An error occurred while fetching company");
+        setCompany([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCompanies();
+    fetchCompany();
   }, []);
-
-  console.log("LayoutProvider - current companies:", companies);
 
   return (
     <layoutsContext.Provider
       value={{
-        companies,
-        setCompanies,
+        company,
+        setCompany,
         loading,
         error,
       }}

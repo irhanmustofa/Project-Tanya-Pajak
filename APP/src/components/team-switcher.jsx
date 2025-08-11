@@ -18,15 +18,14 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useState, useEffect, useCallback } from "react";
-import { base_url } from "@/api/http-endpoints";
 
-export function TeamSwitcher({ teams = [] }) {
+export function TeamSwitcher({ teams }) {
   const { isMobile } = useSidebar();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const savedClientId = useLocalStorage.get("clientId");
-
+  console.log("Saved Client ID:", savedClientId);
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query);
@@ -52,7 +51,7 @@ export function TeamSwitcher({ teams = [] }) {
       setActiveTeam(getInitialTeam());
     }
   }, [teams, savedClientId]);
-
+  console.log("Active Team:", activeTeam);
   const handleTeamSelect = (client) => {
     setActiveTeam(client);
     useLocalStorage.set("clientId", client.clientId);
@@ -67,7 +66,6 @@ export function TeamSwitcher({ teams = [] }) {
         );
 
   const [openAdd, setOpenAdd] = useState(false);
-  console.log("list", teams);
   return (
     <SidebarMenu>
       <SidebarMenuItem>

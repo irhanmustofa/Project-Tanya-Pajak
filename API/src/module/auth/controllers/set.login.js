@@ -21,8 +21,14 @@ const tryLoginRepository = new authRepositories(tryLoginSchema());
 const authenticationRepository = new authRepositories(authenticationSchema());
 
 const setLogin = async (body) => {
-  const { email, password, device } = body;
-  const getData = await userRepository.getByFilter({ email: email });
+  const { email, password, device, company_npwp } = body;
+
+  const filter = { company_npwp: company_npwp, status: 1 };
+  const getClient = await clientRepository.getByFilter(filter);
+  if (!getClient.success) return forbidden({ message: "Client not found" });
+  const clientId = getClient.data[0]?._id;
+
+  const getData = await userRepository.getByFilter({ email: email, client_id: clientId });
 
   if (!getData.success) {
     return forbidden({ message: "User not found." });
@@ -41,7 +47,6 @@ const setLogin = async (body) => {
   };
 
   const isPasswordValid = passwordCompare(password, data.password);
-  console.log("isPasswordValid", isPasswordValid);
   if (!isPasswordValid) {
     const getTryLogin = await tryLoginRepository.getTryLogin(email);
     const limit = authConfig.limitLogin;
@@ -125,15 +130,12 @@ const setLogin = async (body) => {
       });
     }
   }
-  const clientId = data.client_id;
 
-  const filter = { client_id: clientId, status: 1 };
 
-  // const getClient = await clientRepository.getByFilter(filter);
 
-  // if (!getClient.success || getClient.data.length === 0) {
-  //   return notFound({ message: "Client not found or inactive." });
-  // }
+  if (!getClient.success || getClient.data.length === 0) {
+    return notFound({ message: "Client not found or inactive." });
+  }
 
   try {
     const newOtp = randomInt(6).toString();
@@ -161,6 +163,7 @@ const setLogin = async (body) => {
       .body(`Your OTP code is: ${newOtp}. It is valid for 1 minute.`);
 
     await mailer.send();
+    console.log(`OTP is: ${newOtp}`);
     return success({
       message: "Login successfully. OTP sent to your email.",
       data: {

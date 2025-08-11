@@ -23,11 +23,11 @@ export function DatatableToolbar({ table, filterFields }) {
   useEffect(() => {
     if (table.getFilteredSelectedRowModel().rows.length > 0) {
       setIdSelector(
-        table.getFilteredSelectedRowModel().rows.map((row) => row.original.id)
+        table.getFilteredSelectedRowModel().rows.map((row) => row.original._id)
       );
     }
   }, [table.getFilteredSelectedRowModel().rows.length]);
-
+  console.log("DatatableToolbar idSelector:", idSelector);
   const handleDelete = () => {
     dispatch({
       type: dialogAction.DIALOG_DELETE_SOME,

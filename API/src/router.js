@@ -9,8 +9,9 @@ import authRouter from "./module/auth/auth.route.js";
 import clientRouter from "./module/master-client/client.route.js";
 import registerRouter from "./module/register/register.route.js";
 import userClientRouter from "./module/user-client/user.client.route.js";
+import permissionRouter from "./module/permission/permission.route.js";
 
-const noValidate = ["/auth", "/register"];
+const noValidate = ["/auth", "/register", "/permission"];
 
 // router.use(async (req, res, next) => {
 //   if (!noValidate.some((path) => req.path.startsWith(path))) {
@@ -23,6 +24,10 @@ const noValidate = ["/auth", "/register"];
 
 //   next();
 // });
+
+// PERMISSION
+router.use("/permission", permissionRouter);
+
 // REGISTER
 router.use("/register", registerRouter);
 //  AUTH
@@ -33,6 +38,6 @@ router.use("/user-client", userClientRouter);
 
 // DATA MASTER
 router.use("/client", clientRouter);
-router.use("/user", userRouter);
+router.use("/users", userRouter);
 
 export default router;

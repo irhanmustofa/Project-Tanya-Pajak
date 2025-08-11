@@ -53,38 +53,8 @@ export const sidebarData = () => {
   const users = userState;
   const setUser = (user) => setUserState({ ...userState, ...user });
 
-  // Sekarang menggunakan companies dari LayoutProvider
-  const { companies } = useContext(layoutsContext);
-  const [companyState, setCompanyState] = useState([]);
-
-  useEffect(() => {
-    console.log("SidebarData - companies from context:", companies);
-
-    if (companies && companies.length > 0) {
-      setCompanyState(
-        companies.map((company) => ({
-          id: company._id,
-          name: company.company_name,
-          clientId: company.client_id,
-        }))
-      );
-    }
-  }, [companies]);
-
-  console.log("SidebarData - companyState:", companyState);
-  const companyList = companyState;
-
-  const setCompanies = (companyList) => {
-    setCompanyState(companyList);
-  };
-
   const path = window.location.pathname;
-  const is_administration = path === "/user" || path === "/client-group";
-  const is_marketing =
-    path === "/client" ||
-    path === "/service" ||
-    path === "/quotation" ||
-    path === "/contract";
+  const is_administration = path === "/users" || path === "/client-group";
 
   const fullSidebar = [
     {
@@ -92,22 +62,7 @@ export const sidebarData = () => {
       url: "#",
       icon: FolderCogIcon,
       isActive: is_administration,
-      items: [
-        { title: "Master Users", url: "/user" },
-        { title: "Master Groups", url: "/client-group" },
-      ],
-    },
-    {
-      title: "Marketing",
-      url: "#",
-      icon: ShoppingBagIcon,
-      isActive: is_marketing,
-      items: [
-        { title: "Clients", url: "/client" },
-        { title: "Services", url: "/service" },
-        { title: "Quotations", url: "/quotation" },
-        { title: "Contracts", url: "/contract" },
-      ],
+      items: [{ title: "Master Users", url: "/users" }],
     },
   ];
 
@@ -115,5 +70,5 @@ export const sidebarData = () => {
   const sidebars = sidebarState;
   const setSidebar = (sidebar) => setSidebarState(sidebar);
 
-  return { users, setUser, companyList, setCompanies, sidebars, setSidebar };
+  return { users, setUser, sidebars, setSidebar };
 };

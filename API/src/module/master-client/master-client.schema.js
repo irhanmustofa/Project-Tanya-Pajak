@@ -12,6 +12,12 @@ export const masterClientSchema = () => {
       type: String,
       required: true,
     },
+    company_npwp: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
     status: {
       type: Number,
       default: 1,

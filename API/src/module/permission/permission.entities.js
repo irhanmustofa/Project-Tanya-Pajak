@@ -1,11 +1,10 @@
 import Validator from "../../database/database.validator.js";
 
-export default class Client {
+export default class Permission {
     constructor(input) {
         const baseRules = {
-            _id: "required|string",
-            company_name: "required|string|min:3|max:100",
-            company_npwp: "required|string|unique",
+            key: "string|required|trim|unique",
+            description: "string|required|trim",
         };
 
         for (const [key, value] of Object.entries(input)) {

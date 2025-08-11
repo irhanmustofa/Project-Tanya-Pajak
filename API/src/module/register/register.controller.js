@@ -35,59 +35,68 @@ const sendVerificationEmail = async (email, token) => {
 };
 
 const registration = async (req, res) => {
-    console.log("Registration request received:", req.body);
-    const { name, company_name, email, password } = req.body;
-    const getDataRegistered = await registerWrapper.getByFilter({ 'email': email });
+
+    const { name, company_name, company_npwp, email, password } = req.body;
+    const token = randomString(30);
+    const expired = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 jam
+
+    try {
+        const existing = await registerWrapper.getByFilter({ email: email, company_npwp: company_npwp });
 
 
+        if (existing.success && existing.data.length > 0) {
+            const regData = existing.data[0];
+            if (regData.status === 0) {
+                const updated = await registerWrapper.update(regData._id, {
+                    name,
+                    company_name,
+                    company_npwp,
+                    email,
+                    password,
+                    token,
+                    status: 0,
+                    expired
+                });
 
-    if (getDataRegistered.success) {
-        if (getDataRegistered.data[0].status === 0) {
-            const token = randomString(30);
-            const updateData = await registerWrapper.update(getDataRegistered.data[0]._id, {
-                name: name,
-                company_name: company_name,
-                email: email,
-                password: password,
-                token: token,
-                status: 0,
-                expired: new Date(Date.now() + 24 * 60 * 60 * 1000)
-            });
+                if (!(await sendVerificationEmail(email, token))?.accepted?.length) {
+                    return Response(res, badRequest("Failed to send verification email!"));
+                }
 
-            const emailResponse = await sendVerificationEmail(email, token);
-            if (!emailResponse || emailResponse.accepted.length === 0) {
-                return Response(res, badRequest("Failed to send verification email!"));
+                return Response(res, success({
+                    message: "Registration updated successfully. Please check your email!",
+                    data: updated
+                }));
             }
-
-            return Response(res, success({ message: "Registration updated successfully. Please check your email!", data: updateData }));
-        } else {
             return Response(res, badRequest({ message: "Email already registered and verified!" }));
         }
-    } else {
+
         const newRegistration = new Register(req.body);
         if (!newRegistration || newRegistration.errors) {
             return Response(res, badRequest({ message: newRegistration.errors.join(", ") }));
         }
 
-        const token = randomString(30);
-        const createdRegistration = await registerWrapper.create({
-            name: newRegistration.name,
-            company_name: newRegistration.company_name,
-            email: newRegistration.email,
-            password: newRegistration.password,
-            token: token,
+        const created = await registerWrapper.create({
+            ...newRegistration,
+            token,
             status: 0,
-            expired: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            expired
         });
 
-        const emailResponse = await sendVerificationEmail(email, token);
-        if (!emailResponse || emailResponse.accepted.length === 0) {
+        if (!(await sendVerificationEmail(email, token))?.accepted?.length) {
             return Response(res, badRequest({ message: "Failed to send verification email! Please try again." }));
         }
 
-        return Response(res, success({ message: "Registration successful. Please check your email!", data: createdRegistration }));
+        return Response(res, success({
+            message: "Registration successful. Please check your email!",
+            data: created
+        }));
+
+    } catch (err) {
+        console.error("Registration error:", err);
+        return Response(res, badRequest({ message: "Server error during registration." }));
     }
 };
+
 
 const verification = async (req, res) => {
     let valid = true;
@@ -120,15 +129,16 @@ const verification = async (req, res) => {
             return Response(res, badRequest({ message: "Failed to update registration status!" }));
         }
 
-        const existingUser = await userWrapper.getByFilter({ email: registerData.email });
+        const existingUser = await userWrapper.getByFilter({ email: registerData.email, client_id: registerData.client_id });
         if (existingUser.success) {
-            return Response(res, badRequest({ message: "User with this email already exists!" }));
+            return Response(res, badRequest({ message: "User with this email already exists in Company!" }));
         }
 
         const clientId = generateId();
         const newClient = new Client({
             _id: clientId,
             company_name: registerData.company_name,
+            company_npwp: registerData.company_npwp,
             status: 1,
         });
         const addNewClient = await clientWrapper.create(newClient);
@@ -144,6 +154,8 @@ const verification = async (req, res) => {
             password: registerData.password,
             role: 0,
             status: 1,
+            subscription: Date.now() + 30 * 24 * 60 * 60 * 1000,
+            paket: 0,
         });
 
         const addNewUser = await userWrapper.create(newUser);

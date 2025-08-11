@@ -1,4 +1,4 @@
-import Response, { badRequest } from "../../app/response.js";
+import Response, { badRequest, success } from "../../app/response.js";
 import MongodbWrapper from "../../database/mongo/mongo.wrapper.js";
 import User from "./user.entities.js";
 import { userSchema } from "./user.schema.js";
@@ -6,15 +6,30 @@ import { userSchema } from "./user.schema.js";
 const wrapper = new MongodbWrapper(userSchema());
 
 const getAll = async (req, res) => {
-  return Response(res, await wrapper.all());
+  const filter = {
+    client_id: req.headers.clientid,
+    email: { $ne: req.headers.email }
+  };
+
+  return Response(res, await wrapper.getByFilter(filter));
 };
 
 const create = async (req, res) => {
+  const { clientid } = req.headers;
+
+  const existingUser = await wrapper.getByFilter({ email: req.body.email, client_id: clientid });
+
+  if (existingUser.success && existingUser.data.length > 0) {
+    return Response(res, badRequest({ message: "User with this email already exists." }));
+  }
+
   const user = new User(req.body);
   if (user.errors && user.errors.length > 0) {
     return Response(res, badRequest({ message: user.errors.join(", ") }));
   }
-  return Response(res, await wrapper.create(user));
+
+  return Response(res, await wrapper.create({ ...user, client_id: clientid }));
+
 };
 
 const update = async (req, res) => {
@@ -22,6 +37,7 @@ const update = async (req, res) => {
   if (user.errors && user.errors.length > 0) {
     return Response(res, badRequest({ message: user.errors.join(", ") }));
   }
+  console.log("Updating user with ID:", req.params);
   return Response(res, await wrapper.update(req.params.id, user));
 };
 
@@ -30,6 +46,7 @@ const remove = async (req, res) => {
 };
 
 const deleteSome = async (req, res) => {
+  console.log("Deleting users with IDs:", req.body);
   const toDelete = req.body.map((id) => ({ _id: id }));
 
   if (!toDelete || !Array.isArray(toDelete)) {
@@ -54,7 +71,7 @@ const deleteSome = async (req, res) => {
     }
   }
 
-  return Response(res, success());
+  return Response(res, success({ message: "Users deleted successfully." }));
 };
 
 const userController = {

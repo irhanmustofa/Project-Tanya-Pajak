@@ -12,9 +12,9 @@ export const userClientAll = async () => {
       .url(userClientsEndpoint.all)
       .headers({
         email: useLocalStorage.get("email"),
+        clientId: useLocalStorage.get("clientId"),
       })
       .send();
-    console.log("userClientAll - API request sent:", request);
     return request;
   } catch (error) {
     return {
