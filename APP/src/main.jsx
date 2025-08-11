@@ -38,6 +38,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/update-profile" element={<PerubahanProfil />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/update-profile" element={<PerubahanProfil />} />
           </Routes>
         </Router>
       </PendingRequestProvider>

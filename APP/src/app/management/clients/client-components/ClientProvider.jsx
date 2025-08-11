@@ -4,14 +4,10 @@ import { useAppReducer } from "@/hooks/use-app-reducer";
 import { clientAll } from "./ClientService";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/custom/loader";
-import { groupAll } from "../../groups/group-components/GroupService";
-import { serviceAll } from "../../service/service-components/ServiceService";
 
 export default function ClientProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [clientState, clientDispatch] = useReducer(appReducer, initialState);
-  const [groups, setGroups] = useState([]);
-  const [service, setService] = useState([]);
 
   useEffect(() => {
     clientAll().then((res) => {
@@ -20,18 +16,6 @@ export default function ClientProvider({ children }) {
       }
 
       clientDispatch({ type: actionReducer.FAILURE, payload: res.message });
-    });
-
-    groupAll().then((res) => {
-      if (res.success) {
-        setGroups(res.data);
-      }
-    });
-
-    serviceAll().then((res) => {
-      if (res.success) {
-        setService(res.data);
-      }
     });
   }, []);
 
@@ -57,8 +41,6 @@ export default function ClientProvider({ children }) {
       value={{
         clientState,
         clientAction: actionReducer,
-        clientGroup: groups,
-        services: service,
       }}
     >
       <clientDispatchContext.Provider value={clientDispatch}>
