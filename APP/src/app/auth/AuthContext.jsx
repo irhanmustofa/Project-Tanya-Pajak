@@ -1,5 +1,5 @@
 import { createContext, use, useContext, useEffect, useState } from "react";
-import { getAuthorization } from "./auth-service";
+// import { getAuthorization } from "./auth-service";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 const AuthContext = createContext();
