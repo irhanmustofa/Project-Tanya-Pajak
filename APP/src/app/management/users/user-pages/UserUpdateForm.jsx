@@ -24,7 +24,7 @@ import { userUpdate } from "../user-components/UserService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { InputHorizontal } from "@/components/custom/input-custom";
 import { useValidateInput } from "@/hooks/use-validate-input";
-import { statusType, roles } from "@/helpers/variables";
+import { statusType } from "@/helpers/variables";
 import { userAll } from "../user-components/UserService";
 
 export default function UserUpdateForm({ id, onClose }) {

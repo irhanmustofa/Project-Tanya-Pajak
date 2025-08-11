@@ -10,6 +10,7 @@ export default function ClientProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [clientState, clientDispatch] = useReducer(appReducer, initialState);
   const id = useLocalStorage.get("clientId") ?? "";
+
   useEffect(() => {
     clientFirst(id).then((res) => {
       if (res.success) {
