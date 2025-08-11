@@ -36,6 +36,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/forgot" element={<ForgotPage />} />
             <Route path="/reset/:token" element={<ResetPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/update-profile" element={<PerubahanProfil />} />
             <Route path="/users" element={<Users />} />
             <Route path="/documents" element={<Documents />} />
             <Route path="/update-profile" element={<UpdateProfil />} />
