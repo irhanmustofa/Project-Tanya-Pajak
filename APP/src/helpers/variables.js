@@ -159,3 +159,32 @@ export const companyHandler = [
     icon: LucideDollarSign,
   },
 ];
+
+export const jenisWpOption = [
+  { kode: "1", jenis_wp: "BADAN" },
+  { kode: "2", jenis_wp: "ORANG PRIBADI" },
+];
+
+export const badanHukumOption = [
+  { kode: "1", badan_hukum: "Perseroan Terbatas (PT)" },
+  { kode: "2", badan_hukum: "Perseroan Perorangan" },
+  { kode: "3", badan_hukum: "Perusahaan Persero (Persero)" },
+  { kode: "4", badan_hukum: "Perusahaan Perum (Perum)" },
+  { kode: "5", badan_hukum: "Koperasi" },
+  { kode: "6", badan_hukum: "Yayasan" },
+];
+
+export const statusNpwpOption = [
+  { status: "Aktif", kode: "1" },
+  { status: "Non Aktif", kode: "0" },
+];
+
+export const kppOption = [
+  { kode: "1", kantor: "KPP Pratama Jakarta Matraman (001)" },
+  { kode: "2", kantor: "KPP Pratama Jakarta Pulogadung (003)" },
+  { kode: "3", kantor: "KPP Pratama Jakarta Cakung Satu (004)" },
+  { kode: "4", kantor: "KPP Pratama Jakarta Kramat Jati (005)" },
+  { kode: "5", kantor: "KPP Pratama Jakarta Cakung Dua (006)" },
+  { kode: "6", kantor: "KPP Pratama Jakarta Duren Sawit (008)" },
+  { kode: "7", kantor: "KPP Pratama Jakarta Pasar Rebo (009)" },
+];
