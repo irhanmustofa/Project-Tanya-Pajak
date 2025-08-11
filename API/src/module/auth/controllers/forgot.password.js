@@ -14,22 +14,24 @@ import Mailer from "../../../utils/mailer.js";
 import { masterClientSchema } from "../../master-client/master-client.schema.js";
 import { userSchema } from "../../master-user/user.schema.js";
 import authRepositories from "../auth.repositories.js";
-import { authenticationSchema, forgotPasswordSchema, tryLoginSchema } from "../auth.schema.js";
+import { forgotPasswordSchema } from "../auth.schema.js";
 
 const userRepository = new MongodbWrapper(userSchema());
+const masterClientRepository = new MongodbWrapper(masterClientSchema());
 const forgotRepository = new authRepositories(forgotPasswordSchema());
 
 const forgotPassword = async (req, res) => {
-  const { email } = req.body;
+  const { email, company_npwp } = req.body;
 
-  if (!email) {
-    return forbidden({
-      message: "Email is required!"
-    });
-  }
+  const getClient = await masterClientRepository.getByFilter({
+    company_npwp: company_npwp,
+    status: 1
+  });
+  const clientId = getClient.data.length > 0 ? getClient.data[0]._id : null;
 
   const getUserActive = await userRepository.getByFilter({
     email: email,
+    client_id: clientId,
     status: 1
   });
 
@@ -62,6 +64,7 @@ const forgotPassword = async (req, res) => {
   }
 
   const createResetData = await forgotRepository.setForgotPassword({
+    client_id: clientId,
     email: email,
     token: code,
     expired: new Date(Date.now() + 10 * 60 * 1000),
@@ -102,10 +105,12 @@ const resetPassword = async (req, res) => {
       message: "Reset token has expired."
     });
   }
+  const clientId = resetData.client_id;
 
   try {
     const getUsersWithEmail = await userRepository.getByFilter({
-      email: resetData.email
+      email: resetData.email,
+      client_id: clientId,
     });
 
     if (!getUsersWithEmail.success) {
@@ -114,27 +119,17 @@ const resetPassword = async (req, res) => {
       });
     }
 
+    const id = getUsersWithEmail.data[0]._id;
+
     const hashedPassword = passwordHash(password);
-    let updatedCount = 0;
+    const updateResult = await userRepository.update(id, {
+      password: hashedPassword,
+    });
 
-    for (const user of getUsersWithEmail.data) {
-      try {
-        const updateResult = await userRepository.update(user._id, {
-          password: hashedPassword
-        });
-
-        if (updateResult.success) {
-          updatedCount++;
-        }
-      } catch (error) {
-        console.error(`Failed to update user ${user._id}:`, error);
-      }
-    }
-
-    if (updatedCount === 0) {
-      return error({
-        message: "Failed to update any user passwords."
-      });
+    if (!updateResult.success) {
+      return Response(res, badRequest({
+        message: "Failed to update password."
+      }));
     }
 
     await forgotRepository.deleteForgotPassword({

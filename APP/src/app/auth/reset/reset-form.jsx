@@ -76,14 +76,7 @@ const ResetForm = () => {
           );
           resetFormData.append("token", token);
 
-          console.log("Sending reset data:", {
-            password: formData.password,
-            password_confirmation: formData.password_confirmation,
-            token: token,
-          });
-
           const response = await resetPassword({ data: resetFormData, token });
-          console.log("Reset response:", response);
 
           if (response?.success) {
             dialogDispatch({
@@ -103,7 +96,6 @@ const ResetForm = () => {
               navigate("/");
             }, 2500);
           } else {
-            console.log("Reset failed:", response?.message);
             dialogDispatch({
               type: dialogAction.DIALOG_INFO,
               payload: {

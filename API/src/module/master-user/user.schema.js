@@ -24,9 +24,23 @@ export const userSchema = () => {
       type: Number,
       default: 0,
     },
+    subscription: {
+      type: Date,
+      required: true,
+      default: Date.now + 7 * 24 * 60 * 60 * 1000, // Default to 7 days from now
+    },
+    paket: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
     status: {
       type: Number,
       default: 1,
+    },
+    permission: {
+      type: Array,
+      default: [],
     },
   };
 

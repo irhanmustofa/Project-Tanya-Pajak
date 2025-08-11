@@ -7,31 +7,19 @@ const userWrapper = new MongodbWrapper(userSchema());
 const clientWrapper = new MongodbWrapper(masterClientSchema());
 
 const getUserClient = async (req, res) => {
-    const { email } = req.headers;
-    console.log("Email from headers:", email);
-    if (!email) {
-        return Response(res, badRequest({ message: "Email is required." }));
-    }
+    const { email, clientid } = req.headers;
 
     try {
-        const userData = await userWrapper.getByFilter({ email: email });
-        if (!userData.success || userData.data.length === 0) {
-            return Response(res, notFound({ message: "User not found." }));
-        }
+        const [userResult, clientResult] = await Promise.all([
+            userWrapper.getByFilter({ email, client_id: clientid }),
+            clientWrapper.getByFilter({ _id: clientid })
+        ]);
 
-        const clientIds = [...new Set(userData.data.map(user => user.client_id))];
-        console.log("Client IDs found:", clientIds);
+        const users = userResult?.data || [];
+        const clients = clientResult?.data || [];
 
-        const allClientsData = [];
-        for (const clientId of clientIds) {
-            const clientData = await clientWrapper.getByFilter({ _id: clientId });
-            if (clientData.success && clientData.data.length > 0) {
-                allClientsData.push(clientData.data[0]);
-            }
-        }
-
-        const combinedUsers = userData.data.map(user => {
-            const userClient = allClientsData.find(client => client._id === user.client_id);
+        const combinedUsers = users.map(user => {
+            const client = clients.find(c => c._id?.toString() === user.client_id?.toString());
 
             return {
                 _id: user._id,
@@ -40,9 +28,7 @@ const getUserClient = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 status: user.status,
-                company_name: userClient ? userClient.company_name : null,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt
+                company_name: client?.company_name || null,
             };
         });
 
@@ -53,7 +39,9 @@ const getUserClient = async (req, res) => {
 
     } catch (error) {
         console.error("Error in getUserClient:", error);
-        return Response(res, badRequest({ message: "Failed to retrieve user and client data." }));
+        return Response(res, badRequest({
+            message: "Failed to retrieve user and client data."
+        }));
     }
 };
 
