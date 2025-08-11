@@ -4,7 +4,6 @@ import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { verify } from "@/app/auth/auth-service";
 
 export default function VerifyPage() {
-  console.log("VerifyPage rendered");
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
@@ -29,11 +28,6 @@ export const DialogVerify = ({ setSuccess, onClose }) => {
     if (hasVerified.current) return;
 
     const verifyToken = async () => {
-<<<<<<< HEAD
-=======
-      console.log("Starting verification for token:", token);
-
->>>>>>> 2cd1356 (update-register)
       if (!token) {
         setSuccess(false);
         dialogDispatch({
@@ -50,10 +44,6 @@ export const DialogVerify = ({ setSuccess, onClose }) => {
 
       try {
         const response = await verify(token);
-<<<<<<< HEAD
-=======
-        console.log("Verify response:", response);
->>>>>>> 2cd1356 (update-register)
 
         if (response.success) {
           setSuccess(true);
