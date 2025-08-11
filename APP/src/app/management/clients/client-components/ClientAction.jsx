@@ -1,7 +1,13 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { MoreHorizontal, LucideEdit, LucideTrash } from "lucide-react";
+import {
+  MoreHorizontal,
+  LucideEdit,
+  LucideTrash,
+  LucideFileCheck,
+  LucideUserRoundPen,
+  LucideFileClock,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -10,20 +16,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { clientAll, clientsEndpoint } from "./ClientService";
+import { useState } from "react";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useClient, useClientDispatch } from "./ClientProvider";
-import LoaderOverlay from "@/components/custom/loader-overlay";
-import ClientFormTabsUpdate from "../client-pages/client-update-form/ClientFormTabsUpdate";
+import { clientAll, clientEndpoint } from "./ClientService";
+import ClientUpdateForm from "@/app/management/clients/client-pages/ClientUpdateForm";
 
 export default function ClientAction({ row }) {
-  const dispatch = useDialogDispatch();
-  const clientDispatch = useClientDispatch();
-  const { dialogState, dialogAction, DialogDelete } = useDialog();
-  const { clientAction } = useClient();
-
+  const [openQuotation, setOpenQuotation] = useState(false);
   const [onUpdate, setOnUpdate] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [onHistory, setOnHistory] = useState(false);
+  const [onObservation, setOnObservation] = useState(false);
+
+  const { clientAction, clientState, services } = useClient();
+  const clientDispatch = useClientDispatch();
+
+  const { dialogState, dialogAction, DialogDelete } = useDialog();
+  const dispatch = useDialogDispatch();
 
   const handleDelete = (id) => {
     dispatch({
@@ -34,32 +43,26 @@ export default function ClientAction({ row }) {
         message:
           "Are you sure you want to delete this client? This action cannot be undone.",
         status: "warning",
-        url: clientsEndpoint.delete(id),
+        url: clientEndpoint.delete(id),
       },
     });
   };
 
-  const handleOnCloseDelete = async (success) => {
+  const handleOnCloseDelete = (success) => {
     if (!success) return;
 
-    setIsLoading(true);
-
-    await clientAll().then((res) => {
-      if (res.success) {
-        clientDispatch({ type: clientAction.SUCCESS, payload: res.data });
-      }
-    });
-
-    setIsLoading(false);
-    window.location.reload();
+    setTimeout(() => {
+      clientAll().then((res) => {
+        if (res.success) {
+          clientDispatch({ type: clientAction.SUCCESS, payload: res.data });
+        }
+      });
+    }, 500);
   };
 
   const item = row.original;
-
   return (
-    <div className="relative">
-      {isLoading && <LoaderOverlay />}
-
+    <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -70,25 +73,32 @@ export default function ClientAction({ row }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setOnObservation(true)}>
+            <LucideUserRoundPen className="mr-2 h-4 w-4" />
+            <Label>Observation</Label>
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOnUpdate(true)}>
             <LucideEdit className="mr-2 h-4 w-4" />
             <Label>Update</Label>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDelete(item._id)}>
+          <DropdownMenuItem onClick={() => setOnHistory(true)}>
+            <LucideFileClock className="mr-2 h-4 w-4" />
+            <Label>History</Label>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpenQuotation(true)}>
+            <LucideFileCheck className="mr-2 h-4 w-4" />
+            <Label>Quotation</Label>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleDelete(item.id)}>
             <LucideTrash className="mr-2 h-4 w-4" />
             <Label>Delete</Label>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
       {onUpdate && (
-        <ClientFormTabsUpdate
-          id={item._id}
-          onClose={() => setOnUpdate(false)}
-        />
+        <ClientUpdateForm id={item.id} onClose={() => setOnUpdate(false)} />
       )}
-
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
-    </div>
+    </>
   );
 }
