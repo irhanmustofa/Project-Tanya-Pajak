@@ -15,7 +15,7 @@ export default function PerubahanProfilPages() {
   return (
     <>
       <h1 className="text-2xl font-medium mb-10">PROFIL WAJIB PAJAK</h1>
-      <TabsRoot defaultValue="profil">
+      <TabsRoot defaultValue="alamat">
         <TabsList className="p-4 border-0">
           <TabsTrigger className="border rounded-full" value="profil">
             Profil Wajib Pajak

@@ -1,7 +1,7 @@
 export const mongoConfig = {
-  urlMaster: `mongodb://admin:PasswordKuat123@212.38.94.214:27017/db_tanya_pajak?authSource=admin`,
+  urlMaster: `mongodb+srv://123lainlain:oSKFzkHhUWCGu73q@cluster-0001.cftug9j.mongodb.net/db_tanya_pajak?retryWrites=true&w=majority&appName=Cluster-0001`,
   urlClient: (client_id) =>
-    `mongodb://admin:PasswordKuat123@212.38.94.214:27017/${client_id}?authSource=admin`,
+    `mongodb+srv://123lainlain:oSKFzkHhUWCGu73q@cluster-0001.cftug9j.mongodb.net/${client_id}??retryWrites=true&w=majority&appName=Cluster-0001`,
   collection: {
     register: "register",
     forgot_password: "forgot_password",
