@@ -360,3 +360,10 @@ export const kluOption = [
   { kode: "Q93123", deskripsi: "KELAB RENANG" },
   { kode: "S95120", deskripsi: "JASA REPARASI PERALATAN KOMUNIKASI" },
 ];
+
+export const jenisAlamat = [
+  { jenis: "Alamat Korespondensi", kode: "JA-1" },
+  { jenis: "Alamat Lokasi Aset", kode: "JA-2" },
+  { jenis: "Alamat Sesuai E-KTP", kode: "JA-3" },
+  { jenis: "Alamat tEMPAT kEGIATAN Usaha", kode: "JA-4" },
+];
