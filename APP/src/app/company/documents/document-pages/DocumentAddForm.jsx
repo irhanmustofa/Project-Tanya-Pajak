@@ -18,18 +18,16 @@ import {
 import { useState, useTransition } from "react";
 import { useValidateInput } from "@/hooks/use-validate-input";
 import {
-  userAll,
-  userCreate,
-} from "@/app/management/users/user-components/UserService";
+  documentAll,
+  documentCreate,
+} from "@/app/company/documents/document-components/DocumentService";
 import {
-  useUser,
-  useUserDispatch,
-} from "@/app/management/users/user-components/UserProvider";
+  useDocument,
+  useDocumentDispatch,
+} from "@/app/company/documents/document-components/DocumentProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { userLevel } from "@/helpers/variables";
-import { Checkbox } from "@/components/ui/checkbox";
 
-export default function UserAddForm({ onClose }) {
+export default function DocumentAddForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
   const [isPending, startTrasition] = useTransition();
   const [selectedRole, setSelectedRole] = useState(null);
@@ -37,8 +35,8 @@ export default function UserAddForm({ onClose }) {
 
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
-  const userDispatch = useUserDispatch();
-  const { userAction, permissions } = useUser();
+  const documentDispatch = useDocumentDispatch();
+  const { documentAction, permissions } = useDocument();
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
       name: "required|min:3",
@@ -80,21 +78,24 @@ export default function UserAddForm({ onClose }) {
         formData.append("permissions", JSON.stringify(selectedPermissions));
       }
 
-      await userCreate(formData).then((response) => {
+      await documentCreate(formData).then((response) => {
         if (response.success) {
           dialogDispatch({
             type: dialogAction.DIALOG_INFO,
             payload: {
               show: true,
-              title: "Add User Success",
-              message: "User added successfully",
+              title: "Add Document Success",
+              message: "Document added successfully",
               status: "success",
             },
           });
 
-          userAll().then((res) => {
+          documentAll().then((res) => {
             if (res.success) {
-              userDispatch({ type: userAction.SUCCESS, payload: res.data });
+              documentDispatch({
+                type: documentAction.SUCCESS,
+                payload: res.data,
+              });
             }
           });
 
@@ -104,7 +105,7 @@ export default function UserAddForm({ onClose }) {
             type: dialogAction.DIALOG_INFO,
             payload: {
               show: true,
-              title: "Add User Failed",
+              title: "Add Document Failed",
               message: response.message,
               status: "error",
             },
@@ -124,8 +125,10 @@ export default function UserAddForm({ onClose }) {
       {dialogState.isOpen && <DialogInfo />}
       <Dialog open={isOpen} onOpenChange={handleOnClose}>
         <DialogContent className="sm:max-w-[425px]">
-          <DialogTitle>Input New User</DialogTitle>
-          <DialogDescription>Add a new user to the system.</DialogDescription>
+          <DialogTitle>Input New Document</DialogTitle>
+          <DialogDescription>
+            Add a new Document to the system.
+          </DialogDescription>
           <form onSubmit={inputHandler}>
             <div className="grid gap-4 py-4">
               <InputHorizontal
@@ -149,66 +152,6 @@ export default function UserAddForm({ onClose }) {
                 onChange={(e) => handleChange("password", e.target.value)}
                 error={errors.password}
               />
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label>Role</Label>
-                <Select name="role" onValueChange={handleRoleChange}>
-                  <SelectTrigger className="col-span-3 rounded-md border">
-                    <SelectValue placeholder="Select Role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {userLevel.map((level) => (
-                      <SelectItem key={level.code} value={String(level.code)}>
-                        {level.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              {selectedRole === 1 && (
-                <div className="grid gap-4 p-4 border rounded-md bg-muted/50">
-                  <Label className="text-sm font-medium">Permissions</Label>
-                  <div className="grid grid-cols-1 gap-3 max-h-48 overflow-y-auto">
-                    {permissions && permissions.length > 0 ? (
-                      permissions.map((permission) => (
-                        <div
-                          key={permission._id || permission.id}
-                          className="flex items-center space-x-2"
-                        >
-                          <Checkbox
-                            id={`permission-${permission._id || permission.id}`}
-                            checked={selectedPermissions.includes(
-                              permission.key || permission.key
-                            )}
-                            onCheckedChange={(checked) =>
-                              handlePermissionChange(
-                                permission.key || permission.key,
-                                checked
-                              )
-                            }
-                          />
-                          <Label
-                            htmlFor={`permission-${
-                              permission.key || permission.key
-                            }`}
-                            className="text-sm font-normal cursor-pointer"
-                          >
-                            {permission.description}
-                          </Label>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-sm text-muted-foreground">
-                        No permissions available
-                      </div>
-                    )}
-                  </div>
-                  {selectedPermissions.length > 0 && (
-                    <div className="text-xs text-muted-foreground">
-                      Selected: {selectedPermissions.length} permission(s)
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
             <DialogFooter>
               <Button type="submit" disabled={!valid} pending={isPending}>

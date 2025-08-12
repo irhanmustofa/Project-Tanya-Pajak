@@ -22,13 +22,12 @@ import {
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
-import { useUser } from "./UserProvider";
-import UserAddForm from "@/app/management/users/user-pages/UserAddForm";
+import { useDocument } from "./DocumentProvider";
+import DocumentAddForm from "@/app/company/documents/document-pages/DocumentAddForm";
 import { useExportPDF } from "@/hooks/use-export-pdf";
-import { statusType, userLevel } from "@/helpers/variables";
 import { usePermissions } from "@/hooks/use-permissions";
 
-export default function UserSubject() {
+export default function DocumentSubject() {
   const { checkPermission } = usePermissions();
   const { ExportPDF } = useExportPDF();
   const [openAdd, setOpenAdd] = useState(false);
@@ -40,31 +39,26 @@ export default function UserSubject() {
     body: [],
   });
 
-  const { userState } = useUser();
+  const { documentState } = useDocument();
 
   useEffect(() => {
     if (isExportExcel || isExportPdf) {
-      if (userState.data.length > 0) {
+      if (documentState.data.length > 0) {
         const exportExcel = [];
         setDataExport({ head: [], body: [] });
 
-        dataExport.head = ["Name", "Email", "Level", "Status"];
+        dataExport.head = ["Name", "Email"];
         exportExcel.push(dataExport.head);
 
-        userState.data.map((item) =>
-          dataExport.body.push([
-            item.name,
-            item.email,
-            userLevel.find((x) => x.code === item.role).name,
-            statusType.find((x) => x.code === item.status).name,
-          ])
+        documentState.data.map((item) =>
+          dataExport.body.push([item.name, item.email])
         );
 
         dataExport.body.map((item) => exportExcel.push(Object.values(item)));
 
         if (isExportExcel) {
           setIsExportExcel(false);
-          useExcelWriter(exportExcel, "Data Users.xlsx");
+          useExcelWriter(exportExcel, "Data Documents.xlsx");
         } else if (isExportPdf) {
           setDataExport(dataExport);
           setIsExportPdf(false);
@@ -77,28 +71,28 @@ export default function UserSubject() {
   return (
     <div className="flex justify-between mb-4">
       <h2 className="text-2xl font-semibold">
-        Users <b>Management </b>
+        Documents <b>Management </b>
       </h2>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
             <LucideSettings className="h-4 w-4" />
-            <span className="">User Manager</span>
+            <span className="">Document Manager</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="font-light w-36">
-            User Manager
+            Document Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {checkPermission("users.create") && (
+          {checkPermission("document.create") && (
             <DropdownMenuItem onClick={() => setOpenAdd(true)}>
               <LucideFilePen className="mr-2 h-4 w-4" />
               <span>Add New</span>
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
-          {userState.data.length > 0 && (
+          {documentState.data.length > 0 && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <LucideFileUp className="mr-2 h-4 w-4" />
@@ -120,10 +114,10 @@ export default function UserSubject() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      {openAdd && <UserAddForm onClose={() => setOpenAdd(false)} />}
+      {openAdd && <DocumentAddForm onClose={() => setOpenAdd(false)} />}
       {showExportPdf && (
         <ExportPDF
-          title="Data Users"
+          title="Data Documents"
           columns={dataExport.head}
           data={dataExport.body}
           onClose={() => setShowExportPdf(false)}
