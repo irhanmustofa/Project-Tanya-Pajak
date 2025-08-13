@@ -3,6 +3,7 @@ import { authEndpoint } from "@/app/auth/auth-endpoint";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export const register = async (data) => {
+
   try {
     const request = await HttpRequest.method("POST")
       .url(authEndpoint.signup)
@@ -46,7 +47,7 @@ export const verifyOtp = async (otp) => {
       .url(authEndpoint.setAuthentication)
       .headers({
         email: email,
-        device: device,
+        device: device
       })
       .body({ otp })
       .send();
@@ -55,7 +56,7 @@ export const verifyOtp = async (otp) => {
   } catch (error) {
     console.error(error);
   }
-};
+}
 
 export const resetPassword = async ({ data, token }) => {
   const password = data.get("password");
@@ -73,6 +74,7 @@ export const resetPassword = async ({ data, token }) => {
 };
 
 export const forgot = async (formData) => {
+
   try {
     const request = await HttpRequest.method("POST")
       .url(authEndpoint.forgot)

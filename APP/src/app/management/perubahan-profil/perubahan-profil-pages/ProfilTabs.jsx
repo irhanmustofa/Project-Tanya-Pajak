@@ -158,7 +158,7 @@ export default function ProfilTabs() {
           />
 
           <InputVertical
-            title={"Nomor NPWP" + "" + input.company_npwp}
+            title={"Nomor NPWP"}
             name="company_npwp"
             onChange={(e) => {
               handleChange("company_npwp", e.target.value);

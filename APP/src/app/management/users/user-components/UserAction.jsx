@@ -47,6 +47,8 @@ export default function UserAction({ row }) {
     await userAll().then((res) => {
       if (res.success) {
         userDispatch({ type: userAction.SUCCESS, payload: res.data });
+      } else {
+        userDispatch({ type: userAction.ERROR, payload: res.message });
       }
     });
 
@@ -54,7 +56,6 @@ export default function UserAction({ row }) {
   };
 
   const item = row.original;
-
   return (
     <div className="relative">
       {isLoading && <LoaderOverlay />}
