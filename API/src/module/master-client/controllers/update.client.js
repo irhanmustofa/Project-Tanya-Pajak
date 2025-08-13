@@ -41,8 +41,8 @@ export default async function updateClient(req) {
     if (masterClient.errors) {
       return badRequest({ message: masterClient.errors.join(", ") });
     }
-    return badRequest({ message: "waduhh" });
-    // return await wrapper.update(req.params.id, masterClient);
+    // return badRequest({ message: "waduhh" });
+    return await wrapper.update(req.params.id, masterClient);
   } catch (error) {
     console.log("Error updating client:", error);
     return error({ message: "An error occurred while the system was running" });

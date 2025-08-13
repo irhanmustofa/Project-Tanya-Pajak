@@ -50,12 +50,7 @@ export const passwordCompare = (plain, hashed) => {
 
 export const parseTanggal = (tanggal) => {
   // Jika null, undefined, atau empty string, return null
-  if (
-    !tanggal ||
-    tanggal === "" ||
-    tanggal === "undefined" ||
-    tanggal === "null"
-  ) {
+  if (!tanggal || tanggal === "" || tanggal === "undefined" || tanggal === "null") {
     return null;
   }
 

@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/tabs";
 import { AppWindowIcon, CodeIcon } from "lucide-react";
 import ProfilTabs from "./ProfilTabs";
-import { useClient } from "../../perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
+import { useClient } from "../perubahan-profil-components/PerubahanProfilProvider";
 import AlamatTabs from "./AlamatTabs";
 
 export default function PerubahanProfilPages() {

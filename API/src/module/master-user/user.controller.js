@@ -8,7 +8,7 @@ const wrapper = new MongodbWrapper(userSchema());
 const getAll = async (req, res) => {
   const filter = {
     client_id: req.headers.clientid,
-    email: { $ne: req.headers.email },
+    email: { $ne: req.headers.email }
   };
 
   return Response(res, await wrapper.getByFilter(filter));
@@ -16,44 +16,20 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
   const { clientid } = req.headers;
-  let permission = [];
 
-  if (req.body?.permissions) {
-    try {
-      permission =
-        typeof req.body.permissions === "string"
-          ? JSON.parse(req.body.permissions)
-          : req.body.permissions;
-
-      if (!Array.isArray(permission)) {
-        permission = [permission];
-      }
-    } catch (parseError) {
-      console.error("Error parsing permissions:", parseError);
-      permission = [];
-    }
-  }
-  const existingUser = await wrapper.getByFilter({
-    email: req.body.email,
-    client_id: clientid,
-  });
+  const existingUser = await wrapper.getByFilter({ email: req.body.email, client_id: clientid });
 
   if (existingUser.success && existingUser.data.length > 0) {
-    return Response(
-      res,
-      badRequest({ message: "User with this email already exists." })
-    );
+    return Response(res, badRequest({ message: "User with this email already exists." }));
   }
-  const user = new User({
-    ...req.body,
-    client_id: clientid,
-    permission,
-  });
+
+  const user = new User(req.body);
   if (user.errors && user.errors.length > 0) {
     return Response(res, badRequest({ message: user.errors.join(", ") }));
   }
 
-  return Response(res, await wrapper.create(user));
+  return Response(res, await wrapper.create({ ...user, client_id: clientid }));
+
 };
 
 const update = async (req, res) => {

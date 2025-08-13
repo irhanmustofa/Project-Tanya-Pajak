@@ -1,6 +1,19 @@
-import { useState } from "react";
-import { FileTextIcon, FolderCogIcon } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
+import {
+  AudioWaveform,
+  Command,
+  GalleryVerticalEnd,
+  FolderCogIcon,
+  ShoppingBagIcon,
+  WalletIcon,
+  LucideUser2,
+  LucideCommand,
+  LucidePresentation,
+  LucideScale,
+  GalleryVerticalEndIcon,
+} from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { layoutsContext } from "@/layouts/LayoutContextProvider"; // Import dari file yang benar
 
 export const sidebarData = () => {
   const avatarImage = () => {
@@ -42,8 +55,6 @@ export const sidebarData = () => {
 
   const path = window.location.pathname;
   const is_administration = path === "/users" || path === "/client-group";
-  const is_efaktur = path === "/efaktur" || path === "/efaktur/transactions";
-  const is_ebupot = path === "/ebupot" || path === "/ebupot/transactions";
 
   const fullSidebar = [
     {
@@ -52,30 +63,6 @@ export const sidebarData = () => {
       icon: FolderCogIcon,
       isActive: is_administration,
       items: [{ title: "Master Users", url: "/users" }],
-    },
-    {
-      title: "E-Faktur",
-      url: "#",
-      icon: FileTextIcon,
-      isActive: is_efaktur,
-      items: [
-        { title: "Pajak Keluaran", url: "#" },
-        { title: "Pajak Masukan", url: "#" },
-        { title: "Retur Pajak Keluaran", url: "#" },
-        { title: "Retur Pajak Masukan", url: "#" },
-      ],
-    },
-    {
-      title: "E-Bupot",
-      url: "#",
-      icon: FileTextIcon,
-      isActive: is_ebupot,
-      items: [
-        { title: "Pajak Keluaran", url: "#" },
-        { title: "Pajak Masukan", url: "#" },
-        { title: "Retur Pajak Keluaran", url: "#" },
-        { title: "Retur Pajak Masukan", url: "#" },
-      ],
     },
   ];
 

@@ -28,10 +28,7 @@ const setLogin = async (body) => {
   if (!getClient.success) return forbidden({ message: "Client not found" });
   const clientId = getClient.data[0]?._id;
 
-  const getData = await userRepository.getByFilter({
-    email: email,
-    client_id: clientId,
-  });
+  const getData = await userRepository.getByFilter({ email: email, client_id: clientId });
 
   if (!getData.success) {
     return forbidden({ message: "User not found." });
@@ -43,7 +40,6 @@ const setLogin = async (body) => {
   }
 
   const resetInput = {
-    client_id: clientId,
     email,
     device,
     hits: 1,
@@ -52,7 +48,7 @@ const setLogin = async (body) => {
 
   const isPasswordValid = passwordCompare(password, data.password);
   if (!isPasswordValid) {
-    const getTryLogin = await tryLoginRepository.getTryLogin(email, clientId);
+    const getTryLogin = await tryLoginRepository.getTryLogin(email);
     const limit = authConfig.limitLogin;
 
     if (!getTryLogin.success) {
@@ -101,7 +97,6 @@ const setLogin = async (body) => {
     }
 
     const result = await tryLoginRepository.setTryLogin({
-      client_id: clientId,
       email,
       hits,
     });
@@ -135,6 +130,8 @@ const setLogin = async (body) => {
       });
     }
   }
+
+
 
   if (!getClient.success || getClient.data.length === 0) {
     return notFound({ message: "Client not found or inactive." });

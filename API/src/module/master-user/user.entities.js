@@ -8,7 +8,7 @@ export default class User {
       email: "required|email",
       password: "required|string|min:8",
       role: "numeric",
-      status: "numeric",
+      status: "numeric"
     };
 
     for (const [key, value] of Object.entries(input)) {
@@ -21,10 +21,7 @@ export default class User {
 
     if (this.subscription === undefined) {
       this.subscription = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    } else if (
-      typeof this.subscription === "string" ||
-      typeof this.subscription === "number"
-    ) {
+    } else if (typeof this.subscription === 'string' || typeof this.subscription === 'number') {
       this.subscription = new Date(this.subscription);
     }
 
