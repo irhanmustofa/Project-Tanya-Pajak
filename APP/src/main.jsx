@@ -14,6 +14,7 @@ import DialogProvider from "@/dialogs/DialogProvider";
 
 import { PendingRequestProvider } from "./hooks/use-pending-request";
 import RegisterPage from "./app/auth/register/register-page";
+import Documents from "./app/company/documents/Documents";
 import UpdateProfil from "./app/management/perubahan-profil/PerubahanProfil";
 
 createRoot(document.getElementById("root")).render(
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/reset/:token" element={<ResetPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/documents" element={<Documents />} />
             <Route path="/update-profile" element={<UpdateProfil />} />
           </Routes>
         </Router>

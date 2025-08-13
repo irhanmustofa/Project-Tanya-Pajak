@@ -52,12 +52,12 @@ export const useDocument = () => {
   return context;
 };
 
-export const usedocumentDispatch = () => {
+export const useDocumentDispatch = () => {
   const context = useContext(documentDispatchContext);
 
   if (!context) {
     throw new Error(
-      "usedocumentDispatch must be used within a DocumentProvider"
+      "useDocumentDispatch must be used within a DocumentProvider"
     );
   }
 
