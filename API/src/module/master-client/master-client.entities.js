@@ -47,7 +47,6 @@ export default class Client {
       bentuk_badan_hukum: "number",
       status_npwp: "number",
       status_pkp: "number",
-      tanggal_pengukuhan_pkp: "string",
       kantor_wilayah_djp: "string",
       kantor_pelayanan_pajak: "number",
       seksi_pengawasan: "number",
