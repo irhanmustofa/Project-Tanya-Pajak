@@ -10,7 +10,7 @@ export default async function updateClient(req) {
     if (!getData.success) {
       return badRequest({ message: getData.message });
     }
-
+    console.log("body:", req.body);
     const singleData = getData.data[0];
     const input = {
       _id: req.body._id ?? singleData._id,

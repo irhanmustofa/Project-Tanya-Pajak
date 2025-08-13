@@ -21,11 +21,11 @@ import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import {
   useClient,
   useClientDispatch,
-} from "../perubahan-profil-components/PerubahanProfilProvider";
+} from "../../perubahan-profil-components/PerubahanProfilProvider";
 import {
   clientFirst,
   clientUpdate,
-} from "../perubahan-profil-components/PerubahanProfilService";
+} from "../../perubahan-profil-components/PerubahanProfilService";
 import { dateShort, dateStrip } from "@/components/custom/DateFormatted";
 
 export default function ProfilTabs() {
