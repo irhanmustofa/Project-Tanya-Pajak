@@ -68,6 +68,9 @@ export const documentUpdate = async (id, data) => {
     const request = await HttpRequest.method("PUT")
       .url(documentsEndpoint.update(id))
       .body(data)
+      .headers({
+        clientid: useLocalStorage.get("clientId"),
+      })
       .send();
 
     return request;

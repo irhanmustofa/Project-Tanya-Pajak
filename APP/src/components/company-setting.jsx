@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useContext } from "react";
 import { layoutsContext } from "@/layouts/LayoutContextProvider";
+import { Link } from "react-router-dom";
 
 export function CompanySetting() {
   const { company } = useContext(layoutsContext);
@@ -71,14 +72,13 @@ export function CompanySetting() {
               e.preventDefault();
             }}
           >
-            <DropdownMenuItem
-              onClick={() => console.log("Navigate to profile")}
-              className="gap-2 p-2"
-            >
-              <div className="flex size-6 items-center justify-center rounded-sm border">
-                <File className="size-4" />
-              </div>
-              My Documents
+            <DropdownMenuItem className="gap-2 p-2">
+              <Link to="/documents" className="flex items-center gap-2">
+                <div className="flex size-6 items-center justify-center rounded-sm border">
+                  <File className="size-4" />
+                </div>
+                My Documents
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => console.log("Navigate to profile")}
