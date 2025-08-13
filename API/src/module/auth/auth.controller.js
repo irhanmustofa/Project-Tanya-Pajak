@@ -30,9 +30,9 @@ const login = async (req, res) => {
     success({
       message: "Login successful.",
       data: {
-        token: createToken(),
-        group_id: result.data.group_id,
+        role: result.data.role,
         client_id: result.data._id,
+        name: result.data.name,
       },
     })
   );
@@ -101,13 +101,13 @@ const forgot = async (req, res) => {
   return Response(
     res,
     success({
-      message:
-        "Reset Password Success! Please check your email to reset your password",
+      message: "Reset Password Success! Please check your email to reset your password",
     })
   );
 };
 
 const resetPassword = async (req, res) => {
+
   const result = await forgotPasswordController.resetPassword(req, res);
 
   if (!result.success) {
@@ -115,6 +115,7 @@ const resetPassword = async (req, res) => {
   }
 
   return Response(res, success({ message: "Password reset successful." }));
+
 };
 
 const AuthController = {

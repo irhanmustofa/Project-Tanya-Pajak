@@ -27,7 +27,7 @@ export const userSchema = () => {
     subscription: {
       type: Date,
       required: true,
-      default: Date.now + 7 * 24 * 60 * 60 * 1000,
+      default: Date.now + 7 * 24 * 60 * 60 * 1000, // Default to 7 days from now
     },
     paket: {
       type: Number,

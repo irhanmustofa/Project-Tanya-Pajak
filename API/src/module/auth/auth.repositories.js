@@ -55,7 +55,6 @@ export default class authRepositories {
   async setTryLogin(tryLogin) {
     const existingTryLogin = await MongodbORM.collection(this.model)
       .where("email", "=", tryLogin.email)
-      .where("client_id", "=", tryLogin.client_id)
       .first();
 
     if (!existingTryLogin.success) {
@@ -67,10 +66,9 @@ export default class authRepositories {
       .update(tryLogin);
   }
 
-  async getTryLogin(email, client_id) {
+  async getTryLogin(email) {
     return await MongodbORM.collection(this.model)
       .where("email", "=", email)
-      .where("client_id", "=", client_id)
       .first();
   }
 
