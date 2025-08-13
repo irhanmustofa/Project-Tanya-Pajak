@@ -148,6 +148,17 @@ const verification = async (req, res) => {
   }
 
   if (valid) {
+    const updateRegister = await registerWrapper.update(registerData._id, {
+      status: 1,
+    });
+
+    if (!updateRegister.success) {
+      return Response(
+        res,
+        badRequest({ message: "Failed to update registration status!" })
+      );
+    }
+
     const existingUser = await userWrapper.getByFilter({
       email: registerData.email,
       client_id: registerData.client_id,
@@ -177,7 +188,7 @@ const verification = async (req, res) => {
       );
     }
 
-    const newUser = {
+    const newUser = new Register({
       client_id: clientId,
       name: registerData.name,
       email: registerData.email,
@@ -186,7 +197,7 @@ const verification = async (req, res) => {
       status: 1,
       subscription: Date.now() + 30 * 24 * 60 * 60 * 1000,
       paket: 0,
-    };
+    });
 
     const addNewUser = await userWrapper.create(newUser);
 
@@ -212,16 +223,6 @@ const verification = async (req, res) => {
       return Response(
         res,
         badRequest({ message: "Failed to create client account details!" })
-      );
-    }
-    const updateRegister = await registerWrapper.update(registerData._id, {
-      status: 1,
-    });
-
-    if (!updateRegister.success) {
-      return Response(
-        res,
-        badRequest({ message: "Failed to update registration status!" })
       );
     }
 
