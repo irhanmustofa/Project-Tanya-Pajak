@@ -15,9 +15,11 @@ import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useUser, useUserDispatch } from "./UserProvider";
 import UserUpdateForm from "@/app/management/users/user-pages/UserUpdateForm";
 import LoaderOverlay from "@/components/custom/loader-overlay";
+import { usePermissions } from "@/hooks/use-permissions";
 
 export default function UserAction({ row }) {
   const dispatch = useDialogDispatch();
+  const { checkPermission } = usePermissions();
   const userDispatch = useUserDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
   const { userAction } = useUser();
@@ -70,10 +72,12 @@ export default function UserAction({ row }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOnUpdate(true)}>
-            <LucideEdit className="mr-2 h-4 w-4" />
-            <Label>Update</Label>
-          </DropdownMenuItem>
+          {checkPermission("users.update") && (
+            <DropdownMenuItem onClick={() => setOnUpdate(true)}>
+              <LucideEdit className="mr-2 h-4 w-4" />
+              <Label>Update</Label>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => handleDelete(item._id)}>
             <LucideTrash className="mr-2 h-4 w-4" />
             <Label>Delete</Label>
