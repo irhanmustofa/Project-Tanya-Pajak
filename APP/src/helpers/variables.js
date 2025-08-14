@@ -78,15 +78,8 @@ export const quotationStatus = [
 ];
 
 export const userLevel = [
-  { code: 0, name: "Super Admin" },
-  { code: 1, name: "Admin" },
-  { code: 2, name: "Finance" },
-  { code: 3, name: "Marketing" },
-  { code: 7, name: "Human Resource" },
-  { code: 8, name: "Legal" },
-  { code: 4, name: "Supervisor" },
-  { code: 5, name: "Team Head" },
-  { code: 6, name: "Staff" },
+  { code: 0, name: "Admin" },
+  { code: 1, name: "User" },
 ];
 
 export const clientType = [
@@ -329,41 +322,4 @@ export const omsetOption = [{ kode: "opt-1", name: "lebih dari Rp. 4,8 M" }];
 export const jenisKontak = [
   { kode: "jk-1", name: "Kontak Alternatif Wajib Pajak" },
   { kode: "jk-2", name: "Kontak Teknis Wajib Pajak" },
-];
-
-export const kluOption = [
-  {
-    kode: "H50111",
-    deskripsi: "ANGKUTAN LAUT DOMESTIK UMUM LINER UNTUK PENUMPANG",
-  },
-  {
-    kode: "H50112",
-    deskripsi: "ANGKUTAN LAUT DOMESTIK UMUM TRAMPER UNTUK PENUMPANG",
-  },
-  { kode: "J60101", deskripsi: "PENYIARAN RADIO OLEH PEMERINTAH" },
-  { kode: "J61919", deskripsi: "JASA NILAI TAMBAH TELEPONI LAINNYA" },
-  { kode: "J61914", deskripsi: "WARUNG TELEKOMUNIKASI (WARTEL)" },
-  { kode: "K64200", deskripsi: "KEGIATAN PERUSAHAAN HOLDING" },
-  { kode: "K66110", deskripsi: "ADMINISTRASI PASAR UANG (BURSA EFEK)" },
-  { kode: "L68110", deskripsi: "REAL ESTAT YANG DIMILIKI SENDIRI ATAU DISEWA" },
-  {
-    kode: "N77400",
-    deskripsi:
-      "SEWA GUNA USAHA TANPA HAK OPSI ASET NON FINANSIAL, BUKAN KARYA HAK CIPTA",
-  },
-  {
-    kode: "P85230",
-    deskripsi:
-      "JASA PENDIDIKAN MENENGAH KEJURUAN DAN TEKNIK/MADRASAH ALIYAH KEJURUAN PEMERINTAH",
-  },
-  { kode: "P85498", deskripsi: "JASA PENDIDIKAN KERAJINAN DAN INDUSTRI" },
-  { kode: "Q93123", deskripsi: "KELAB RENANG" },
-  { kode: "S95120", deskripsi: "JASA REPARASI PERALATAN KOMUNIKASI" },
-];
-
-export const jenisAlamat = [
-  { jenis: "Alamat Korespondensi", kode: "JA-1" },
-  { jenis: "Alamat Lokasi Aset", kode: "JA-2" },
-  { jenis: "Alamat Sesuai E-KTP", kode: "JA-3" },
-  { jenis: "Alamat tEMPAT kEGIATAN Usaha", kode: "JA-4" },
 ];
