@@ -51,12 +51,42 @@ const create = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const user = new User(req.body);
-  if (user.errors && user.errors.length > 0) {
-    return Response(res, badRequest({ message: user.errors.join(", ") }));
+  try {
+    let permission = [];
+
+    if (req.body?.permission) {
+      try {
+        let parsedPermission = typeof req.body.permission === 'string'
+          ? JSON.parse(req.body.permission)
+          : req.body.permission;
+
+        if (Array.isArray(parsedPermission)) {
+          permission = parsedPermission.filter(p => p !== null && p !== undefined && p !== '');
+        } else if (parsedPermission && parsedPermission !== null) {
+          permission = [parsedPermission];
+        }
+      } catch (parseError) {
+        console.error("Error parsing permissions:", parseError);
+        permission = [];
+      }
+    }
+
+    const userData = {
+      ...req.body,
+      permission
+    };
+
+    const user = new User(userData);
+
+    if (user.errors && user.errors.length > 0) {
+      return Response(res, badRequest({ message: user.errors.join(", ") }));
+    }
+
+    return Response(res, await wrapper.update(req.params.id, user));
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return Response(res, badRequest({ message: "Failed to update user" }));
   }
-  console.log("Updating user with ID:", req.params);
-  return Response(res, await wrapper.update(req.params.id, user));
 };
 
 const remove = async (req, res) => {

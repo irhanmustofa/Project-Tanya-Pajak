@@ -47,7 +47,6 @@ export const LayoutProvider = ({ children }) => {
     };
     fetchCompany();
   }, []);
-  console.log("User permissions:", userPermissions);
 
   // Permission checker function
   const hasPermission = (permissionKey) => {
@@ -65,10 +64,9 @@ export const LayoutProvider = ({ children }) => {
         company,
         role,
         setCompany,
-        userPermissions,
         loading,
         error,
-        hasPermission, // Function to check permissions
+        hasPermission,
       }}
     >
       {children}
