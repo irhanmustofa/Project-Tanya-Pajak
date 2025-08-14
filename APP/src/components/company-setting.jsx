@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useState, useEffect, useContext } from "react";
 import { layoutsContext } from "@/layouts/LayoutContextProvider";
+import { Link } from "react-router-dom";
 
 export function CompanySetting() {
   const { company } = useContext(layoutsContext);
@@ -63,16 +64,15 @@ export function CompanySetting() {
               Profile
             </DropdownMenuLabel>
 
-            <DropdownMenuItem
-              onClick={() => console.log("Navigate to profile")}
-              className="gap-2 p-2"
-            >
-              <div className="flex size-6 items-center justify-center rounded-sm border">
-                <User className="size-4" />
-              </div>
-              Detail Profile
-              <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
+            <Link to="/update-profile">
+              <DropdownMenuItem className="gap-2 p-2">
+                <div className="flex size-6 items-center justify-center rounded-sm border">
+                  <User className="size-4" />
+                </div>
+                Detail Profile
+                <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </Link>
 
             <DropdownMenuItem
               onClick={() => console.log("Navigate to settings")}

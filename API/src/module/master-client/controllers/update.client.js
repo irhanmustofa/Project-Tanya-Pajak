@@ -5,13 +5,38 @@ import { masterClientSchema } from "../master-client.schema.js";
 
 export default async function updateClient(req) {
   try {
+    var inputAlamat = {};
     const wrapper = new MongodbWrapper(masterClientSchema());
     const getData = await wrapper.getByFilter({ _id: req.params.id });
     if (!getData.success) {
       return badRequest({ message: getData.message });
     }
-    console.log("body:", req.body);
+
     const singleData = getData.data[0];
+    if (req.body.alamat !== undefined && req.body.alamat) {
+      inputAlamat = {
+        negara: req.body.negara,
+        jenis_alamat: req.body.jenis_alamat,
+        alamat: req.body.alamat,
+        rt: req.body.rt,
+        rw: req.body.rw,
+        provinsi: req.body.provinsi,
+        kabupaten: req.body.kabupaten,
+        kecamatan: req.body.kecamatan,
+        desa: req.body.desa,
+        kode_area: req.body.kode_area,
+        kode_pos: req.body.kode_pos,
+        data_geometrik: req.body.data_geometrik,
+        disewa: req.body.disewa,
+        tanggal_mulai: req.body.tanggal_mulai,
+        tanggal_berakhir: req.body.tanggal_berakhir,
+        kode_kpp: req.body.kode_kpp,
+        bagian_pengawasan: req.body.bagian_pengawasan,
+      };
+      singleData.alamat.push(inputAlamat);
+      console.log("join-address:", singleData.alamat);
+      console.log("body:", inputAlamat);
+    }
     const input = {
       _id: req.body._id ?? singleData._id,
       company_name: req.body.company_name ?? singleData.company_name,
@@ -32,10 +57,10 @@ export default async function updateClient(req) {
         req.body.seksi_pengawasan ?? singleData.seksi_pengawasan,
       kode_klu: req.body.kode_klu ?? singleData.kode_klu,
       deskripsi_klu: req.body.deskripsi_klu ?? singleData.deskripsi_klu,
-      alamat: req.body.alamat ?? singleData.alamat,
+      alamat: singleData.alamat,
       kontak: req.body.kontak ?? singleData.kontak,
     };
-    console.log(input);
+    console.log("input:", input);
     const masterClient = new MasterClient(input);
 
     if (masterClient.errors) {
