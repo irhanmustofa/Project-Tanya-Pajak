@@ -27,7 +27,7 @@ export function DatatableToolbar({ table, filterFields }) {
       );
     }
   }, [table.getFilteredSelectedRowModel().rows.length]);
-  console.log("DatatableToolbar idSelector:", idSelector);
+
   const handleDelete = () => {
     dispatch({
       type: dialogAction.DIALOG_DELETE_SOME,

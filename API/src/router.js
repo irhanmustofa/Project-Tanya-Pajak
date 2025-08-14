@@ -10,6 +10,7 @@ import clientRouter from "./module/master-client/client.route.js";
 import registerRouter from "./module/register/register.route.js";
 import userClientRouter from "./module/user-client/user.client.route.js";
 import permissionRouter from "./module/permission/permission.route.js";
+import alamatRouter from "./module/alamat-client/alamat.route.js";
 
 const noValidate = ["/auth", "/register", "/permission"];
 
@@ -38,6 +39,7 @@ router.use("/user-client", userClientRouter);
 
 // DATA MASTER
 router.use("/client", clientRouter);
+router.use("/alamat-client", alamatRouter);
 router.use("/users", userRouter);
 
 export default router;

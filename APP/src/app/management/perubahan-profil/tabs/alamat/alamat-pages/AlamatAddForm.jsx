@@ -20,11 +20,8 @@ import {
 } from "@/components/ui/select";
 import { useState, useTransition } from "react";
 import { useValidateInput } from "@/hooks/use-validate-input";
-import {
-  clientFirst,
-  clientCreate,
-  clientUpdate,
-} from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilService";
+import { alamatClientCreate } from "@/app/management/perubahan-profil/tabs/alamat/alamat-components/AlamatService";
+import { clientFirst } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilService";
 import {
   useClient,
   useClientDispatch,
@@ -32,7 +29,12 @@ import {
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { countryList } from "../../../data/country";
 import { provinceList } from "../../../data/province";
-import { jenisAlamat, jenisWpOption } from "@/helpers/variables";
+import {
+  jenisAlamat,
+  jenisWpOption,
+  kppOption,
+  pengawasOption,
+} from "@/helpers/variables";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
@@ -59,7 +61,9 @@ export default function ClientAddForm({ onClose }) {
 
     startTrasition(async () => {
       const formData = new FormData();
+      formData.append("clientId", id);
       formData.append("negara", event.target.negara.value);
+      formData.append("jenis_alamat", event.target.jenis_alamat.value);
       formData.append("alamat", event.target.alamat.value);
       formData.append("rt", event.target.rt.value);
       formData.append("rw", event.target.rw.value);
@@ -78,8 +82,8 @@ export default function ClientAddForm({ onClose }) {
         "bagian_pengawasan",
         event.target.bagian_pengawasan.value
       );
-      console.log("form", formData.getAll);
-      await clientUpdate(id, formData).then((response) => {
+
+      await alamatClientCreate(formData).then((response) => {
         if (response.success) {
           dialogDispatch({
             type: dialogAction.DIALOG_INFO,
@@ -91,7 +95,7 @@ export default function ClientAddForm({ onClose }) {
             },
           });
 
-          clientFirst().then((res) => {
+          clientFirst(id).then((res) => {
             if (res.success) {
               clientDispatch({ type: clientAction.SUCCESS, payload: res.data });
             }
@@ -122,7 +126,7 @@ export default function ClientAddForm({ onClose }) {
     <div className="relative">
       {dialogState.isOpen && <DialogInfo />}
       <Dialog open={isOpen} onOpenChange={handleOnClose}>
-        <DialogContent className="sm:max-w-[700px]">
+        <DialogContent className="sm:max-w-[850px]">
           <DialogTitle>Input New Client</DialogTitle>
           <DialogDescription>Add a new Client to the system.</DialogDescription>
           <form onSubmit={inputHandler}>
@@ -177,24 +181,21 @@ export default function ClientAddForm({ onClose }) {
                   </div>
                 </div>
 
-                <Textarea placeholder="Alamat" name="alamat" className="my-4" />
-
-                <div className="grid grid-cols-4 my-2">
-                  <div className="col-span-1">
-                    <h1>RT/RW</h1>
-                  </div>
-                  <div className="xl:col-span-1 col-span-3 flex">
-                    <Input name="rt" />
-                    <h1 className="text-center mx-4 text-[20px]">/</h1>
-                    <Input name="rw" />
+                <div className="grid xl:grid-cols-6 grid-cols-4 gap-4 my-4">
+                  <Textarea
+                    placeholder="Alamat"
+                    name="alamat"
+                    className="xl:col-span-5 col-span-3"
+                  />
+                  <div className="">
+                    <Input placeholder="RT" name="rt" className="mb-2" />
+                    <Input placeholder="RW" name="rw" className="mt-2" />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-4 my-2">
-                  <div className="col-span-1">
+                <div className="grid grid-cols-2 my-2 gap-4">
+                  <div>
                     <h1 className="mb-2">Provinsi</h1>
-                  </div>
-                  <div className="col-span-3">
                     <Select
                       name="provinsi"
                       onValueChange={(e) => {
@@ -216,13 +217,8 @@ export default function ClientAddForm({ onClose }) {
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-4 my-2">
-                  <div className="col-span-1">
+                  <div>
                     <h1 className="mb-2">Kabupaten</h1>
-                  </div>
-                  <div className="col-span-3">
                     <Select
                       name="kabupaten"
                       onValueChange={(e) => {
@@ -246,11 +242,9 @@ export default function ClientAddForm({ onClose }) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-4 my-2">
-                  <div className="col-span-1">
+                <div className="grid grid-cols-2 gap-4 my-2">
+                  <div>
                     <h1 className="mb-2">Kecamatan</h1>
-                  </div>
-                  <div className="col-span-3">
                     <Select
                       name="kecamatan"
                       onValueChange={(e) => {
@@ -272,13 +266,8 @@ export default function ClientAddForm({ onClose }) {
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-4 my-2">
-                  <div className="col-span-1">
+                  <div>
                     <h1 className="mb-2">Desa</h1>
-                  </div>
-                  <div className="col-span-3">
                     <Select
                       name="desa"
                       onValueChange={(e) => {
@@ -302,11 +291,8 @@ export default function ClientAddForm({ onClose }) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-4 my-2">
-                  <div className="col-span-1">
-                    <h1 className="text-wrap">Kode Wilayah / Kode Pos</h1>
-                  </div>
-                  <div className="xl:col-span-1 col-span-3 flex">
+                <div className="grid grid-cols-6 gap-4 my-4">
+                  <div className="col-span-3 flex gap-4">
                     <Input
                       value={"" || undefined}
                       name="kode_area"
@@ -314,28 +300,30 @@ export default function ClientAddForm({ onClose }) {
                         handleChange("kode_area", e.target.value);
                       }}
                       disabled={true}
-                      placeholder="automatically"
+                      placeholder="Kode Wilayah automatically"
                     />
-                    <h1 className="px-4 text-[20px] text-center">/</h1>
                     <Input
                       name="kode_pos"
                       title="Kode Pos"
                       onChange={(e) => {
                         handleChange("kode_pos", e.target.value);
                       }}
+                      placeholder="Kode Pos"
+                    />
+                  </div>
+                  <div className="col-span-3 ">
+                    <Input
+                      name="data_geometrik"
+                      placeholder="Data Geometrik"
+                      onChange={(e) => {
+                        handleChange("data_geometrik", e.target.value);
+                      }}
+                      className="w-full"
                     />
                   </div>
                 </div>
 
-                <InputHorizontal
-                  name="data_geometrik"
-                  title="Data Geometrik"
-                  onChange={(e) => {
-                    handleChange("data_geometrik", e.target.value);
-                  }}
-                />
-
-                <div className="grid grid-cols-4 my-2 items-center">
+                <div className="flex gap-4 my-2 items-center">
                   <Label>Disewa</Label>
                   <Checkbox
                     name="disewa"
@@ -346,40 +334,53 @@ export default function ClientAddForm({ onClose }) {
                     }}
                   />
                 </div>
+                <div className="grid grid-cols-2 gap-4 my-4">
+                  <InputVertical
+                    name="tanggal_mulai"
+                    type="date"
+                    title="Tanggal Mulai"
+                    onChange={(e) => {
+                      handleChange("tanggal_mulai", e.target.value);
+                    }}
+                  />
 
-                <InputHorizontal
-                  name="tanggal_mulai"
-                  type="date"
-                  title="Tanggal Mulai"
-                  onChange={(e) => {
-                    handleChange("tanggal_mulai", e.target.value);
-                  }}
-                />
+                  <InputVertical
+                    type="date"
+                    name="tanggal_berakhir"
+                    title="Tanggal Berakhir"
+                    className="my-2"
+                    onChange={(e) => {
+                      handleChange("tanggal_berakhir", e.target.value);
+                    }}
+                  />
+                </div>
 
-                <InputHorizontal
-                  type="date"
-                  name="tanggal_berakhir"
-                  title="Tanggal Berakhir"
-                  className="my-2"
-                  onChange={(e) => {
-                    handleChange("tanggal_berakhir", e.target.value);
-                  }}
-                />
-
-                <InputHorizontal
-                  type="text"
-                  name="kode_kpp"
-                  title="Kode Kantor Pelayanan Pajak"
-                  onChange={(e) => {
-                    handleChange("kode_kpp", e.target.value);
-                  }}
-                />
-
-                <div className="grid grid-cols-4 my-2">
-                  <div className="col-span-1">
+                <div className="grid grid-cols-2 gap-4 my-4">
+                  <div>
                     <Label>Kode Kantor Pelayanan Pajak</Label>
+                    <Select
+                      value={"" || undefined}
+                      name="kode_kpp"
+                      onValueChange={(e) => {
+                        handleChange("kode_kpp", e);
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {kppOption.map((item, key) => {
+                          return (
+                            <SelectItem key={key} value={item.kode}>
+                              {item.name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <div className="col-span-3">
+                  <div>
+                    <Label>Bagian Pengawasan</Label>
                     <Select
                       value={"" || undefined}
                       name="bagian_pengawasan"
@@ -391,9 +392,13 @@ export default function ClientAddForm({ onClose }) {
                         <SelectValue placeholder="Pilih" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem key={1} value={"kode"}>
-                          {"010"}
-                        </SelectItem>
+                        {pengawasOption.map((item, key) => {
+                          return (
+                            <SelectItem key={key} value={item.kode}>
+                              {item.name}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   </div>

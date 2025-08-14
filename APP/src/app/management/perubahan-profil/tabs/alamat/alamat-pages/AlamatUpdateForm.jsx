@@ -28,21 +28,33 @@ import {
 } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilService";
 
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { InputHorizontal } from "@/components/custom/input-custom";
+import { InputVertical } from "@/components/custom/input-custom";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { useValidateInput } from "@/hooks/use-validate-input";
-import { Input } from "postcss";
 import { dateStrip } from "@/components/custom/DateFormatted";
-import { jenisAlamat } from "@/helpers/variables";
+import {
+  jenisAlamat,
+  jenisWpOption,
+  kppOption,
+  pengawasOption,
+} from "@/helpers/variables";
+import { countryList } from "../../../data/country";
+import { provinceList } from "../../../data/province";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function AlamatUpdateForm({ id, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState({});
+  const [isCheck, setIsCheck] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const clientDispatch = useClientDispatch();
   const { clientAction, clientState } = useClient();
+  const clientId = useLocalStorage.get("clientId");
 
   const { errors, handleChange } = useValidateInput({
     schema: {
@@ -65,8 +77,12 @@ export default function AlamatUpdateForm({ id, onClose }) {
   });
 
   useEffect(() => {
-    const user = clientState.data.find((item) => item._id === id);
+    const getData = clientState.data[0].alamat.find(
+      (item) => item.alamat_id === id
+    );
     setInput({
+      negara: getData.negara,
+      jenis_alamat: getData.jenis_alamat,
       alamat: getData.alamat,
       rt: getData.rt,
       rw: getData.rw,
@@ -85,13 +101,14 @@ export default function AlamatUpdateForm({ id, onClose }) {
     });
 
     setIsOpen(true);
-  }, [id, clientState.data]);
+  }, [id, clientState.data[0].alamat]);
 
   const inputHandler = (event) => {
     event.preventDefault();
 
     startTransition(async () => {
       const formData = new FormData();
+      formData.append("clientId", clientId);
       formData.append("alamat", input.alamat);
       formData.append("rt", input.rt);
       formData.append("rw", input.rw);
@@ -164,25 +181,25 @@ export default function AlamatUpdateForm({ id, onClose }) {
               Update User
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[850px]">
             <DialogTitle>Update User</DialogTitle>
             <DialogDescription>
               Make changes an existing account.
             </DialogDescription>
             <form onSubmit={inputHandler}>
-              <div className="grid xl:grid-cols-3 grid-cols-1 gap-6 my-4  items-end">
-                <div className="col-span-2">
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
+              <div className="grid grid-cols-1 my-4  items-end">
+                <div className="col-span-1">
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
                       <h1 className="font-medium mb-2">Negara</h1>
-                    </div>
-                    <div className="col-span-3">
                       <Select
-                        name="Negara"
+                        name={input.negara + "negara"}
                         onValueChange={(e) => {
                           handleChange("negara", e);
-                          setInput({ ...input, negara: e });
-                          setCountry(e);
+                          setInput({
+                            ...input,
+                            negara: e,
+                          });
                         }}
                         value={String(input.negara)}
                       >
@@ -200,21 +217,18 @@ export default function AlamatUpdateForm({ id, onClose }) {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
+                    <div className="">
                       <h1 className="font-medium mb-2">Jenis Alamat</h1>
-                    </div>
-                    <div className="col-span-3">
                       <Select
                         name="jenis_alamat"
                         onValueChange={(e) => {
                           handleChange("jenis_alamat", e);
-                          setInput({ ...input, jenis_alamat: e });
-                          setCountry(e);
+                          setInput({
+                            ...input,
+                            jenis_alamat: e,
+                          });
                         }}
-                        value={String(input.jenis_alamat)}
+                        value={input.jenis_alamat}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Pilih" />
@@ -232,33 +246,61 @@ export default function AlamatUpdateForm({ id, onClose }) {
                     </div>
                   </div>
 
-                  <InputHorizontal
-                    title="Alamat"
-                    name="alamat"
-                    value={input.alamat}
-                  />
-
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
-                      <h1>RT/RW</h1>
-                    </div>
-                    <div className="xl:col-span-1 col-span-3 flex">
-                      <Input name="rt" value={input.rt} />
-                      <h1 className="text-center mx-4 text-[20px]">/</h1>
-                      <Input name="rw" value={input.rw} />
+                  <div className="grid xl:grid-cols-6 grid-cols-4 gap-4 my-4">
+                    <Textarea
+                      placeholder="Alamat"
+                      name="alamat"
+                      className="xl:col-span-5 col-span-3"
+                      value={input.alamat}
+                      onChange={(e) => {
+                        handleChange("alamat", e.target, value);
+                        setInput({
+                          ...input,
+                          alamat: e.target.value,
+                        });
+                      }}
+                    />
+                    <div className="">
+                      <Input
+                        placeholder="RT"
+                        name="rt"
+                        className="mb-2"
+                        value={input.rt}
+                        onChange={(e) => {
+                          handleChange("rt", e.target, value);
+                          setInput({
+                            ...input,
+                            rt: e.target.value,
+                          });
+                        }}
+                      />
+                      <Input
+                        placeholder="RW"
+                        name="rw"
+                        className="mt-2"
+                        value={input.rw}
+                        onChange={(e) => {
+                          handleChange("rw", e.target, value);
+                          setInput({
+                            ...input,
+                            rw: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
+                  <div className="grid grid-cols-2 my-2 gap-4">
+                    <div>
                       <h1 className="mb-2">Provinsi</h1>
-                    </div>
-                    <div className="col-span-3">
                       <Select
                         name="provinsi"
                         onValueChange={(e) => {
                           handleChange("provinsi", e);
-                          setInput({ ...input, provinsi: e });
+                          setInput({
+                            ...input,
+                            provinsi: e,
+                          });
                         }}
                         value={String(input.provinsi)}
                       >
@@ -276,20 +318,18 @@ export default function AlamatUpdateForm({ id, onClose }) {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
+                    <div>
                       <h1 className="mb-2">Kabupaten</h1>
-                    </div>
-                    <div className="col-span-3">
                       <Select
                         name="kabupaten"
                         onValueChange={(e) => {
                           handleChange("kabupaten", e);
-                          setInput({ ...input, kabupaten: e });
+                          setInput({
+                            ...input,
+                            kabupaten: e,
+                          });
                         }}
-                        value={input.kabupaten}
+                        value={String(input.kabupaten)}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Pilih" />
@@ -307,18 +347,19 @@ export default function AlamatUpdateForm({ id, onClose }) {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
+                  <div className="grid grid-cols-2 gap-4 my-2">
+                    <div>
                       <h1 className="mb-2">Kecamatan</h1>
-                    </div>
-                    <div className="col-span-3">
                       <Select
                         name="kecamatan"
                         onValueChange={(e) => {
                           handleChange("kecamatan", e);
-                          setInput({ ...input, kecamatan: e });
+                          setInput({
+                            ...input,
+                            kecamatan: e,
+                          });
                         }}
-                        value={input.kecamatan}
+                        value={String(input.kecamatan)}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Pilih" />
@@ -334,20 +375,18 @@ export default function AlamatUpdateForm({ id, onClose }) {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
+                    <div>
                       <h1 className="mb-2">Desa</h1>
-                    </div>
-                    <div className="col-span-3">
                       <Select
                         name="desa"
                         onValueChange={(e) => {
                           handleChange("desa", e);
-                          setInput({ ...input, desa: e });
+                          setInput({
+                            ...input,
+                            desa: e,
+                          });
                         }}
-                        value={input.desa}
+                        value={String(input.desa)}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Pilih" />
@@ -365,110 +404,138 @@ export default function AlamatUpdateForm({ id, onClose }) {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
-                      <h1 className="text-wrap">Kode Wilayah / Kode Pos</h1>
-                    </div>
-                    <div className="xl:col-span-1 col-span-3 flex">
+                  <div className="grid grid-cols-6 gap-4 my-4">
+                    <div className="col-span-3 flex gap-4">
                       <Input
+                        value={input.kode_area}
                         name="kode_area"
                         onChange={(e) => {
                           handleChange("kode_area", e.target.value);
-                          setInput({ ...input, kode_area: e.target.value });
+                          setInput({
+                            ...input,
+                            kode_area: e.target.value,
+                          });
                         }}
                         disabled={true}
-                        placeholder="automatically"
-                        value={input.kode_area}
+                        placeholder="Kode Wilayah automatically"
                       />
-                      <h1 className="px-4 text-[20px] text-center">/</h1>
                       <Input
                         name="kode_pos"
-                        title="Kode Pos"
                         onChange={(e) => {
                           handleChange("kode_pos", e.target.value);
-                          setInput({ ...input, kode_pos: e.target.value });
+                          setInput({
+                            ...input,
+                            kode_pos: e.target.value,
+                          });
                         }}
+                        placeholder="Kode Pos"
                         value={input.kode_pos}
+                      />
+                    </div>
+                    <div className="col-span-3 ">
+                      <Input
+                        name="data_geometrik"
+                        placeholder="Data Geometrik"
+                        onChange={(e) => {
+                          handleChange("data_geometrik", e.target.value);
+                          setInput({
+                            ...input,
+                            data_geometrik: e.target.value,
+                          });
+                        }}
+                        className="w-full"
+                        value={input.data_geometrik}
                       />
                     </div>
                   </div>
 
-                  <InputHorizontal
-                    name="data_geometrik"
-                    title="Data Geometrik"
-                    onChange={(e) => {
-                      handleChange("data_geometrik", e.target.value);
-                      setInput({ ...input, data_geometrik: e.target.value });
-                    }}
-                    value={input.data_geometrik}
-                  />
-
-                  <div className="grid grid-cols-4 my-2 items-center">
+                  <div className="flex gap-4 my-2 items-center">
                     <Label>Disewa</Label>
                     <Checkbox
                       name="disewa"
                       className="mt-2"
                       onCheckedChange={(e) => {
                         handleChange("disewa", isCheck);
-                        setIsCheck(input.disewa ? true : false);
+                        setIsCheck(isCheck ? false : true);
+                        setInput({ ...input, disewa: isCheck });
                       }}
+                      checked={input.disewa}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 my-4">
+                    <InputVertical
+                      name="tanggal_mulai"
+                      type="date"
+                      title="Tanggal Mulai"
+                      onChange={(e) => {
+                        handleChange("tanggal_mulai", e.target.value);
+                        setInput({ ...input, tanggal_mulai: e.target.value });
+                      }}
+                      value={dateStrip(input.tanggal_mulai)}
+                    />
+
+                    <InputVertical
+                      type="date"
+                      name="tanggal_berakhir"
+                      title="Tanggal Berakhir"
+                      className="my-2"
+                      onChange={(e) => {
+                        handleChange("tanggal_berakhir", e.target.value);
+                        setInput({
+                          ...input,
+                          tanggal_berakhir: e.target.value,
+                        });
+                      }}
+                      value={dateStrip(input.tanggal_berakhir)}
                     />
                   </div>
 
-                  <InputHorizontal
-                    name="tanggal_mulai"
-                    type="date"
-                    title="Tanggal Mulai"
-                    onChange={(e) => {
-                      handleChange("tanggal_mulai", e.target.value);
-                      setInput({ ...input, tanggal_mulai: e.target.value });
-                    }}
-                    value={dateStrip(input.tanggal_mulai)}
-                  />
-
-                  <InputHorizontal
-                    type="date"
-                    name="tanggal_berakhir"
-                    title="Tanggal Berakhir"
-                    className="my-2"
-                    onChange={(e) => {
-                      handleChange("tanggal_berakhir", e.target.value);
-                      setInput({ ...input, tanggal_berakhir: e.target.value });
-                    }}
-                    value={dateStrip(input.tanggal_berakhir)}
-                  />
-
-                  <InputHorizontal
-                    type="text"
-                    name="kode_kpp"
-                    title="Kode Kantor Pelayanan Pajak"
-                    onChange={(e) => {
-                      handleChange("kode_kpp", e.target.value);
-                      setInput({ ...input, kode_kpp: e.target.value });
-                    }}
-                    value={input.kode_kpp}
-                  />
-
-                  <div className="grid grid-cols-4 my-2">
-                    <div className="col-span-1">
+                  <div className="grid grid-cols-2 gap-4 my-4">
+                    <div>
                       <Label>Kode Kantor Pelayanan Pajak</Label>
-                    </div>
-                    <div className="col-span-3">
                       <Select
-                        value={String(input.bagian_pengawasan)}
-                        name="bagian_pengawasan"
+                        value={input.kode_kpp}
+                        name="kode_kpp"
                         onValueChange={(e) => {
-                          handleChange("bagian_pengawasan", e);
-                          setInput({ ...input, bagian_pengawasan: e });
+                          handleChange("kode_kpp", e);
+                          setInput({ ...input, kode_kpp: e });
                         }}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Pilih" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem key={1} value={"kode"}>
-                            {"010"}
-                          </SelectItem>
+                          {kppOption.map((item, key) => {
+                            return (
+                              <SelectItem key={key} value={item.kode}>
+                                {item.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Bagian Pengawasan</Label>
+                      <Select
+                        value={input.bagian_pegawasan}
+                        name="bagian_pengawasan"
+                        onValueChange={(e) => {
+                          handleChange("bagian_pengawasan", e);
+                          setInput({ ...input, bagian_pegawasan: e });
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pilih" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {pengawasOption.map((item, key) => {
+                            return (
+                              <SelectItem key={key} value={item.kode}>
+                                {item.name}
+                              </SelectItem>
+                            );
+                          })}
                         </SelectContent>
                       </Select>
                     </div>

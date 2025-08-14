@@ -187,13 +187,13 @@ export const statusNpwpOption = [
 ];
 
 export const kppOption = [
-  { kode: "1", kantor: "KPP Pratama Jakarta Matraman (001)" },
-  { kode: "2", kantor: "KPP Pratama Jakarta Pulogadung (003)" },
-  { kode: "3", kantor: "KPP Pratama Jakarta Cakung Satu (004)" },
-  { kode: "4", kantor: "KPP Pratama Jakarta Kramat Jati (005)" },
-  { kode: "5", kantor: "KPP Pratama Jakarta Cakung Dua (006)" },
-  { kode: "6", kantor: "KPP Pratama Jakarta Duren Sawit (008)" },
-  { kode: "7", kantor: "KPP Pratama Jakarta Pasar Rebo (009)" },
+  { kode: "1", name: "KPP Pratama Jakarta Matraman (001)" },
+  { kode: "2", name: "KPP Pratama Jakarta Pulogadung (003)" },
+  { kode: "3", name: "KPP Pratama Jakarta Cakung Satu (004)" },
+  { kode: "4", name: "KPP Pratama Jakarta Kramat Jati (005)" },
+  { kode: "5", name: "KPP Pratama Jakarta Cakung Dua (006)" },
+  { kode: "6", name: "KPP Pratama Jakarta Duren Sawit (008)" },
+  { kode: "7", name: "KPP Pratama Jakarta Pasar Rebo (009)" },
 ];
 
 export const kluOption = [
@@ -231,4 +231,12 @@ export const jenisAlamat = [
   { jenis: "Alamat Lokasi Aset", kode: "JA-2" },
   { jenis: "Alamat Sesuai E-KTP", kode: "JA-3" },
   { jenis: "Alamat Tempat Kegiatan Usaha", kode: "JA-4" },
+];
+
+export const pengawasOption = [
+  { kode: "BP-01", name: "Bagian Pengawas I" },
+  { kode: "BP-02", name: "Bagian Pengawas II" },
+  { kode: "BP-03", name: "Bagian Pengawas III" },
+  { kode: "BP-04", name: "Bagian Pengawas IV" },
+  { kode: "BP-05", name: "Bagian Pengawas V" },
 ];

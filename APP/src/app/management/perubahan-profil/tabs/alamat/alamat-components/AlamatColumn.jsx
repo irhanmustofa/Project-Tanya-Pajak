@@ -3,9 +3,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import AlamatAction from "@/app/management/perubahan-profil/tabs/alamat/alamat-components/AlamatAction";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
 import { countryList } from "../../../data/country";
+import { useClient } from "../../../perubahan-profil-components/PerubahanProfilProvider";
 
 export default function useAlamatTableConfig() {
   const [filterColumnTeamValue, setFilterColumnTeamValue] = useState([]);
+  const { clientState } = useClient();
+
   const alamatColumn = useMemo(
     () => [
       {
@@ -48,14 +51,16 @@ export default function useAlamatTableConfig() {
           <DatatableColumnHeader column={column} title="Negara" />
         ),
         cell: ({ row }) => {
-          var negara = [];
-          if (row.getValue("negara")) {
-            countryList.filter(
-              (item) =>
-                (negara = item.kode.indexOf(row.getValue("negara") !== -1))
-            );
+          var negara = row.getValue("negara") ?? "";
+          if (negara) {
+            for (let i = 0; i < countryList.length; i++) {
+              if (countryList[i].kode == negara) {
+                negara = countryList[i].name;
+                break;
+              }
+            }
           }
-          return <div className=" capitalize">{negara[0].name ?? ""}</div>;
+          return <div className=" capitalize">{negara ?? ""}</div>;
         },
       },
       {
@@ -74,7 +79,9 @@ export default function useAlamatTableConfig() {
           <DatatableColumnHeader column={column} title="Lokasi Disewa" />
         ),
         cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("disewa")}</div>
+          <div className="uppercase">
+            {row.getValue("disewa") === true ? "ya" : "no"}
+          </div>
         ),
       },
       {
@@ -105,21 +112,12 @@ export default function useAlamatTableConfig() {
         ),
       },
       {
-        accessorKey: "seksi_pengawasan",
+        accessorKey: "bagian_pengawasan",
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Seksi Pengawasan" />
         ),
         cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("seksi_pengawasan")}</div>
-        ),
-      },
-      {
-        accessorKey: "alamat",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Alamat" />
-        ),
-        cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("alamat")}</div>
+          <div className="lowercase">{row.getValue("bagian_pengawasan")}</div>
         ),
       },
       {
@@ -128,7 +126,7 @@ export default function useAlamatTableConfig() {
         cell: ({ row }) => <AlamatAction row={row} />,
       },
     ],
-    []
+    [clientState]
   );
 
   const filterFields = useMemo(() => {
