@@ -20,11 +20,20 @@ const createPermission = async (req, res) => {
 };
 
 const getAllPermissions = async (req, res) => {
-    const permissions = await wrapper.all();
+    const permissions = await wrapper.allOrder("key", "asc");
     if (permissions.error) {
         return Response(res, badRequest({ message: permissions.message }));
     }
-    return Response(res, permissions);
+    const filteredData = permissions.data.map(permission => ({
+        _id: permission._id,
+        key: permission.key,
+        description: permission.description
+    }));
+
+    return Response(res, success({
+        message: "Permissions retrieved successfully",
+        data: filteredData
+    }));
 };
 
 

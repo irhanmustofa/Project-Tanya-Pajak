@@ -16,19 +16,37 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
   const { clientid } = req.headers;
+  let permission = [];
 
+  if (req.body?.permissions) {
+    try {
+      permission = typeof req.body.permissions === 'string'
+        ? JSON.parse(req.body.permissions)
+        : req.body.permissions;
+
+      if (!Array.isArray(permission)) {
+        permission = [permission];
+      }
+    } catch (parseError) {
+      console.error("Error parsing permissions:", parseError);
+      permission = [];
+    }
+  }
   const existingUser = await wrapper.getByFilter({ email: req.body.email, client_id: clientid });
 
   if (existingUser.success && existingUser.data.length > 0) {
     return Response(res, badRequest({ message: "User with this email already exists." }));
   }
-
-  const user = new User(req.body);
+  const user = new User({
+    ...req.body,
+    client_id: clientid,
+    permission,
+  });
   if (user.errors && user.errors.length > 0) {
     return Response(res, badRequest({ message: user.errors.join(", ") }));
   }
 
-  return Response(res, await wrapper.create({ ...user, client_id: clientid }));
+  return Response(res, await wrapper.create(user));
 
 };
 
