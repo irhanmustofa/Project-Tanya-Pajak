@@ -59,7 +59,7 @@ export const sidebarData = () => {
       icon: FileTextIcon,
       isActive: is_efaktur,
       items: [
-        { title: "Pajak Keluaran", url: "#" },
+        { title: "Pajak Keluaran", url: "/pajak-keluaran" },
         { title: "Pajak Masukan", url: "#" },
         { title: "Retur Pajak Keluaran", url: "#" },
         { title: "Retur Pajak Masukan", url: "#" },

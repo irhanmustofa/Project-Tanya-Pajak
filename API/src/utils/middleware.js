@@ -49,7 +49,6 @@ export const validatingUser = async (headers) => {
 };
 
 export const checkPermission = (requiredPermissions) => {
-  console.log('Checking permissions:');
   const userWrapper = new MongodbWrapper(userSchema());
   return async (req, res, next) => {
     try {

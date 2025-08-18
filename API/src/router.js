@@ -11,6 +11,7 @@ import registerRouter from "./module/register/register.route.js";
 import userClientRouter from "./module/user-client/user.client.route.js";
 import permissionRouter from "./module/permission/permission.route.js";
 import documentRouter from "./module/document/document.route.js";
+import pajakKeluaranRouter from "./module/faktur-pajak/pajak-keluaran/pajak-keluaran.route.js";
 
 const noValidate = ["/auth", "/register", "/permission"];
 
@@ -43,5 +44,7 @@ router.use("/users", userRouter);
 
 // Profile
 router.use("/documents", documentRouter);
+// Faktur Pajak
+router.use("/pajak-keluaran", pajakKeluaranRouter);
 
 export default router;

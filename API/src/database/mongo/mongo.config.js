@@ -13,5 +13,8 @@ export const mongoConfig = {
     master_client: "master_client",
     permission: "permission",
     documents: "documents",
+    pajak_keluaran: "pajak_keluaran",
+    pajak_masukan: "pajak_masukan",
+    faktur_pajak: "faktur_pajak",
   },
 };
