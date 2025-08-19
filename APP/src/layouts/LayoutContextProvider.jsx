@@ -25,7 +25,6 @@ export const LayoutProvider = ({ children }) => {
         }
 
         const response = await userClientAll(clientId);
-        console.log("Company response:", response);
         if (response.success) {
           setCompany(response.data[0]);
           setRole(response.data[0].role);
@@ -55,8 +54,6 @@ export const LayoutProvider = ({ children }) => {
     }
     return userPermissions.includes(permissionKey);
   };
-
-  console.log("User permissions:", userPermissions);
 
   return (
     <layoutsContext.Provider
