@@ -89,10 +89,7 @@ export default function AlamatAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <AlamatUpdateForm
-          id={item.alamat_id}
-          onClose={() => setOnUpdate(false)}
-        />
+        <AlamatUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}

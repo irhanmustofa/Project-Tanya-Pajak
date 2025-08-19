@@ -162,6 +162,8 @@ export default function ProfilTabs() {
       formData.append("seksi_pengawasan", input.seksi_pengawasan);
       formData.append("kode_klu", input.kode_klu);
 
+      console.log("fe:", input);
+
       await clientUpdate(id, formData).then((response) => {
         if (!response.success) {
           dialogDispatch({
@@ -206,7 +208,6 @@ export default function ProfilTabs() {
 
   const handleCloseDialog = () => {
     setIsOpen(false);
-    setInput({});
   };
 
   return (
