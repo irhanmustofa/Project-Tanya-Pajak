@@ -1,11 +1,9 @@
 import Response, { badRequest, success } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
-import FakturPajak from "../faktur-pajak.entities.js";
-import { fakturPajakSchema } from "../faktur-pajak.schema.js";
 import PajakKeluaran from "./pajak-keluaran.entities.js";
 import { pajakKeluaranSchema } from "./pajak-keluaran.schema.js";
 
-const wrapper = (client_id) => new MongodbWrapper(fakturPajakSchema(client_id));
+const wrapper = (client_id) => new MongodbWrapper(pajakKeluaranSchema(client_id));
 
 const getAll = async (req, res) => {
     return Response(res, await wrapper(req.headers.clientid).all());
@@ -13,12 +11,19 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
     let lawan_transaksi = req.body.lawan_transaksi;
+    let items = req.body.items;
+    if (typeof items === "string") {
+        items = JSON.parse(items);
+    }
     if (typeof lawan_transaksi === "string") {
         lawan_transaksi = JSON.parse(lawan_transaksi);
     }
-    req.body.jenis_faktur = 0;
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        return Response(res, badRequest({ message: "Items must be a non-empty." }));
+    }
     req.body.lawan_transaksi = lawan_transaksi;
-    const pajakKeluaran = new FakturPajak(req.body);
+    req.body.items = items;
+    const pajakKeluaran = new PajakKeluaran(req.body);
     console.log(pajakKeluaran);
     if (!pajakKeluaran.isValid()) {
         return Response(res, {
@@ -32,10 +37,18 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
     let lawan_transaksi = req.body.lawan_transaksi;
+    let items = req.body.items;
+    if (typeof items === "string") {
+        items = JSON.parse(items);
+    }
     if (typeof lawan_transaksi === "string") {
         lawan_transaksi = JSON.parse(lawan_transaksi);
     }
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        return Response(res, badRequest({ message: "Items must be a non-empty." }));
+    }
     req.body.lawan_transaksi = lawan_transaksi;
+    req.body.items = items;
     const pajakKeluaran = new PajakKeluaran(req.body);
     if (!pajakKeluaran.isValid()) {
         return Response(res, {
