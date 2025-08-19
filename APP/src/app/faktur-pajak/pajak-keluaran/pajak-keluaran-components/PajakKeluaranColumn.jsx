@@ -80,6 +80,51 @@ export default function usePajakKeluaranTableConfig() {
         },
       },
       {
+        accessorKey: "status",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Status" />
+        ),
+        cell: ({ row }) => {
+          const status = row.getValue("status");
+          const statusItem = statusType.find((item) => item.code === status);
+
+          // Enhanced styling berdasarkan status
+          const getStatusStyle = (statusCode) => {
+            switch (statusCode) {
+              case 0:
+                return "bg-yellow-100 text-yellow-800 border-yellow-200";
+              case 1:
+                return "bg-green-100 text-green-800 border-green-200";
+              case 2:
+                return "bg-red-100 text-red-800 border-red-200";
+              case 3:
+                return "bg-blue-100 text-blue-800 border-blue-200";
+              default:
+                return "bg-gray-100 text-gray-800 border-gray-200";
+            }
+          };
+
+          return (
+            <div className="w-[100px]">
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusStyle(
+                  status
+                )}`}
+              >
+                {statusItem
+                  ? statusItem.name
+                  : status === 0
+                  ? "Pending"
+                  : "Unknown"}
+              </span>
+            </div>
+          );
+        },
+        filterFn: (row, id, value) => {
+          return value.includes(row.getValue(id));
+        },
+      },
+      {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => <PajakKeluaranAction row={row} />,
