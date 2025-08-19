@@ -170,6 +170,14 @@ export const companyHandler = [
 export const jenisWpOption = [
   { kode: "1", jenis_wp: "BADAN" },
   { kode: "2", jenis_wp: "ORANG PRIBADI" },
+  { kode: "3", jenis_wp: "Joint Operation" },
+  { kode: "4", jenis_wp: "Hidup Berpisah" },
+  { kode: "5", jenis_wp: "Kantor Perwakilan Perusahaan Asing" },
+  { kode: "6", jenis_wp: "Pisah Harta" },
+  { kode: "7", jenis_wp: "Bendahara Pemerintah" },
+  { kode: "8", jenis_wp: "Memilih Terpisah" },
+  { kode: "9", jenis_wp: "Penyelenggara Kegiatan" },
+  { kode: "10", jenis_wp: "Warisan Belum Terbagi" },
 ];
 
 export const badanHukumOption = [
@@ -239,4 +247,59 @@ export const pengawasOption = [
   { kode: "BP-03", name: "Bagian Pengawas III" },
   { kode: "BP-04", name: "Bagian Pengawas IV" },
   { kode: "BP-05", name: "Bagian Pengawas V" },
+];
+
+export const jenisKelamin = [
+  { kode: "jk-1", name: "Pria" },
+  { kode: "jk-2", name: "Wanita" },
+];
+
+export const jenisPerkawinan = [
+  { kode: "jp-1", name: "Kawin" },
+  { kode: "jp-2", name: "Tidak Kawin" },
+  { kode: "jp-3", name: "Cerai Hidup" },
+  { kode: "jp-4", name: "Cerai Mati" },
+];
+
+export const hubunganKeluarga = [
+  { kode: "hk-1", name: "Anak" },
+  { kode: "hk-2", name: "Cucu" },
+  { kode: "hk-3", name: "Kepala Keluarga" },
+  { kode: "hk-4", name: "Suami" },
+  { kode: "hk-5", name: "Istri" },
+  { kode: "hk-6", name: "Mertua" },
+  { kode: "hk-7", name: "Menantu" },
+  { kode: "hk-8", name: "Pembantu" },
+  { kode: "hk-9", name: "Family Lain" },
+  { kode: "hk-10", name: "Orang Tua" },
+  { kode: "hk-11", name: "Lainnya" },
+];
+
+export const agamaOption = [
+  { kode: "a-1", name: "Islam" },
+  { kode: "a-2", name: "Kristen" },
+  { kode: "a-3", name: "Katholik" },
+  { kode: "a-4", name: "Hindu" },
+  { kode: "a-5", name: "Budha" },
+  { kode: "a-6", name: "Khonghucu" },
+  { kode: "a-7", name: "Kepercayaan Terhadap Tuhan YME" },
+  { kode: "a-8", name: "Lainnya" },
+];
+
+export const kewarganegaraanOption = [
+  { kode: "k-1", name: "Warga Negara Indonesia" },
+  { kode: "k-2", name: "Warga Negara Asing" },
+];
+
+export const bahasaOption = [
+  { kode: "k-1", name: "Bahasa Indonesia" },
+  { kode: "k-2", name: "Bahasa Inggris" },
+];
+
+export const jenisPerusahaan = [
+  { kode: "jp-1", name: "Swasta Nasional" },
+  { kode: "jp-2", name: "Fasilitas PMDN" },
+  { kode: "jp-3", name: "BUMN" },
+  { kode: "jp-4", name: "BUMD" },
+  { kode: "jp-5", name: "Penanaman Modal Asing (PMA)" },
 ];

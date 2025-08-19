@@ -25,13 +25,11 @@ export const dateToday = () => {
 };
 
 export const dateStrip = (date) => {
-  return new Date(date)
-    .toLocaleDateString("ja-JP", {
-      day: "2-digit",
-      year: "numeric",
-      month: "2-digit",
-    })
-    .replaceAll("/", "-");
+  return new Date(date).toLocaleDateString("sv-SE", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
 };
 
 export const dateSlash = (date) => {

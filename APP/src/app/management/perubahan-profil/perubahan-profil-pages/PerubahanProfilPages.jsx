@@ -4,7 +4,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { AppWindowIcon, CodeIcon } from "lucide-react";
 import ProfilTabs from "../tabs/profil/ProfilTabs";
 import { useClient } from "../perubahan-profil-components/PerubahanProfilProvider";
 import AlamatTable from "../tabs/alamat/alamat-pages/AlamatTable";

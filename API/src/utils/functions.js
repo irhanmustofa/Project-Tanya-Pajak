@@ -50,7 +50,12 @@ export const passwordCompare = (plain, hashed) => {
 
 export const parseTanggal = (tanggal) => {
   // Jika null, undefined, atau empty string, return null
-  if (!tanggal || tanggal === "" || tanggal === "undefined" || tanggal === "null") {
+  if (
+    !tanggal ||
+    tanggal === "" ||
+    tanggal === "undefined" ||
+    tanggal === "null"
+  ) {
     return null;
   }
 
@@ -119,4 +124,16 @@ export const getDateToday = () => {
     "" +
     date.getSeconds();
   return dateToday;
+};
+
+export const dateStripFormat = (val) => {
+  return new Date(val).toLocaleDateString("sv-SE", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+};
+
+export const currencyToNumber = (val, prefix = ".") => {
+  return Number(val.replaceAll(prefix, ""));
 };

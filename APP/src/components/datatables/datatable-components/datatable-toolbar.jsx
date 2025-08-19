@@ -12,11 +12,12 @@ import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import DialogDeleteSome from "@/dialogs/DialogDeleteSome";
 import { format } from "date-fns";
 
-export function DatatableToolbar({ table, filterFields }) {
+export function DatatableToolbar({ table, filterFields, pathCustom }) {
   const isFiltered = table.getState().columnFilters.length > 0;
   const [idSelector, setIdSelector] = useState([]);
   const { filterDate, filterColumn } = filterFields;
-  const path = useLocation().pathname.split("/").slice(1).join("/");
+  const path =
+    pathCustom ?? useLocation().pathname.split("/").slice(1).join("/");
   const dispatch = useDialogDispatch();
   const { dialogState, dialogAction } = useDialog();
 

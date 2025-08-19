@@ -1,11 +1,10 @@
-import Response, { badRequest } from "../../../app/response.js";
+import { badRequest } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import MasterClient from "../master-client.entities.js";
 import { masterClientSchema } from "../master-client.schema.js";
 
 export default async function updateClient(req) {
   try {
-    var inputAlamat = {};
     const wrapper = new MongodbWrapper(masterClientSchema());
     const getData = await wrapper.getByFilter({ _id: req.params.id });
     if (!getData.success) {
@@ -13,38 +12,45 @@ export default async function updateClient(req) {
     }
 
     const singleData = getData.data[0];
-    if (req.body.alamat !== undefined && req.body.alamat) {
-      inputAlamat = {
-        negara: req.body.negara,
-        jenis_alamat: req.body.jenis_alamat,
-        alamat: req.body.alamat,
-        rt: req.body.rt,
-        rw: req.body.rw,
-        provinsi: req.body.provinsi,
-        kabupaten: req.body.kabupaten,
-        kecamatan: req.body.kecamatan,
-        desa: req.body.desa,
-        kode_area: req.body.kode_area,
-        kode_pos: req.body.kode_pos,
-        data_geometrik: req.body.data_geometrik,
-        disewa: req.body.disewa,
-        tanggal_mulai: req.body.tanggal_mulai,
-        tanggal_berakhir: req.body.tanggal_berakhir,
-        kode_kpp: req.body.kode_kpp,
-        bagian_pengawasan: req.body.bagian_pengawasan,
-      };
-      singleData.alamat.push(inputAlamat);
-      console.log("join-address:", singleData.alamat);
-      console.log("body:", inputAlamat);
-    }
+
     const input = {
       _id: req.body._id ?? singleData._id,
+      negara_asal: req.body.negara_asal ?? singleData.negara_asal,
       company_name: req.body.company_name ?? singleData.company_name,
       company_npwp: req.body.company_npwp ?? singleData.company_npwp,
       kegiatan_utama: req.body.kegiatan_utama ?? singleData.kegiatan_utama,
       jenis_wp: req.body.jenis_wp ?? singleData.jenis_wp,
       bentuk_badan_hukum:
         req.body.bentuk_badan_hukum ?? singleData.bentuk_badan_hukum,
+      nomor_keputusan_pengesahan:
+        req.body.nomor_keputusan_pengesahan ??
+        singleData.nomor_keputusan_pengesahan,
+      tanggal_keputusan_pengesahan:
+        req.body.tanggal_keputusan_pengesahan ??
+        singleData.tanggal_keputusan_pengesahan,
+      nomor_keputusan_pengesahan_perubahan:
+        req.body.nomor_keputusan_pengesahan_perubahan ??
+        singleData.nomor_keputusan_pengesahan_perubahan,
+      tanggal_keputusan_pengesahan_perubahan:
+        req.body.tanggal_keputusan_pengesahan_perubahan ??
+        singleData.tanggal_keputusan_pengesahan_perubahan,
+      nomor_akta_pendirian:
+        req.body.nomor_akta_pendirian ?? singleData.nomor_akta_pendirian,
+      tempat_pendirian:
+        req.body.tempat_pendirian ?? singleData.tempat_pendirian,
+      tanggal_pendirian:
+        req.body.tanggal_pendirian ?? singleData.tanggal_pendirian,
+      nik_notaris: req.body.nik_notaris ?? singleData.nik_notaris,
+      nama_notaris: req.body.nama_notaris ?? singleData.nama_notaris,
+      jenis_perusahaan:
+        req.body.jenis_perusahaan ?? singleData.jenis_perusahaan,
+      modal_dasar: req.body.modal_dasar ?? singleData.modal_dasar,
+      modal_ditempatkan:
+        req.body.modal_ditempatkan ?? singleData.modal_ditempatkan,
+      modal_disetor: req.body.modal_disetor ?? singleData.modal_disetor,
+      kewarganegaraan: req.body.kewarganegaraan ?? singleData.kewarganegaraan,
+      bahasa: req.body.bahasa ?? singleData.bahasa,
+
       status_npwp: req.body.status_npwp ?? singleData.status_npwp,
       status_pkp: req.body.status_pkp ?? singleData.status_pkp,
       tanggal_pengukuhan_pkp:
@@ -56,17 +62,13 @@ export default async function updateClient(req) {
       seksi_pengawasan:
         req.body.seksi_pengawasan ?? singleData.seksi_pengawasan,
       kode_klu: req.body.kode_klu ?? singleData.kode_klu,
-      deskripsi_klu: req.body.deskripsi_klu ?? singleData.deskripsi_klu,
-      alamat: singleData.alamat,
-      kontak: req.body.kontak ?? singleData.kontak,
     };
-    console.log("input:", input);
-    const masterClient = new MasterClient(input);
 
+    const masterClient = new MasterClient(input);
     if (masterClient.errors) {
       return badRequest({ message: masterClient.errors.join(", ") });
     }
-    // return badRequest({ message: "waduhh" });
+
     return await wrapper.update(req.params.id, masterClient);
   } catch (error) {
     console.log("Error updating client:", error);

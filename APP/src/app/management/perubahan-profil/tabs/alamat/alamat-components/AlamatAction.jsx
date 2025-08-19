@@ -10,10 +10,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import {
-  clientFirst,
-  clientEndpoint,
-} from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilService";
+import { clientFirst } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilService";
+
+import { alamatClientEndpoint } from "./AlamatService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import {
   useClient,
@@ -21,6 +20,7 @@ import {
 } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
 import AlamatUpdateForm from "@/app/management/perubahan-profil/tabs/alamat/alamat-pages/AlamatUpdateForm";
 import LoaderOverlay from "@/components/custom/loader-overlay";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function AlamatAction({ row }) {
   const dispatch = useDialogDispatch();
@@ -30,6 +30,7 @@ export default function AlamatAction({ row }) {
 
   const [onUpdate, setOnUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const clientId = useLocalStorage.get("clientId");
 
   const handleDelete = (id) => {
     dispatch({
@@ -40,7 +41,7 @@ export default function AlamatAction({ row }) {
         message:
           "Are you sure you want to delete this user? This action cannot be undone.",
         status: "warning",
-        url: clientEndpoint.delete(id),
+        url: alamatClientEndpoint.delete(id, clientId),
       },
     });
   };
@@ -50,7 +51,7 @@ export default function AlamatAction({ row }) {
 
     setIsLoading(true);
 
-    await clientFirst().then((res) => {
+    await clientFirst(clientId).then((res) => {
       if (res.success) {
         clientDispatch({ type: clientAction.SUCCESS, payload: res.data });
       } else {
@@ -88,10 +89,7 @@ export default function AlamatAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <AlamatUpdateForm
-          id={item.alamat_id}
-          onClose={() => setOnUpdate(false)}
-        />
+        <AlamatUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}

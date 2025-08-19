@@ -21,7 +21,13 @@ import {
 import { DatatablePagination } from "./datatable-components/datatable-pagination";
 import { DatatableToolbar } from "./datatable-components/datatable-toolbar";
 
-export default function DataTable({ data, columns, filterFields, state }) {
+export default function DataTable({
+  data,
+  columns,
+  filterFields,
+  state,
+  path,
+}) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState([]);
@@ -53,6 +59,7 @@ export default function DataTable({ data, columns, filterFields, state }) {
           table={table}
           filterFields={filterFields}
           rowSelection={rowSelection}
+          pathCustom={path}
         />
       </div>
       <div className="rounded-md border">
