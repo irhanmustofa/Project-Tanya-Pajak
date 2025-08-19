@@ -50,18 +50,9 @@ export default function useAlamatTableConfig() {
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Negara" />
         ),
-        cell: ({ row }) => {
-          var negara = row.getValue("negara") ?? "";
-          if (negara) {
-            for (let i = 0; i < countryList.length; i++) {
-              if (countryList[i].kode == negara) {
-                negara = countryList[i].name;
-                break;
-              }
-            }
-          }
-          return <div className=" capitalize">{negara ?? ""}</div>;
-        },
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("negara") ?? ""}</div>
+        ),
       },
       {
         accessorKey: "alamat",

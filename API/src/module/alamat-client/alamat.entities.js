@@ -3,7 +3,7 @@ import Validator from "../../database/database.validator.js";
 export default class Alamat {
   constructor(input) {
     const {
-      alamat_id,
+      _id,
       negara,
       jenis_alamat,
       alamat,
@@ -17,6 +17,10 @@ export default class Alamat {
       kode_pos,
       data_geometrik,
       disewa,
+      identitas_pemilik,
+      nama_pemilik,
+      tanggal_mulai_sewa,
+      tanggal_sewa_berakhir,
       tanggal_mulai,
       tanggal_berakhir,
       kode_kpp,
@@ -24,7 +28,7 @@ export default class Alamat {
     } = input;
 
     const data = {
-      alamat_id,
+      _id,
       negara,
       jenis_alamat,
       alamat,
@@ -38,6 +42,10 @@ export default class Alamat {
       kode_pos,
       data_geometrik,
       disewa,
+      identitas_pemilik,
+      nama_pemilik,
+      tanggal_mulai_sewa,
+      tanggal_sewa_berakhir,
       tanggal_mulai,
       tanggal_berakhir,
       kode_kpp,
@@ -45,7 +53,7 @@ export default class Alamat {
     };
 
     const baseRules = {
-      alamat_id: "required|string",
+      _id: "required|string",
       negara: "string",
       jenis_alamat: "string",
       alamat: "string",
@@ -59,6 +67,10 @@ export default class Alamat {
       kode_pos: "string",
       data_geometrik: "string",
       disewa: "bolean",
+      identitas_pemilik: "string",
+      nama_pemilik: "string",
+      tanggal_mulai_sewa: "string",
+      tanggal_sewa_berakhir: "string",
       tanggal_mulai: "string",
       tanggal_berakhir: "string",
       kode_kpp: "string",
@@ -68,7 +80,7 @@ export default class Alamat {
     const validator = new Validator(data, baseRules);
     const result = validator.getResult();
 
-    this.alamat_id = alamat_id;
+    this._id = _id;
     this.negara = negara;
     this.jenis_alamat = jenis_alamat;
     this.alamat = alamat;
@@ -82,6 +94,10 @@ export default class Alamat {
     this.kode_pos = kode_pos;
     this.data_geometrik = data_geometrik;
     this.disewa = Boolean(disewa);
+    this.identitas_pemilik = identitas_pemilik;
+    this.nama_pemilik = nama_pemilik;
+    this.tanggal_mulai_sewa = tanggal_mulai_sewa;
+    this.tanggal_sewa_berakhir = tanggal_sewa_berakhir;
     this.tanggal_mulai = tanggal_mulai;
     this.tanggal_berakhir = tanggal_berakhir;
     this.kode_kpp = kode_kpp;

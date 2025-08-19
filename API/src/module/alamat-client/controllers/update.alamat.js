@@ -7,7 +7,7 @@ export default async function updateAlamat(req) {
   var inputAlamat = {};
   var newData = [];
   const id = req.params.id;
-  const clientId = req.headers.clientid;
+  const clientId = req.body.clientId;
   const wrapper = new MongodbWrapper(masterClientSchema());
   const getData = await wrapper.getByFilter({ _id: clientId });
 
@@ -17,11 +17,10 @@ export default async function updateAlamat(req) {
 
   try {
     var singleData = getData.data[0].alamat;
-    var arrayNum = -1;
+    var arrayNum = 0;
     for (let i = 0; i < singleData.length; i++) {
-      if (singleData[i].alamat_id !== id) {
-        newData.push(singleData[i]);
-      } else {
+      let alamatUnique = singleData[i]._id;
+      if (alamatUnique == id) {
         arrayNum = i;
       }
     }
@@ -31,7 +30,7 @@ export default async function updateAlamat(req) {
     }
 
     inputAlamat = {
-      alamat_id: id,
+      _id: id,
       negara: req.body.negara || singleData[arrayNum].negara,
       jenis_alamat: req.body.jenis_alamat || singleData[arrayNum].jenis_alamat,
       alamat: req.body.alamat || singleData[arrayNum].alamat,
@@ -46,6 +45,14 @@ export default async function updateAlamat(req) {
       data_geometrik:
         req.body.data_geometrik || singleData[arrayNum].data_geometrik,
       disewa: req.body.disewa || singleData[arrayNum].disewa,
+      identitas_pemilik:
+        req.body.identitas_pemilik || singleData[arrayNum].identitas_pemilik,
+      nama_pemilik: req.body.nama_pemilik || singleData[arrayNum].nama_pemilik,
+      tanggal_mulai_sewa:
+        req.body.tanggal_mulai_sewa || singleData[arrayNum].tanggal_mulai_sewa,
+      tanggal_sewa_berakhir:
+        req.body.tanggal_sewa_berakhir ||
+        singleData[arrayNum].tanggal_sewa_berakhir,
       tanggal_mulai:
         req.body.tanggal_mulai || singleData[arrayNum].tanggal_mulai,
       tanggal_berakhir:
@@ -56,9 +63,20 @@ export default async function updateAlamat(req) {
     };
 
     const alamatClient = new Alamat(inputAlamat);
-    newData.push(alamatClient);
+    if (alamatClient.errors) {
+      return badRequest({ message: alamatClient.errors.join(", ") });
+    }
 
-    return await wrapper.update(clientId, newData);
+    for (let i = 0; i < singleData.length; i++) {
+      let alamatUnique = singleData[i]._id;
+      if (alamatUnique !== undefined && alamatUnique !== id) {
+        newData.push(singleData[i]);
+      } else {
+        newData.push(alamatClient);
+      }
+    }
+
+    return await wrapper.update(clientId, { alamat: newData });
   } catch (error) {
     console.log("Error add client address:", error);
     return error({ message: "An error occurred while the system was running" });

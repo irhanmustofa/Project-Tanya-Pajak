@@ -16,9 +16,8 @@ export default async function createAlamat(req) {
 
   try {
     const singleData = getData.data[0].alamat;
-    console.log("get:", singleData);
     inputAlamat = {
-      alamat_id: generateId(),
+      _id: generateId(),
       negara: req.body.negara,
       jenis_alamat: req.body.jenis_alamat,
       alamat: req.body.alamat,
@@ -32,6 +31,10 @@ export default async function createAlamat(req) {
       kode_pos: req.body.kode_pos,
       data_geometrik: req.body.data_geometrik,
       disewa: req.body.disewa,
+      identitas_pemilik: req.body.identitas_pemilik,
+      nama_pemilik: req.body.nama_pemilik,
+      tanggal_mulai_sewa: req.body.tanggal_mulai_sewa,
+      tanggal_sewa_berakhir: req.body.tanggal_sewa_berakhir,
       tanggal_mulai: req.body.tanggal_mulai,
       tanggal_berakhir: req.body.tanggal_berakhir,
       kode_kpp: req.body.kode_kpp,
@@ -39,8 +42,12 @@ export default async function createAlamat(req) {
     };
 
     const alamatClient = new Alamat(inputAlamat);
-    singleData.push(alamatClient);
+    if (alamatClient.errors) {
+      badRequest({ message: alamatClient.errors.join(", ") });
+    }
 
+    singleData.push(alamatClient);
+    console.log(singleData);
     return await wrapper.update(clientId, { alamat: singleData });
   } catch (error) {
     console.log("Error add client address:", error);
