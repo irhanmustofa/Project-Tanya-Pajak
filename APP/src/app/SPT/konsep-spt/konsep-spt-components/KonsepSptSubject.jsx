@@ -17,22 +17,21 @@ import {
   LucideFileText,
   LucideFileSpreadsheet,
   LucideSettings,
+  LucideFilePlus,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
-import { usePajakKeluaran } from "./PajakKeluaranProvider";
+import { useKonsepSpt } from "./KonsepSptProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
 import { usePermissions } from "@/hooks/use-permissions";
-import PajakKeluaranAddForm from "../pajak-keluaran-pages/PajakKeluaranAddForm";
-import PajakKeluaranImportForm from "../pajak-keluaran-pages/PajakKeluaranImportForm";
+import { useNavigate } from "react-router-dom";
 
-export default function PajakKeluaranSubject() {
+export default function KonsepSptSubject() {
   const { checkPermission } = usePermissions();
   const { ExportPDF } = useExportPDF();
   const [openAdd, setOpenAdd] = useState(false);
-  const [openImport, setOpenImport] = useState(false);
   const [isExportExcel, setIsExportExcel] = useState(false);
   const [isExportPdf, setIsExportPdf] = useState(false);
   const [showExportPdf, setShowExportPdf] = useState(false);
@@ -40,19 +39,20 @@ export default function PajakKeluaranSubject() {
     head: [],
     body: [],
   });
+  const navigate = useNavigate();
 
-  const { pajakKeluaranState } = usePajakKeluaran();
+  const { konsepSptState } = useKonsepSpt();
 
   useEffect(() => {
     if (isExportExcel || isExportPdf) {
-      if (pajakKeluaranState.data.length > 0) {
+      if (konsepSptState.data.length > 0) {
         const exportExcel = [];
         setDataExport({ head: [], body: [] });
 
         dataExport.head = ["Name", "Email"];
         exportExcel.push(dataExport.head);
 
-        pajakKeluaranState.data.map((item) =>
+        konsepSptState.data.map((item) =>
           dataExport.body.push([item.name, item.email])
         );
 
@@ -60,7 +60,7 @@ export default function PajakKeluaranSubject() {
 
         if (isExportExcel) {
           setIsExportExcel(false);
-          useExcelWriter(exportExcel, "Data Pajak Keluaran.xlsx");
+          useExcelWriter(exportExcel, "Data Konsep SPT.xlsx");
         } else if (isExportPdf) {
           setDataExport(dataExport);
           setIsExportPdf(false);
@@ -72,35 +72,35 @@ export default function PajakKeluaranSubject() {
 
   return (
     <div className="flex justify-between mb-4">
-      <h2 className="text-2xl font-semibold">
-        Pajak Keluaran <b>Management </b>
-      </h2>
+      <h2 className="text-2xl font-semibold">Konsep SPT</h2>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
             <LucideSettings className="h-4 w-4" />
-            <span className="">Pajak Keluaran Manager</span>
+            <span className="">Konsep SPT Manager</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="font-light w-36">
-            Pajak Keluaran Manager
+            Konsep SPT Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {checkPermission("pajak-keluaran.create") && (
+          {checkPermission("spt.create") && (
+            <DropdownMenuItem
+              onClick={() => navigate("/spt/create-konsep-spt")}
+            >
+              <LucideFilePlus className="mr-2 h-4 w-4" />
+              <span>Buat Konsep SPT</span>
+            </DropdownMenuItem>
+          )}
+          {checkPermission("spt.create") && (
             <DropdownMenuItem onClick={() => setOpenAdd(true)}>
               <LucideFilePen className="mr-2 h-4 w-4" />
               <span>Add New</span>
             </DropdownMenuItem>
           )}
-          {checkPermission("pajak-keluaran.import") && (
-            <DropdownMenuItem onClick={() => setOpenImport(true)}>
-              <LucideFilePen className="mr-2 h-4 w-4" />
-              <span>Import</span>
-            </DropdownMenuItem>
-          )}
           <DropdownMenuSeparator />
-          {pajakKeluaranState.data.length > 0 && (
+          {konsepSptState.data.length > 0 && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <LucideFileUp className="mr-2 h-4 w-4" />
@@ -122,13 +122,10 @@ export default function PajakKeluaranSubject() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      {openAdd && <PajakKeluaranAddForm onClose={() => setOpenAdd(false)} />}
-      {openImport && (
-        <PajakKeluaranImportForm onClose={() => setOpenImport(false)} />
-      )}
+
       {showExportPdf && (
         <ExportPDF
-          title="Data Pajak Keluaran"
+          title="Data Konsep SPT"
           columns={dataExport.head}
           data={dataExport.body}
           onClose={() => setShowExportPdf(false)}

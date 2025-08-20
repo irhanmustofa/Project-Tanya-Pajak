@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { FileTextIcon, FolderCogIcon } from "lucide-react";
+import {
+  FileTextIcon,
+  FolderCogIcon,
+  LucideUser2,
+  WalletIcon,
+} from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useNavigate } from "react-router-dom";
 
 export const sidebarData = () => {
   const avatarImage = () => {
@@ -44,7 +50,8 @@ export const sidebarData = () => {
   const is_administration = path === "/users" || path === "/client-group";
   const is_efaktur = path === "/efaktur" || path === "/efaktur/transactions";
   const is_ebupot = path === "/ebupot" || path === "/ebupot/transactions";
-
+  const is_spt = path === "/spt" || path === "/spt/transactions";
+  const navigate = useNavigate();
   const fullSidebar = [
     {
       title: "Administration",
@@ -75,6 +82,62 @@ export const sidebarData = () => {
         { title: "Pajak Masukan", url: "#" },
         { title: "Retur Pajak Keluaran", url: "#" },
         { title: "Retur Pajak Masukan", url: "#" },
+      ],
+    },
+    {
+      title: "Surat Pemberitahuan (SPT)",
+      url: "#",
+      icon: FileTextIcon,
+      isActive: is_spt,
+      items: [
+        {
+          title: "Surat Pemberitahuan (SPT)",
+          icon: WalletIcon,
+          subMenus: [
+            {
+              title: "Konsep SPT",
+              onClick: () => {
+                navigate("/spt/konsep-spt");
+              },
+            },
+            {
+              title: "SPT Menunggu Pembayaran",
+              onClick: () => {
+                console.log("Edit Profile clicked");
+              },
+            },
+            {
+              title: "SPT Dilaporkan",
+              onClick: () => {
+                console.log("Export Profile clicked");
+              },
+            },
+            {
+              title: "SPT Ditolak",
+              onClick: () => {
+                console.log("Export Profile clicked");
+              },
+            },
+            {
+              title: "SPT Dibatalkan",
+              onClick: () => {
+                console.log("Export Profile clicked");
+              },
+            },
+          ],
+        },
+        {
+          title: "Pencatatan",
+          url: "#",
+        },
+        {
+          title: "Dasbor Kompensasi",
+          url: "#",
+        },
+        {
+          title: "Koreksi SPT",
+          url: "#",
+        },
       ],
     },
   ];

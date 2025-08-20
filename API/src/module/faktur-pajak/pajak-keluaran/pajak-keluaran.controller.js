@@ -91,6 +91,13 @@ const deleteSome = async (req, res) => {
     return Response(res, success({ message: "Pajak Keluaran deleted successfully." }));
 };
 
+const bulkImport = async (req, res) => {
+    const { data } = req.body;
+
+    console.log("Bulk Import Data:", data);
+    // return Response(res, await wrapper(req.headers.clientid).bulkImport(data));
+};
+
 
 const pajakKeluaranController = {
     getAll,
@@ -98,6 +105,7 @@ const pajakKeluaranController = {
     update,
     remove,
     deleteSome,
+    bulkImport
 };
 
 export default pajakKeluaranController;

@@ -12,14 +12,11 @@ import { useState, useEffect, useTransition } from "react";
 import { useExcelReader } from "@/hooks/use-excel-reader";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import {
-  userImport,
-  userAll,
-} from "../pajak-keluaran-components/PajakKeluaranService";
+import { userImport, userAll } from "../konsep-spt-components/KonsepSptService";
 import {
   useUser,
   useUserDispatch,
-} from "../pajak-keluaran-components/PajakKeluaranProvider";
+} from "../konsep-spt-components/KonsepSptProvider";
 
 export default function UserImportForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);

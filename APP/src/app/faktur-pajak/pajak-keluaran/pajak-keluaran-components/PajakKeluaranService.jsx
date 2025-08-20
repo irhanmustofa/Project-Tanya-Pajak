@@ -9,6 +9,7 @@ export const pajakKeluaransEndpoint = {
   get: (id) => `${base_url}/pajak-keluaran/${id}`,
   update: (id) => `${base_url}/pajak-keluaran/${id}`,
   delete: (id) => `${base_url}/pajak-keluaran/${id}`,
+  import: `${base_url}/pajak-keluaran/import`,
 };
 
 export const pajakKeluaranAll = async () => {
@@ -72,6 +73,21 @@ export const pajakKeluaranUpdate = async (id, data) => {
       })
       .send();
 
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const pajakKeluaranImport = async (data) => {
+  try {
+    const request = await HttpRequest.method("POST")
+      .url(clientsEndpoint.import)
+      .body(data)
+      .send();
     return request;
   } catch (error) {
     return {

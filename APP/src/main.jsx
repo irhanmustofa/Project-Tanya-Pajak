@@ -16,6 +16,8 @@ import { PendingRequestProvider } from "./hooks/use-pending-request";
 import RegisterPage from "./app/auth/register/register-page";
 import Documents from "./app/company/documents/Documents";
 import PajakKeluarans from "./app/faktur-pajak/pajak-keluaran/PajakKeluarans";
+import KonsepSpt from "./app/SPT/konsep-spt/KonsepSpt";
+import CreateKonsepSPT from "./app/SPT/konsep-spt/CreateKonsepSPT/CreateKonsepSPT";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -39,6 +41,11 @@ createRoot(document.getElementById("root")).render(
             <Route path="/users" element={<Users />} />
             <Route path="/documents" element={<Documents />} />
             <Route path="/pajak-keluaran" element={<PajakKeluarans />} />
+            <Route path="/spt/konsep-spt" element={<KonsepSpt />} />
+            <Route
+              path="/spt/create-konsep-spt"
+              element={<CreateKonsepSPT />}
+            />
           </Routes>
         </Router>
       </PendingRequestProvider>
