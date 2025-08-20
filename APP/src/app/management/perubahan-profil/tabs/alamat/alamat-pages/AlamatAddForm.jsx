@@ -51,6 +51,7 @@ export default function ClientAddForm({ onClose }) {
   const { clientAction } = useClient();
   const [isCheck, setIsCheck] = useState(false);
   const [isCountry, setIsCountry] = useState("");
+  const [kodeArea, setKodeArea] = useState("");
 
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
@@ -96,10 +97,7 @@ export default function ClientAddForm({ onClose }) {
         "desa",
         event.target.desa !== undefined ? event.target.desa.value : ""
       );
-      formData.append(
-        "kode_area",
-        event.target.kode_area !== undefined ? event.target.kode_area.value : ""
-      );
+      formData.append("kode_area", kodeArea);
       formData.append(
         "kode_pos",
         event.target.kode_pos !== undefined ? event.target.kode_pos.value : ""
@@ -352,6 +350,7 @@ export default function ClientAddForm({ onClose }) {
                         name="desa"
                         onValueChange={(e) => {
                           handleChange("desa", e);
+                          setKodeArea(e);
                         }}
                         value={"" || undefined}
                       >
@@ -376,7 +375,7 @@ export default function ClientAddForm({ onClose }) {
                   <div className="grid grid-cols-6 gap-4 my-4">
                     <div className="xl:col-span-3 col-span-full flex gap-4">
                       <Input
-                        value={"" || undefined}
+                        value={kodeArea}
                         name="kode_area"
                         onChange={(e) => {
                           handleChange("kode_area", e.target.value);

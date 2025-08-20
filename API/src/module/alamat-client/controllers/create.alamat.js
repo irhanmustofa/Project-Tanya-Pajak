@@ -43,11 +43,10 @@ export default async function createAlamat(req) {
 
     const alamatClient = new Alamat(inputAlamat);
     if (alamatClient.errors) {
-      badRequest({ message: alamatClient.errors.join(", ") });
+      return badRequest({ message: alamatClient.errors.join(", ") });
     }
 
     singleData.push(alamatClient);
-    console.log(singleData);
     return await wrapper.update(clientId, { alamat: singleData });
   } catch (error) {
     console.log("Error add client address:", error);

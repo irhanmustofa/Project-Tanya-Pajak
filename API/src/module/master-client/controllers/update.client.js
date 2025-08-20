@@ -1,4 +1,4 @@
-import { badRequest } from "../../../app/response.js";
+import { badRequest, error } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import MasterClient from "../master-client.entities.js";
 import { masterClientSchema } from "../master-client.schema.js";
@@ -70,8 +70,8 @@ export default async function updateClient(req) {
     }
 
     return await wrapper.update(req.params.id, masterClient);
-  } catch (error) {
-    console.log("Error updating client:", error);
+  } catch (err) {
+    console.log("err updating client:", error);
     return error({ message: "An error occurred while the system was running" });
   }
 }
