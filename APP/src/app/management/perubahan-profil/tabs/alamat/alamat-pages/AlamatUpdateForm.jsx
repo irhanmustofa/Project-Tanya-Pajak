@@ -55,6 +55,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
   const { clientAction, clientState } = useClient();
   const clientId = useLocalStorage.get("clientId");
   const [isCountry, setIsCountry] = useState("");
+  const [kodeArea, setKodeArea] = useState("");
 
   const { errors, handleChange } = useValidateInput({
     schema: {
@@ -95,6 +96,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
     });
     setIsCountry(getData.negara);
     setIsCheck(getData.disewa);
+    setKodeArea(getData.kode_area);
 
     setIsOpen(true);
   }, [id, clientState]);
@@ -114,7 +116,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
       formData.append("kabupaten", input.kabupaten);
       formData.append("kecamatan", input.kecamatan);
       formData.append("desa", input.desa);
-      formData.append("kode_area", input.kode_area);
+      formData.append("kode_area", kodeArea);
       formData.append("kode_pos", input.kode_pos);
       formData.append("data_geometrik", input.data_geometrik);
       formData.append("disewa", input.disewa);
@@ -224,7 +226,8 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                       </Select>
                       {errors.negara}
                     </div>
-                    <div className="">
+
+                    <div>
                       <h1 className="font-medium mb-2">
                         Jenis Alamat{" "}
                         <span className="text-[13px] text-red-500">*</span>
@@ -405,6 +408,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                           name="desa"
                           onValueChange={(e) => {
                             handleChange("desa", e);
+                            setKodeArea(e);
                             setInput({
                               ...input,
                               desa: e,
@@ -433,7 +437,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                     <div className="grid grid-cols-6 gap-4 my-4">
                       <div className="xl:col-span-3 col-span-full flex gap-4">
                         <Input
-                          value={input.kode_area}
+                          value={kodeArea}
                           name="kode_area"
                           onChange={(e) => {
                             handleChange("kode_area", e.target.value);

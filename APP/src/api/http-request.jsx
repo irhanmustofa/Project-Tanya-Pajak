@@ -50,6 +50,7 @@ class HttpRequest {
     const token = useLocalStorage.get("token");
     const email = useLocalStorage.get("email");
     const device = useLocalStorage.get("device");
+    const clientId = useLocalStorage.get("clientId");
     const lastAccess = useLocalStorage.get("lastAccess");
 
     if (token) {
@@ -97,6 +98,13 @@ class HttpRequest {
         ...fetchOptions.headers,
         token,
         email,
+      };
+    }
+
+    if (clientId) {
+      fetchOptions.headers = {
+        ...fetchOptions.headers,
+        clientId,
       };
     }
 

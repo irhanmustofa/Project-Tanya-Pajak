@@ -22,6 +22,7 @@ export const masterClientSchema = () => {
     kantor_wilayah_djp: { type: String },
     kantor_pelayanan_pajak: { type: Number },
     seksi_pengawasan: { type: Number },
+    status: { required: true, type: Number, default: 1 },
 
     nomor_keputusan_pengesahan: { type: String },
     tanggal_keputusan_pengesahan: { type: Date },
@@ -49,9 +50,10 @@ export const masterClientSchema = () => {
     pekerjaan: { type: String },
     nama_ibu_kandung: { type: String },
     nomor_kartu_keluarga: { type: String },
+    kode_klu: { type: String },
 
     alamat: {
-      _id: { type: String },
+      _id: { type: String, required: true, unique: true },
       negara: { type: String },
       jenis_alamat: { type: Number },
       alamat: { type: String },
@@ -82,12 +84,26 @@ export const masterClientSchema = () => {
       kode_klu: { type: String },
     },
 
-    kontak: {
-      phone: { type: String },
+    merek: { type: String },
+    jumlah_karyawan: { type: String },
+    metode_pembukuan: { type: String },
+    mata_uang_pembukuan: { type: String },
+    periode_pembukuan: { type: String },
+    omset_pertahun: { type: String },
+    bruto: { type: Number },
+
+    data_kontak: {
+      _id: { type: String, unique: true, required: true },
+      jenis_kontak: { type: String },
+      nomor_telepon: { type: String },
+      nomor_handphone: { type: String },
+      nomor_faksimile: { type: String },
       email: { type: String },
+      website: { type: String },
+      keterangan: { type: String },
+      tanggal_mulai: { type: Date },
+      tanggal_berakhir: { type: Date },
     },
-    kode_klu: { type: String },
-    status: { required: true, type: Number, default: 1 },
   };
 
   const options = {

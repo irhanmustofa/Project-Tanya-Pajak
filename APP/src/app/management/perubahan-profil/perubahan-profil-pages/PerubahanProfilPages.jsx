@@ -7,6 +7,7 @@ import {
 import ProfilTabs from "../tabs/profil/ProfilTabs";
 import { useClient } from "../perubahan-profil-components/PerubahanProfilProvider";
 import AlamatTable from "../tabs/alamat/alamat-pages/AlamatTable";
+import EkonomiTabs from "../tabs/ekonomi/EkonomiTabs";
 
 export default function PerubahanProfilPages() {
   const { clientState, clientAction } = useClient();
@@ -14,16 +15,31 @@ export default function PerubahanProfilPages() {
   return (
     <>
       <h1 className="text-2xl font-medium mb-10">PROFIL WAJIB PAJAK</h1>
-      <TabsRoot defaultValue="alamat">
+      <TabsRoot defaultValue="ekonomi">
         <TabsList className="p-4 border-0">
-          <TabsTrigger className="border rounded-full" value="profil">
+          <TabsTrigger
+            className="border rounded-full xl:text-[14px] text-[10px]"
+            value="profil"
+          >
             Profil Wajib Pajak
           </TabsTrigger>
-          <TabsTrigger className="border rounded-full" value="alamat">
+          <TabsTrigger
+            className="border rounded-full xl:text-[14px] text-[10px]"
+            value="alamat"
+          >
             Alamat
           </TabsTrigger>
-          <TabsTrigger className="border rounded-full" value="kontak">
+          <TabsTrigger
+            className="border rounded-full xl:text-[14px] text-[10px]"
+            value="kontak"
+          >
             Kontak
+          </TabsTrigger>
+          <TabsTrigger
+            className="border rounded-full xl:text-[14px] text-[10px]"
+            value="ekonomi"
+          >
+            Ekonomi
           </TabsTrigger>
         </TabsList>
         <TabsContent value="profil">
@@ -36,6 +52,9 @@ export default function PerubahanProfilPages() {
         </TabsContent>
         <TabsContent value="kontak">
           <h1>Kontak</h1>
+        </TabsContent>
+        <TabsContent value="ekonomi">
+          <EkonomiTabs />
         </TabsContent>
       </TabsRoot>
     </>

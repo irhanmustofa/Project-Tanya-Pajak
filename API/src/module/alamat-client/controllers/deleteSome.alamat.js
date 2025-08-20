@@ -6,7 +6,7 @@ export default async function deleteSomeAlamat(req) {
   var newData = [];
   let alamatUnique = "";
   const ids = req.body;
-  const clientId = req.params.clientId;
+  const clientId = req.headers.clientid;
 
   const wrapper = new MongodbWrapper(masterClientSchema());
   const getData = await wrapper.getByFilter({ _id: clientId });
@@ -17,6 +17,7 @@ export default async function deleteSomeAlamat(req) {
 
   try {
     var singleData = getData.data[0].alamat;
+
     var arrayNum = -1;
     for (let i = 0; i < singleData.length; i++) {
       alamatUnique = singleData[i]._id;

@@ -303,3 +303,30 @@ export const jenisPerusahaan = [
   { kode: "jp-4", name: "BUMD" },
   { kode: "jp-5", name: "Penanaman Modal Asing (PMA)" },
 ];
+
+export const jumlahKaryawan = [
+  { kode: "jk-1", name: "Tidak Memiliki Karyawan" },
+  { kode: "jk-2", name: "di bawah 10" },
+  { kode: "jk-3", name: "10 sd 100" },
+  { kode: "jk-4", name: "101 sd 1000" },
+  { kode: "jk-5", name: "di atas 1000" },
+];
+
+export const metodePembukuan = [
+  { kode: "mp-1", name: "Stelsel Akrual" },
+  { kode: "mp-2", name: "Stelsel Kas" },
+];
+
+export const mataUang = [
+  { kode: "mu-1", name: "Indonesian Rupiah (IDR)" },
+  { kode: "mu-2", name: "Dolar Amerika Serikat (USD)" },
+];
+
+export const periodePembukuan = [{ kode: "pp-1", name: "01-12" }];
+
+export const omsetOption = [{ kode: "opt-1", name: "lebih dari Rp. 4,8 M" }];
+
+export const jenisKontak = [
+  { kode: "jk-1", name: "Kontak Alternatif Wajib Pajak" },
+  { kode: "jk-2", name: "Kontak Teknis Wajib Pajak" },
+];
