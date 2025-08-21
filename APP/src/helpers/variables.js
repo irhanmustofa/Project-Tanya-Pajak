@@ -78,6 +78,7 @@ export const quotationStatus = [
 ];
 
 export const userLevel = [
+<<<<<<< HEAD
   { code: 0, name: "Super Admin" },
   { code: 1, name: "Admin" },
   { code: 2, name: "Finance" },
@@ -87,6 +88,10 @@ export const userLevel = [
   { code: 4, name: "Supervisor" },
   { code: 5, name: "Team Head" },
   { code: 6, name: "Staff" },
+=======
+  { code: 0, name: "Admin" },
+  { code: 1, name: "User" },
+>>>>>>> origin/main
 ];
 
 export const clientType = [

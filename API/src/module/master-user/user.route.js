@@ -4,14 +4,16 @@ import { checkPermission } from "../../utils/middleware.js";
 
 const userRouter = express.Router();
 
-userRouter.route("/delete").post(userController.deleteSome);
+userRouter
+  .route("/delete")
+  .post(checkPermission("users.delete"), userController.deleteSome);
 userRouter
   .route("/")
-  .get(checkPermission("users.view"), userController.getAll)
+  .get(checkPermission("users.read"), userController.getAll)
   .post(checkPermission("users.create"), userController.create);
 userRouter
   .route("/:id")
-  .put(userController.update)
-  .delete(userController.remove);
+  .put(checkPermission("users.update"), userController.update)
+  .delete(checkPermission("users.delete"), userController.remove);
 
 export default userRouter;

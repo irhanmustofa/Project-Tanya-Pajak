@@ -52,7 +52,7 @@ export const masterClientSchema = () => {
     nomor_kartu_keluarga: { type: String },
     kode_klu: { type: String },
 
-    alamat: {
+    data_alamat: {
       _id: { type: String, required: true, unique: true },
       negara: { type: String },
       jenis_alamat: { type: Number },
