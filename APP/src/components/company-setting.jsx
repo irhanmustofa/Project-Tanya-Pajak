@@ -152,15 +152,14 @@ export function CompanySetting() {
                 Perubahan Data
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent className="min-w-48">
-                <DropdownMenuItem
-                  onClick={() => console.log("Navigate to data pribadi")}
-                  className="gap-2 p-2"
-                >
-                  <div className="flex size-4 items-center justify-center">
-                    <User className="size-3" />
-                  </div>
-                  Identitas Wajib Pajak
-                </DropdownMenuItem>
+                <Link to="/update-profile">
+                  <DropdownMenuItem className="gap-2 p-2">
+                    <div className="flex size-4 items-center justify-center">
+                      <User className="size-3" />
+                    </div>
+                    Identitas Wajib Pajak
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem
                   onClick={() => console.log("Navigate to data perusahaan")}
                   className="gap-2 p-2"
