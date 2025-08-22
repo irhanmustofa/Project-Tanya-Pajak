@@ -3,28 +3,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import UserAction from "@/app/management/users/user-components/UserAction";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
 import { userLevel, statusType } from "@/helpers/variables";
-<<<<<<< HEAD
 
 export default function useUserTableConfig() {
   const [filterColumnTeamValue, setFilterColumnTeamValue] = useState([]);
-=======
-import { useUser } from "./UserProvider";
-
-export default function useUserTableConfig() {
-  const [filterColumnTeamValue, setFilterColumnTeamValue] = useState([]);
-  const { userGroup } = useUser();
-
-  useEffect(() => {
-    if (window.location.pathname === "/user") {
-      setFilterColumnTeamValue(
-        userGroup.map((item) => ({
-          value: item.id,
-          label: item.name,
-        }))
-      );
-    }
-  }, [userGroup]);
->>>>>>> 2cd1356 (update-register)
 
   const userColumn = useMemo(
     () => [
@@ -93,21 +74,6 @@ export default function useUserTableConfig() {
         filterFn: (row, id, value) => value.includes(row.getValue(id)),
       },
       {
-<<<<<<< HEAD
-=======
-        accessorKey: "team",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Team" />
-        ),
-        cell: ({ row }) => (
-          <div>
-            {userGroup.find((item) => item.id === row.getValue("team"))?.name}
-          </div>
-        ),
-        filterFn: (row, id, value) => value.includes(row.getValue(id)),
-      },
-      {
->>>>>>> 2cd1356 (update-register)
         accessorKey: "status",
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Status" />
@@ -156,13 +122,6 @@ export default function useUserTableConfig() {
           title: "Role",
           values: filterColumnRoleValue,
         },
-<<<<<<< HEAD
-=======
-        team: {
-          title: "Team",
-          values: filterColumnTeamValue,
-        },
->>>>>>> 2cd1356 (update-register)
       },
     };
   }, [filterColumnTeamValue]);

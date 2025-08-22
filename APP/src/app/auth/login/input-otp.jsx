@@ -5,17 +5,15 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import { verifyOtp } from "../auth-service";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-=======
->>>>>>> 2cd1356 (update-register)
 
 const InputOTPControlled = ({ otp, onValid }) => {
   const [value, setValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-<<<<<<< HEAD
     const handleOtp = async () => {
       if (value.length === 6) {
         setLoading(true);
@@ -47,16 +45,6 @@ const InputOTPControlled = ({ otp, onValid }) => {
 
     handleOtp();
   }, [value, onValid]);
-=======
-    if (value.length === 6) {
-      if (value == otp) {
-        onValid();
-      } else {
-        setValue("");
-      }
-    }
-  }, [value, otp, onValid]);
->>>>>>> 2cd1356 (update-register)
 
   return (
     <>
@@ -99,7 +87,6 @@ const InputOTPControlled = ({ otp, onValid }) => {
                 </InputOTPGroup>
               </InputOTP>
             </div>
-<<<<<<< HEAD
             <div className="text-center text-sm min-h-6 flex items-center justify-center">
               {loading ? (
                 <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
@@ -124,10 +111,6 @@ const InputOTPControlled = ({ otp, onValid }) => {
               ) : error ? (
                 <span className="text-red-600">{error}</span>
               ) : value === "" ? (
-=======
-            <div className="text-center text-sm">
-              {value === "" ? (
->>>>>>> 2cd1356 (update-register)
                 <>Check your email for the code.</>
               ) : (
                 <>You entered: {value}</>

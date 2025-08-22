@@ -17,11 +17,7 @@ const InputReset = ({ setSuccess }) => {
 
   const { errors, valid, handleChange } = useValidateInput({
     schema: {
-<<<<<<<< HEAD:APP/src/app/auth/reset/input-reset.jsx
       password: "required|password",
-========
-      email: "required|email",
->>>>>>>> db7b6ac (update files):APP/src/app/auth/forgot/input-forgot.jsx
     },
   });
 
