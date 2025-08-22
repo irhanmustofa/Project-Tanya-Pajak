@@ -3,7 +3,6 @@ import useAlamatTableConfig from "../alamat-components/AlamatColumn";
 import AlamatSubject from "../alamat-components/AlamatSubject";
 import { countryList } from "../../../data/country";
 import { kppOption, pengawasOption } from "@/helpers/variables";
-import { useEffect } from "react";
 
 export default function AlamatTable({ clientState = {} }) {
   const { alamatColumn, filterFields } = useAlamatTableConfig();

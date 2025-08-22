@@ -39,7 +39,6 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { isValid } from "date-fns";
 
 export default function ClientAddForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -147,8 +146,8 @@ export default function ClientAddForm({ onClose }) {
             type: dialogAction.DIALOG_INFO,
             payload: {
               show: true,
-              title: "Add Client Success",
-              message: "Client added successfully",
+              title: "Add Address Success",
+              message: "Address added successfully",
               status: "success",
             },
           });
@@ -165,7 +164,7 @@ export default function ClientAddForm({ onClose }) {
             type: dialogAction.DIALOG_INFO,
             payload: {
               show: true,
-              title: "Add User Failed",
+              title: "Add Address Failed",
               message: response.message,
               status: "error",
             },

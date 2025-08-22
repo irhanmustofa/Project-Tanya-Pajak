@@ -1,15 +1,15 @@
 import { useState, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import AlamatAction from "@/app/management/perubahan-profil/tabs/alamat/alamat-components/AlamatAction";
+import KontakAction from "@/app/management/perubahan-profil/tabs/kontak/kontak-components/KontakAction";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
 import { useClient } from "../../../perubahan-profil-components/PerubahanProfilProvider";
 import { dateShort } from "@/components/custom/DateFormatted";
 
-export default function useAlamatTableConfig() {
+export default function useKontakTableConfig() {
   const [filterColumnTeamValue, setFilterColumnTeamValue] = useState([]);
   const { clientState } = useClient();
 
-  const alamatColumn = useMemo(
+  const kontakColumn = useMemo(
     () => [
       {
         id: "select",
@@ -46,33 +46,74 @@ export default function useAlamatTableConfig() {
         enableSorting: false,
       },
       {
-        accessorKey: "negara",
+        accessorKey: "jenis_kontak",
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Negara" />
+          <DatatableColumnHeader column={column} title="Jenis Kontak" />
         ),
         cell: ({ row }) => (
-          <div className=" capitalize">{row.getValue("negara") ?? ""}</div>
-        ),
-      },
-      {
-        accessorKey: "alamat",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Alamat" />
-        ),
-        cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("alamat")}</div>
-        ),
-      },
-
-      {
-        accessorKey: "disewa",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Lokasi Disewa" />
-        ),
-        cell: ({ row }) => (
-          <div className="uppercase">
-            {row.getValue("disewa") === true ? "ya" : "no"}
+          <div className=" capitalize">
+            {row.getValue("jenis_kontak") ?? ""}
           </div>
+        ),
+      },
+      {
+        accessorKey: "nomor_telepon",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Nomor Telepon" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">
+            {row.getValue("nomor_telepon") ?? ""}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "nomor_handphone",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Nomor Handphone" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">
+            {row.getValue("nomor_handphone") ?? ""}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "nomor_faksimile",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Nomor Faksimile" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">
+            {row.getValue("nomor_faksimile") ?? ""}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "email",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Email" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("email") ?? ""}</div>
+        ),
+      },
+      {
+        accessorKey: "website",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Website" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("website") ?? ""}</div>
+        ),
+      },
+      {
+        accessorKey: "keterangan",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Keterangan" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("keterangan") ?? ""}</div>
         ),
       },
       {
@@ -81,8 +122,10 @@ export default function useAlamatTableConfig() {
           <DatatableColumnHeader column={column} title="Tanggal Mulai" />
         ),
         cell: ({ row }) => (
-          <div className="lowercase">
-            {dateShort(row.getValue("tanggal_mulai"))}
+          <div className=" capitalize">
+            {row.getValue("tanggal_mulai") !== ""
+              ? dateShort(row.getValue("tanggal_mulai"))
+              : ""}
           </div>
         ),
       },
@@ -92,7 +135,7 @@ export default function useAlamatTableConfig() {
           <DatatableColumnHeader column={column} title="Tanggal Berakhir" />
         ),
         cell: ({ row }) => (
-          <div className="lowercase">
+          <div className=" capitalize">
             {row.getValue("tanggal_berakhir") !== ""
               ? dateShort(row.getValue("tanggal_berakhir"))
               : ""}
@@ -100,27 +143,9 @@ export default function useAlamatTableConfig() {
         ),
       },
       {
-        accessorKey: "kode_kpp",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="KPP" />
-        ),
-        cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("kode_kpp")}</div>
-        ),
-      },
-      {
-        accessorKey: "bagian_pengawasan",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Seksi Pengawasan" />
-        ),
-        cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("bagian_pengawasan")}</div>
-        ),
-      },
-      {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => <AlamatAction row={row} />,
+        cell: ({ row }) => <KontakAction row={row} />,
       },
     ],
     [clientState]
@@ -133,5 +158,5 @@ export default function useAlamatTableConfig() {
     };
   }, [filterColumnTeamValue]);
 
-  return { alamatColumn, filterFields };
+  return { kontakColumn, filterFields };
 }
