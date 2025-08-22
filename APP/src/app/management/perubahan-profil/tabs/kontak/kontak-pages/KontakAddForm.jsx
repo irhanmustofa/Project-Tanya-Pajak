@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { InputVertical } from "@/components/custom/input-custom";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectTrigger,
@@ -24,25 +24,26 @@ import {
   useClientDispatch,
 } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { jenisKontak } from "@/helpers/variables";
+import { jenisKontak } from "@/app/management/perubahan-profil/data/kontakDataList";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function KontakAddForm({ onClose }) {
-  const [isOpen, setIsOpen] = useState(true);
-  const [isPending, startTrasition] = useTransition();
-  const clientId = useLocalStorage.get("clientId") ?? "";
-  const dialogDispatch = useDialogDispatch();
-  const { dialogAction, dialogState, DialogInfo } = useDialog();
-  const clientDispatch = useClientDispatch();
   const { clientAction } = useClient();
+  const dialogDispatch = useDialogDispatch();
+  const clientDispatch = useClientDispatch();
+  const { dialogAction, dialogState, DialogInfo } = useDialog();
+  const [isPending, startTrasition] = useTransition();
+
+  const clientId = useLocalStorage.get("clientId") ?? "";
+  const [isOpen, setIsOpen] = useState(true);
 
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
-      negara: "required",
       jenis_kontak: "required",
-      nomor_telepon: "string",
-      nomor_handphone: "string",
-      email: "string",
+      nomor_telepon: "required",
+      nomor_handphone: "required",
+      email: "required",
+      tanggal_mulai: "required",
     },
   });
 
@@ -51,28 +52,15 @@ export default function KontakAddForm({ onClose }) {
 
     startTrasition(async () => {
       const formData = new FormData();
-      formData("jenis_kontak", event.target.jenis_kontak.value);
-      formData("nomor_telepon", event.target.nomor_telepon.value);
-      formData("nomor_handphone", event.target.nomor_handphone.value);
-      formData("nomor_faksimile", event.target.nomor_faksimile.value);
-      formData("email", event.target.email.value);
-      formData("website", event.target.website.value);
-      formData("keterangan", event.target.keterangan.value);
-      formData("tanggal_mulai", event.target.tanggal_mulai.value);
-      formData("tanggal_berakhir", event.target.tanggal_berakhir.value);
-
-      console.log("jenis_kontak.value:", event.target.jenis_kontak.value);
-      console.log("nomor_telepon.value:", event.target.nomor_telepon.value);
-      console.log("nomor_handphone.value:", event.target.nomor_handphone.value);
-      console.log("nomor_faksimile.value:", event.target.nomor_faksimile.value);
-      console.log("email.value:", event.target.email.value);
-      console.log("website.value:", event.target.website.value);
-      console.log("keterangan.value:", event.target.keterangan.value);
-      console.log("tanggal_mulai.value:", event.target.tanggal_mulai.value);
-      console.log(
-        "tanggal_berakhir.value:",
-        event.target.tanggal_berakhir.value
-      );
+      formData.append("jenis_kontak", event.target.jenis_kontak.value);
+      formData.append("nomor_telepon", event.target.nomor_telepon.value);
+      formData.append("nomor_handphone", event.target.nomor_handphone.value);
+      formData.append("nomor_faksimile", event.target.nomor_faksimile.value);
+      formData.append("email", event.target.email.value);
+      formData.append("website", event.target.website.value);
+      formData.append("keterangan", event.target.keterangan.value);
+      formData.append("tanggal_mulai", event.target.tanggal_mulai.value);
+      formData.append("tanggal_berakhir", event.target.tanggal_berakhir.value);
 
       await kontakClientCreate(formData).then((response) => {
         if (response.success) {
@@ -117,109 +105,157 @@ export default function KontakAddForm({ onClose }) {
     <div className="relative">
       {dialogState.isOpen && <DialogInfo />}
       <Dialog open={isOpen} onOpenChange={handleOnClose}>
-        <DialogContent className="sm:max-w-[850px] max-h-[400px] overflow-auto">
-          <DialogTitle>Input New Address</DialogTitle>
+        <DialogContent className="sm:max-w-[625px] max-h-[100vh] overflow-auto ">
+          <DialogTitle>Input New Contact</DialogTitle>
           <DialogDescription>
-            Add a new Address to the system.
+            Add a new Contact to the system.
           </DialogDescription>
           <form onSubmit={inputHandler}>
             <div className="grid grid-cols-1 my-4  items-end overflow-auto justify-center">
               <div className="col-span-1">
-                <div className="grid xl:grid-cols-2 grid-cols-1 gap-4 mb-4">
-                  <div>
-                    <Label>Jenis Kontak</Label>
-                    <Select
-                      name="jenis_kontak"
-                      onValueChange={(e) => {
-                        handleChange("jenis_kontak", e);
-                      }}
-                      value={""}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {jenisKontak.map((item, key) => {
-                          return (
-                            <SelectItem key={key} value={String(item.kode)}>
-                              {item.name}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
+                <div className="grid xl:grid-cols-2 grid-cols-1 gap-3 mb-2 p-1">
+                  <div className="col-span-2 items-center grid md:grid-cols-4 grid-cols-1 gap-2 xl:mb-0 mb-2">
+                    <Label>
+                      Jenis Kontak{" "}
+                      <span className="text-[13px] text-red-500">*</span>
+                    </Label>
+                    <div className="md:col-span-3 col-span-full">
+                      <Select
+                        name="jenis_kontak"
+                        onValueChange={(e) => {
+                          handleChange("jenis_kontak", e);
+                        }}
+                        value={undefined}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pilih" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {jenisKontak.map((item, key) => {
+                            return (
+                              <SelectItem key={key} value={String(item.kode)}>
+                                {item.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                      {errors.jenis_kontak}
+                    </div>
                   </div>
 
-                  <InputVertical
-                    name="nomor_telepon"
-                    type="tel"
-                    onChange={(e) => {
-                      handleChange("nomor_telepon", e.target.value);
-                    }}
-                    title="Nomor Telepon"
-                  />
+                  <div className="col-span-2 items-center grid md:grid-cols-4 grid-cols-1 gap-2 xl:mb-0 mb-2">
+                    <Label>
+                      Nomor Telepon{" "}
+                      <span className="text-[13px] text-red-500">*</span>
+                    </Label>
+                    <div className="md:col-span-3 col-span-full">
+                      <Input
+                        name="nomor_telepon"
+                        type="tel"
+                        onChange={(e) => {
+                          handleChange("nomor_telepon", e.target.value);
+                        }}
+                      />
+                      {errors.nomor_telepon}
+                    </div>
+                  </div>
 
-                  <InputVertical
-                    name="nomor_handphone"
-                    type="tel"
-                    onChange={(e) => {
-                      handleChange("nomor_handphone", e.target.value);
-                    }}
-                    title="Nomor Handphone"
-                  />
+                  <div className="col-span-2 items-center grid md:grid-cols-4  gap-2 xl:mb-0 mb-2">
+                    <Label>
+                      Nomor Handphone{" "}
+                      <span className="text-[13px] text-red-500">*</span>
+                    </Label>
+                    <div className="md:col-span-3 col-span-full">
+                      <Input
+                        name="nomor_handphone"
+                        type="tel"
+                        onChange={(e) => {
+                          handleChange("nomor_handphone", e.target.value);
+                        }}
+                      />
+                      {errors.nomor_handphone}
+                    </div>
+                  </div>
 
-                  <InputVertical
-                    name="nomor_faksimile"
-                    onChange={(e) => {
-                      handleChange("nomor_faksimile", e.target.value);
-                    }}
-                    title="Nomor Faksimile"
-                  />
+                  <div className="col-span-2 grid md:grid-cols-4 grid-cols-1 gap-2 xl:mb-0 mb-2 items-center">
+                    <Label>Nomor Faksimile</Label>
+                    <Input
+                      name="nomor_faksimile"
+                      className="md:col-span-3 col-span-full"
+                      onChange={(e) => {
+                        handleChange("nomor_faksimile", e.target.value);
+                      }}
+                    />
+                  </div>
 
-                  <InputVertical
-                    name="email"
-                    type="email"
-                    onChange={(e) => {
-                      handleChange("email", e.target.value);
-                    }}
-                    title="Email"
-                  />
+                  <div className="col-span-2 items-center grid md:grid-cols-4 grid-cols-1 gap-2 xl:mb-0 mb-2">
+                    <Label>
+                      Email <span className="text-[13px] text-red-500">*</span>
+                    </Label>
+                    <div className="md:col-span-3 col-span-1">
+                      <Input
+                        name="email"
+                        type="email"
+                        onChange={(e) => {
+                          handleChange("email", e.target.value);
+                        }}
+                      />
+                      {errors.email}
+                    </div>
+                  </div>
 
-                  <InputVertical
-                    name="website"
-                    onChange={(e) => {
-                      handleChange("website", e.target.value);
-                    }}
-                    title="Website"
-                  />
+                  <div className="col-span-2 items-center grid md:grid-cols-4 grid-cols-1 gap-2 xl:mb-0 mb-2">
+                    <Label>Website</Label>
+                    <Input
+                      className="md:col-span-3 col-span-full"
+                      name="website"
+                      onChange={(e) => {
+                        handleChange("website", e.target.value);
+                      }}
+                    />
+                  </div>
 
-                  <div className="col-span-2">
-                    <InputVertical
+                  <div className="col-span-2 grid md:grid-cols-4 grid-cols-1 gap-2 xl:mb-0 mb-2 items-center">
+                    <Label>Keterangan</Label>
+                    <Input
+                      className="md:col-span-3 col-span-full"
                       name="keterangan"
                       onChange={(e) => {
                         handleChange("keterangan", e.target.value);
                       }}
-                      title="Keterangan"
                     />
                   </div>
 
-                  <InputVertical
-                    name="tanggal_mulai"
-                    type="date"
-                    onChange={(e) => {
-                      handleChange("tanggal_mulai", e.target.value);
-                    }}
-                    title="Tanggal Mulai"
-                  />
+                  <div className="col-span-2 items-center grid md:grid-cols-4 grid-cols-1 gap-2 xl:mb-0 mb-2">
+                    <Label>
+                      Tanggal Mulai{" "}
+                      <span className="text-[13px] text-red-500">*</span>
+                    </Label>
+                    <Input
+                      className="md:col-span-3 col-span-full"
+                      name="tanggal_mulai"
+                      type="date"
+                      onChange={(e) => {
+                        handleChange("tanggal_mulai", e.target.value);
+                      }}
+                      error={errors.tanggal_mulai}
+                    />
+                  </div>
 
-                  <InputVertical
-                    name="tanggal_berakhir"
-                    type="date"
-                    onChange={(e) => {
-                      handleChange("tanggal_berakhir", e.target.value);
-                    }}
-                    title="Tanggal Berakhir"
-                  />
+                  <div className="col-span-2 grid md:grid-cols-4 grid-cols-1 items-center gap-2 xl:mb-0 mb-2">
+                    <Label>Tanggal Berakhir</Label>
+                    <Input
+                      name="tanggal_berakhir"
+                      type="date"
+                      onChange={(e) => {
+                        handleChange("tanggal_berakhir", e.target.value);
+                      }}
+                      title="Tanggal Berakhir"
+                      error={errors.tanggal_berakhir}
+                      className="md:col-span-3 col-span-full"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

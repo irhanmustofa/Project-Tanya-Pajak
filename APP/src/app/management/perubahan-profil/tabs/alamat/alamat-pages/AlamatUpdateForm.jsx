@@ -35,12 +35,11 @@ import { useValidateInput } from "@/hooks/use-validate-input";
 import { dateStrip } from "@/components/custom/DateFormatted";
 import {
   jenisAlamat,
-  jenisWpOption,
   kppOption,
   pengawasOption,
-} from "@/helpers/variables";
-import { countryList } from "../../../data/country";
-import { provinceList } from "../../../data/province";
+} from "@/app/management/perubahan-profil/data/alamatDataList";
+import { countryList } from "@/app/management/perubahan-profil/data/country";
+import { provinceList } from "@/app/management/perubahan-profil/data/province";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function AlamatClientUpdateForm({ id, onClose }) {
@@ -185,7 +184,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
               Update User
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[850px] max-h-[850px] overflow-auto">
+          <DialogContent className="sm:max-w-[850px] max-h-[100vh] overflow-auto">
             <DialogTitle>Update User</DialogTitle>
             <DialogDescription>
               Make changes an existing account.
@@ -391,7 +390,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                             <SelectValue placeholder="Pilih" />
                           </SelectTrigger>
                           <SelectContent>
-                            {jenisWpOption.map((item, key) => {
+                            {kppOption.map((item, key) => {
                               return (
                                 <SelectItem key={key} value={String(item.kode)}>
                                   {item.jenis_wp}
@@ -420,7 +419,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                             <SelectValue placeholder="Pilih" />
                           </SelectTrigger>
                           <SelectContent>
-                            {jenisWpOption.map((item, key) => {
+                            {kppOption.map((item, key) => {
                               return (
                                 <SelectItem key={key} value={String(item.kode)}>
                                   {item.jenis_wp}

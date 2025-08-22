@@ -8,14 +8,14 @@ import ProfilTabs from "../tabs/profil/ProfilTabs";
 import { useClient } from "../perubahan-profil-components/PerubahanProfilProvider";
 import AlamatTable from "../tabs/alamat/alamat-pages/AlamatTable";
 import EkonomiTabs from "../tabs/ekonomi/EkonomiTabs";
+import KontakTable from "../tabs/kontak/kontak-pages/KontakTable";
 
 export default function PerubahanProfilPages() {
   const { clientState, clientAction } = useClient();
-
   return (
     <>
       <h1 className="text-2xl font-medium mb-10">PROFIL WAJIB PAJAK</h1>
-      <TabsRoot defaultValue="ekonomi">
+      <TabsRoot defaultValue="kontak">
         <TabsList className="p-4 border-0">
           <TabsTrigger
             className="border rounded-full xl:text-[14px] text-[10px]"
@@ -48,10 +48,10 @@ export default function PerubahanProfilPages() {
           </div>
         </TabsContent>
         <TabsContent value="alamat">
-          <AlamatTable clientState={clientState} />
+          <AlamatTable rowData={clientState.data[0].alamat || []} />
         </TabsContent>
         <TabsContent value="kontak">
-          <h1>Kontak</h1>
+          <KontakTable rowData={clientState.data[0].data_kontak || []} />
         </TabsContent>
         <TabsContent value="ekonomi">
           <EkonomiTabs />

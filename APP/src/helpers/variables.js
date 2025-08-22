@@ -227,21 +227,6 @@ export const kluOption = [
   { kode: "S95120", deskripsi: "JASA REPARASI PERALATAN KOMUNIKASI" },
 ];
 
-export const jenisAlamat = [
-  { jenis: "Alamat Korespondensi", kode: "JA-1" },
-  { jenis: "Alamat Lokasi Aset", kode: "JA-2" },
-  { jenis: "Alamat Sesuai E-KTP", kode: "JA-3" },
-  { jenis: "Alamat Tempat Kegiatan Usaha", kode: "JA-4" },
-];
-
-export const pengawasOption = [
-  { kode: "BP-01", name: "Bagian Pengawas I" },
-  { kode: "BP-02", name: "Bagian Pengawas II" },
-  { kode: "BP-03", name: "Bagian Pengawas III" },
-  { kode: "BP-04", name: "Bagian Pengawas IV" },
-  { kode: "BP-05", name: "Bagian Pengawas V" },
-];
-
 export const jenisKelamin = [
   { kode: "jk-1", name: "Pria" },
   { kode: "jk-2", name: "Wanita" },
@@ -318,8 +303,3 @@ export const mataUang = [
 export const periodePembukuan = [{ kode: "pp-1", name: "01-12" }];
 
 export const omsetOption = [{ kode: "opt-1", name: "lebih dari Rp. 4,8 M" }];
-
-export const jenisKontak = [
-  { kode: "jk-1", name: "Kontak Alternatif Wajib Pajak" },
-  { kode: "jk-2", name: "Kontak Teknis Wajib Pajak" },
-];

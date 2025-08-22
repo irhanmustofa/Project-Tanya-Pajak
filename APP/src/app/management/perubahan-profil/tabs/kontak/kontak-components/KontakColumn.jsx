@@ -122,11 +122,7 @@ export default function useKontakTableConfig() {
           <DatatableColumnHeader column={column} title="Tanggal Mulai" />
         ),
         cell: ({ row }) => (
-          <div className=" capitalize">
-            {row.getValue("tanggal_mulai") !== ""
-              ? dateShort(row.getValue("tanggal_mulai"))
-              : ""}
-          </div>
+          <div className=" capitalize">{row.getValue("tanggal_mulai")}</div>
         ),
       },
       {
@@ -135,11 +131,7 @@ export default function useKontakTableConfig() {
           <DatatableColumnHeader column={column} title="Tanggal Berakhir" />
         ),
         cell: ({ row }) => (
-          <div className=" capitalize">
-            {row.getValue("tanggal_berakhir") !== ""
-              ? dateShort(row.getValue("tanggal_berakhir"))
-              : ""}
-          </div>
+          <div className=" capitalize">{row.getValue("tanggal_berakhir")}</div>
         ),
       },
       {

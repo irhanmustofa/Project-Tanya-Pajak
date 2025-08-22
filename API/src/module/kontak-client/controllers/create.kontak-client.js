@@ -14,18 +14,13 @@ export default async function createKontakClient(req) {
       return badRequest({ message: getData.message });
     }
 
-    var singleData = getData.data[0].data_kontak;
+    var singleData = getData.data[0].data_kontak || [];
     const dataValid = new KontakClient({ ...req.body, _id: generateId() });
     if (dataValid.errors) {
       return badRequest({ message: dataValid.errors.join(", ") });
     }
 
-    if (singleData.length > 0) {
-      singleData.push(dataValid);
-    } else {
-      singleData = [dataValid];
-    }
-
+    singleData.push(dataValid);
     return await wrapper.update(clientId, { data_kontak: singleData });
   } catch (err) {
     console.log("cretae kontak client err:", err);

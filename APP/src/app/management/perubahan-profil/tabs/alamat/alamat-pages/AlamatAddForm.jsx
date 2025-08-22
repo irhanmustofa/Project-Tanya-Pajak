@@ -27,14 +27,13 @@ import {
   useClientDispatch,
 } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
-import { countryList } from "../../../data/country";
-import { provinceList } from "../../../data/province";
+import { countryList } from "@/app/management/perubahan-profil/data/country";
+import { provinceList } from "@/app/management/perubahan-profil/data/province";
 import {
   jenisAlamat,
-  jenisWpOption,
   kppOption,
   pengawasOption,
-} from "@/helpers/variables";
+} from "@/app/management/perubahan-profil/data/alamatDataList";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
@@ -183,13 +182,13 @@ export default function ClientAddForm({ onClose }) {
     <div className="relative">
       {dialogState.isOpen && <DialogInfo />}
       <Dialog open={isOpen} onOpenChange={handleOnClose}>
-        <DialogContent className="sm:max-w-[850px] max-h-[800px] overflow-auto">
+        <DialogContent className="sm:max-w-[850px] max-h-[100vh] overflow-auto">
           <DialogTitle>Input New Client</DialogTitle>
           <DialogDescription>Add a new Client to the system.</DialogDescription>
           <form onSubmit={inputHandler}>
             <div className="grid grid-cols-1 my-4  items-end overflow-auto">
-              <div className="col-span-1">
-                <div className="grid xl:grid-cols-2 grid-cols-1 gap-4 mb-4">
+              <div className="col-span-1 gap-3 p-2">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-2">
                   <div>
                     <h1 className="font-medium mb-2">
                       Negara <span className="text-[13px] text-red-500">*</span>
@@ -246,13 +245,13 @@ export default function ClientAddForm({ onClose }) {
                     {errors.jenis_alamat}
                   </div>
                 </div>
-                <div className="grid xl:grid-cols-6 grid-cols-1 gap-4 my-4">
+                <div className="grid md:grid-cols-6 grid-cols-1 gap-4 my-4">
                   <Textarea
                     placeholder="Detail Alamat"
                     name="alamat"
                     className={
                       isCountry === "ID"
-                        ? "xl:col-span-5 col-span-full"
+                        ? "md:col-span-5 col-span-full"
                         : "col-span-full"
                     }
                     onChange={(e) => {
@@ -261,7 +260,7 @@ export default function ClientAddForm({ onClose }) {
                   />
 
                   {isCountry === "ID" && (
-                    <div className="col-span-1 grid xl:grid-cols-1 grid-cols-2 gap-4">
+                    <div className="col-span-1 grid md:grid-cols-1 grid-cols-2 gap-4">
                       <Input placeholder="RT" name="rt" className="my-2" />
                       <Input placeholder="RW" name="rw" className="my-2" />
                     </div>
@@ -270,7 +269,7 @@ export default function ClientAddForm({ onClose }) {
                 {errors.alamat}
 
                 {isCountry === "ID" && (
-                  <div className="grid xl:grid-cols-2 grid-cols-1 my-2 gap-4">
+                  <div className="grid md:grid-cols-2 grid-cols-1 my-2 gap-4">
                     <div>
                       <h1 className="mb-2">Provinsi</h1>
                       <Select
@@ -332,7 +331,7 @@ export default function ClientAddForm({ onClose }) {
                           <SelectValue placeholder="Pilih" />
                         </SelectTrigger>
                         <SelectContent>
-                          {jenisWpOption.map((item, key) => {
+                          {kppOption.map((item, key) => {
                             return (
                               <SelectItem key={key} value={String(item.kode)}>
                                 {item.jenis_wp}
@@ -357,7 +356,7 @@ export default function ClientAddForm({ onClose }) {
                           <SelectValue placeholder="Pilih" />
                         </SelectTrigger>
                         <SelectContent>
-                          {jenisWpOption.map((item, key) => {
+                          {kppOption.map((item, key) => {
                             return (
                               <SelectItem key={key} value={String(item.kode)}>
                                 {item.jenis_wp}
@@ -372,7 +371,7 @@ export default function ClientAddForm({ onClose }) {
 
                 {isCountry === "ID" && (
                   <div className="grid grid-cols-6 gap-4 my-4">
-                    <div className="xl:col-span-3 col-span-full flex gap-4">
+                    <div className="md:col-span-3 col-span-full flex gap-4">
                       <Input
                         value={kodeArea}
                         name="kode_area"
@@ -392,7 +391,7 @@ export default function ClientAddForm({ onClose }) {
                       />
                     </div>
 
-                    <div className="xl:col-span-3 col-span-full">
+                    <div className="md:col-span-3 col-span-full">
                       <Input
                         name="data_geometrik"
                         placeholder="Data Geometrik"
@@ -418,7 +417,7 @@ export default function ClientAddForm({ onClose }) {
                 </div>
 
                 {isCheck && (
-                  <div className="grid xl:grid-cols-2 grid-cols-1 gap-4  mb-8">
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-4  mb-8">
                     <Input
                       placeholder="NIK/NPWP Pemilik Tempat Sewa"
                       name="identitas_pemilik"
@@ -456,7 +455,7 @@ export default function ClientAddForm({ onClose }) {
                   </div>
                 )}
 
-                <div className="grid xl:grid-cols-2 grid-cols-1 gap-4 my-2">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2">
                   <div>
                     <Label>
                       Tanggal Mulai{" "}
@@ -482,7 +481,7 @@ export default function ClientAddForm({ onClose }) {
                     }}
                   />
                 </div>
-                <div className="grid xl:grid-cols-2 grid-cols-1 gap-4 my-2">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2">
                   <div>
                     <Label>
                       Kode KPP{" "}
