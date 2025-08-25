@@ -23,12 +23,13 @@ import { LucideLayoutDashboard } from "lucide-react";
 import logo from "@/public/vite.svg";
 import { TeamSwitcher } from "./team-switcher";
 import { CompanySetting } from "./company-setting";
+import { NavSpt } from "./nav-spt";
 
 export function AppSidebar({ ...props }) {
   const { dialogState, dialogAction } = useDialog();
   const dispatch = useDialogDispatch();
   const { toggleSidebar } = useSidebar();
-  const { users, sidebars } = sidebarData();
+  const { users, sidebars, is_spt } = sidebarData();
   const isOpen = useLocalStorage.get("sb") === "true";
   const handleClick = () => {
     if (!isOpen) {

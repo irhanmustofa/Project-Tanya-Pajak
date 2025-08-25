@@ -123,6 +123,23 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   /* gray-100 */
 }
 
+input[type="month"]::-webkit-calendar-picker-indicator:hover {
+  background-color: #374151;
+  /* gray-700 */
+}
+
+/* Dark mode */
+.dark input[type="month"]::-webkit-calendar-picker-indicator {
+  background-color: #d1d5db;
+  border-radius: 20%;
+  /* gray-300 */
+}
+
+.dark input[type="month"]::-webkit-calendar-picker-indicator:hover {
+  background-color: #f3f4f6;
+  /* gray-100 */
+}
+
 .rpv-toolbar__item[aria-label="Download"] {
   display: none !important;
 }

@@ -72,14 +72,14 @@ export function CompanySetting() {
               e.preventDefault();
             }}
           >
-            <Link to="/documents" className="flex items-center gap-2">
-              <DropdownMenuItem className="gap-2 p-2">
+            <DropdownMenuItem className="gap-2 p-2">
+              <Link to="/documents" className="flex items-center gap-2">
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <File className="size-4" />
                 </div>
                 My Documents
-              </DropdownMenuItem>
-            </Link>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => console.log("Navigate to profile")}
               className="gap-2 p-2"

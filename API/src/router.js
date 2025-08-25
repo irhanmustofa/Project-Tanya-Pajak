@@ -14,6 +14,8 @@ import alamatRouter from "./module/alamat-client/alamat.route.js";
 import dataEkonomiRouter from "./module/ekonomi-client/ekonomi-client.route.js";
 import kontakClientRouter from "./module/kontak-client/kontak-client.route.js";
 import documentRouter from "./module/document/document.route.js";
+import pajakKeluaranRouter from "./module/faktur-pajak/pajak-keluaran/pajak-keluaran.route.js";
+
 const noValidate = ["/auth", "/register", "/permission"];
 
 // router.use(async (req, res, next) => {
@@ -46,7 +48,9 @@ router.use("/ekonomi-client", dataEkonomiRouter);
 router.use("/kontak-client", kontakClientRouter);
 router.use("/users", userRouter);
 
-//Profile
+// Profile
 router.use("/documents", documentRouter);
+// Faktur Pajak
+router.use("/pajak-keluaran", pajakKeluaranRouter);
 
 export default router;

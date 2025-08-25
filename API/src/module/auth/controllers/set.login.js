@@ -40,6 +40,7 @@ const setLogin = async (body) => {
   }
 
   const resetInput = {
+    client_id: clientId,
     email,
     device,
     hits: 1,
@@ -48,7 +49,7 @@ const setLogin = async (body) => {
 
   const isPasswordValid = passwordCompare(password, data.password);
   if (!isPasswordValid) {
-    const getTryLogin = await tryLoginRepository.getTryLogin(email);
+    const getTryLogin = await tryLoginRepository.getTryLogin(email, clientId);
     const limit = authConfig.limitLogin;
 
     if (!getTryLogin.success) {
@@ -97,6 +98,7 @@ const setLogin = async (body) => {
     }
 
     const result = await tryLoginRepository.setTryLogin({
+      client_id: clientId,
       email,
       hits,
     });
