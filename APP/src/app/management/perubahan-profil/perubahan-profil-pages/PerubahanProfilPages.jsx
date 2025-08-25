@@ -15,7 +15,7 @@ export default function PerubahanProfilPages() {
   return (
     <>
       <h1 className="text-2xl font-medium mb-10">PROFIL WAJIB PAJAK</h1>
-      <TabsRoot defaultValue="kontak">
+      <TabsRoot defaultValue="alamat">
         <TabsList className="p-4 border-0">
           <TabsTrigger
             className="border rounded-full xl:text-[14px] text-[10px]"
@@ -48,10 +48,10 @@ export default function PerubahanProfilPages() {
           </div>
         </TabsContent>
         <TabsContent value="alamat">
-          <AlamatTable rowData={clientState.data[0].alamat || []} />
+          <AlamatTable />
         </TabsContent>
         <TabsContent value="kontak">
-          <KontakTable rowData={clientState.data[0].data_kontak || []} />
+          <KontakTable />
         </TabsContent>
         <TabsContent value="ekonomi">
           <EkonomiTabs />

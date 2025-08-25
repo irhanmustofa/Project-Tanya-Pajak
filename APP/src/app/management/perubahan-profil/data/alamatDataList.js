@@ -12,8 +12,8 @@ export const dataAlamat = () => {
   const kodePengawas = pengawasOption.map((item) => item.kode);
 
   if (clientState.success) {
-    if (clientState.data[0].alamat.length > 0) {
-      clientState.data[0].alamat.map((item) => {
+    if (clientState.data[0].data_alamat.length > 0) {
+      clientState.data[0].data_alamat.map((item) => {
         negara = kpp = pengawas = "";
         if (kodeNegara.indexOf(item.negara) > -1) {
           negara = countryList[kodeNegara.indexOf(item.negara)].name;

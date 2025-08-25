@@ -41,7 +41,7 @@ export default function KontakAction({ row }) {
         message:
           "Are you sure you want to delete this data? This action cannot be undone.",
         status: "warning",
-        url: kontakClientEndpoint.delete(id, clientId),
+        url: kontakClientEndpoint.delete(id),
       },
     });
   };

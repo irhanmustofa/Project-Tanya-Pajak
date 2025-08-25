@@ -7,7 +7,7 @@ export const kontakClientEndpoint = {
   deleteSome: `${base_url}/kontak-client/delete`,
   get: (id) => `${base_url}/kontak-client/${id}`,
   update: (id) => `${base_url}/kontak-client/${id}`,
-  delete: (id, clientId) => `${base_url}/kontak-client/${id}/${clientId}`,
+  delete: (id) => `${base_url}/kontak-client/${id}`,
 };
 
 export const kontakClientFirst = async (id) => {

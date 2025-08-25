@@ -68,7 +68,9 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
   });
 
   useEffect(() => {
-    const getData = clientState.data[0].alamat.find((item) => item._id === id);
+    const getData = clientState.data[0].data_alamat.find(
+      (item) => item._id === id
+    );
 
     setInput({
       negara: getData.negara,
@@ -94,7 +96,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
       bagian_pengawasan: getData.bagian_pengawasan,
     });
     setIsCountry(getData.negara);
-    setIsCheck(getData.disewa);
+    setIsCheck(getData.disewa === "false" ? false : true);
     setKodeArea(getData.kode_area);
 
     setIsOpen(true);
@@ -105,7 +107,6 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
 
     startTransition(async () => {
       const formData = new FormData();
-      formData.append("clientId", clientId);
       formData.append("negara", input.negara);
       formData.append("jenis_alamat", input.jenis_alamat);
       formData.append("alamat", input.alamat);
@@ -490,7 +491,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                         setIsCheck(isCheck ? false : true);
                         setInput({ ...input, disewa: isCheck });
                       }}
-                      checked={isCheck}
+                      checked={Boolean(isCheck)}
                     />
                   </div>
 

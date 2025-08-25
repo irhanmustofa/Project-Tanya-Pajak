@@ -1,4 +1,4 @@
-import { badRequest } from "../../../app/response.js";
+import { badRequest, error } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import { masterClientSchema } from "../../master-client/master-client.schema.js";
 
@@ -16,7 +16,7 @@ export default async function deleteSomeAlamat(req) {
   }
 
   try {
-    var singleData = getData.data[0].alamat;
+    var singleData = getData.data[0].data_alamat;
 
     var arrayNum = -1;
     for (let i = 0; i < singleData.length; i++) {
@@ -37,9 +37,9 @@ export default async function deleteSomeAlamat(req) {
       }
     }
 
-    return await wrapper.update(clientId, { alamat: newData });
-  } catch (error) {
-    console.log("Error add client address:", error);
+    return await wrapper.update(clientId, { data_alamat: newData });
+  } catch (err) {
+    console.log("Error delete some client address:", err);
     return error({ message: "An error occurred while the system was running" });
   }
 }

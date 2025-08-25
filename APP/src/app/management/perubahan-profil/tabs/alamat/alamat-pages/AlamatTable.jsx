@@ -3,7 +3,7 @@ import useAlamatTableConfig from "../alamat-components/AlamatColumn";
 import AlamatSubject from "../alamat-components/AlamatSubject";
 import { dataAlamat } from "../../../data/alamatDataList";
 
-export default function AlamatTable({ rowData = {} }) {
+export default function AlamatTable() {
   const { alamatColumn, filterFields } = useAlamatTableConfig();
   const data = dataAlamat();
 

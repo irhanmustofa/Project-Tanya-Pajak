@@ -9,11 +9,6 @@ import updateAlamat from "./controllers/update.alamat.js";
 
 const wrapper = new MongodbWrapper(masterClientSchema());
 
-const getById = async (req, res) => {
-  const result = await wrapper.getByFilter({ _id: req.params.id });
-  return Response(res, result);
-};
-
 const create = async (req, res) => {
   return Response(res, await createAlamat(req));
 };
@@ -31,7 +26,6 @@ const deleteSome = async (req, res) => {
 };
 
 const MasterClientController = {
-  getById,
   create,
   update,
   remove,

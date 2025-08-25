@@ -67,7 +67,6 @@ export default function ClientAddForm({ onClose }) {
 
     startTrasition(async () => {
       const formData = new FormData();
-      formData.append("clientId", clientId);
       formData.append("negara", event.target.negara.value);
       formData.append("jenis_alamat", event.target.jenis_alamat.value);
       formData.append("alamat", event.target.alamat.value);

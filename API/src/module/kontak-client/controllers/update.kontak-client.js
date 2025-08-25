@@ -9,7 +9,6 @@ export default async function updateKontakClient(req) {
   const body = req.body;
   const clientId = req.headers.clientid;
   const wrapper = new MongodbWrapper(masterClientSchema());
-  var arrayNum = -1;
 
   try {
     const getData = await wrapper.getByFilter({ _id: clientId });
@@ -18,17 +17,16 @@ export default async function updateKontakClient(req) {
     }
 
     var singleData = getData.data[0].data_kontak ?? [];
-    if (singleData.length > 0) {
-      const idKontak = singleData.map((item) => item._id);
-      if (idKontak.indexOf(id) > -1) {
-        arrayNum = idKontak.indexOf(id);
-      }
-    }
-
-    if (arrayNum < 0) {
+    if (singleData.length < 1) {
       return badRequest({ message: "Update Contact Failed! Data Not Found" });
     }
 
+    const idKontak = singleData.map((item) => item._id);
+    if (idKontak.indexOf(id) < 0) {
+      return badRequest({ message: "Update Contact Failed! Data Not Found" });
+    }
+
+    const arrayNum = idKontak.indexOf(id);
     const dataFound = singleData[arrayNum];
     const input = {
       _id: id,
@@ -51,7 +49,7 @@ export default async function updateKontakClient(req) {
     singleData[arrayNum] = dataValid;
     return await wrapper.update(clientId, { data_kontak: singleData });
   } catch (err) {
-    console.log("cretae kontak client err:", err);
+    console.log("Update Contact client err:", err);
     return error({ message: "An error occurred while the system was running" });
   }
 }

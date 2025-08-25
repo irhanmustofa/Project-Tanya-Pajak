@@ -104,6 +104,25 @@ export const masterClientSchema = () => {
       tanggal_mulai: { type: Date },
       tanggal_berakhir: { type: Date },
     },
+
+    orang_terkait: {
+      _id: { type: String, unique: true, required: true },
+      jenis_pihak: { type: String },
+      pic: { type: Number },
+      jenis_orang_terkait: { type: String },
+      sub_jenis_orang_terkait: { type: String },
+      identitas: { type: String },
+      name: { type: String },
+      nomor_paspor: { type: String },
+      kewarganegaraan: { type: String },
+      negara_asal: { type: String },
+      email: { type: String },
+      nomor_telepon: { type: String },
+      tanggal_mulai: { type: Date },
+      tanggal_berakhir: { type: Date },
+      jenis_wp: { type: String },
+      keterangan: { type: String },
+    },
   };
 
   const options = {

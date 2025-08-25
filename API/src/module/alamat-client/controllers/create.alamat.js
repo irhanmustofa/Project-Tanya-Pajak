@@ -5,8 +5,7 @@ import { masterClientSchema } from "../../master-client/master-client.schema.js"
 import Alamat from "../alamat.entities.js";
 
 export default async function createAlamat(req) {
-  var inputAlamat = {};
-  const clientId = req.body.clientId;
+  const clientId = req.headers.clientid;
   const wrapper = new MongodbWrapper(masterClientSchema());
   const getData = await wrapper.getByFilter({ _id: clientId });
 
@@ -15,8 +14,8 @@ export default async function createAlamat(req) {
   }
 
   try {
-    const singleData = getData.data[0].alamat;
-    inputAlamat = {
+    const singleData = getData.data[0].data_alamat;
+    const inputAlamat = {
       _id: generateId(),
       negara: req.body.negara,
       jenis_alamat: req.body.jenis_alamat,
@@ -46,8 +45,8 @@ export default async function createAlamat(req) {
       return badRequest({ message: alamatClient.errors.join(", ") });
     }
 
-    singleData.push(alamatClient);
-    return await wrapper.update(clientId, { alamat: singleData });
+    singleData.push(inputAlamat);
+    return await wrapper.update(clientId, { data_alamat: singleData });
   } catch (error) {
     console.log("Error add client address:", error);
     return error({ message: "An error occurred while the system was running" });

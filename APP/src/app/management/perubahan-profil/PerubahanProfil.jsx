@@ -2,7 +2,7 @@ import ClientProvider from "@/app/management/perubahan-profil/perubahan-profil-c
 import MainPage from "@/layouts/MainPage";
 import PerubahanProfilPages from "./perubahan-profil-pages/PerubahanProfilPages";
 
-export default function ClientUpdateForm() {
+export default function PerubahanProfil() {
   return (
     <>
       <MainPage>

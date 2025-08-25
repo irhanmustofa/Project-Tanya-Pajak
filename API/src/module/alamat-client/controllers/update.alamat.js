@@ -1,13 +1,13 @@
-import { badRequest } from "../../../app/response.js";
+import { badRequest, error } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import { masterClientSchema } from "../../master-client/master-client.schema.js";
 import Alamat from "../alamat.entities.js";
 
 export default async function updateAlamat(req) {
-  var inputAlamat = {};
-  var newData = [];
+  var newData = [],
+    alamatUnique = "";
   const id = req.params.id;
-  const clientId = req.body.clientId;
+  const clientId = req.headers.clientid;
   const wrapper = new MongodbWrapper(masterClientSchema());
   const getData = await wrapper.getByFilter({ _id: clientId });
 
@@ -16,10 +16,14 @@ export default async function updateAlamat(req) {
   }
 
   try {
-    var singleData = getData.data[0].alamat;
+    var singleData = getData.data[0].data_alamat;
+    if (singleData.length < 1) {
+      return badRequest({ message: "Update Alamat Failed! Data not found!" });
+    }
+
     var arrayNum = 0;
     for (let i = 0; i < singleData.length; i++) {
-      let alamatUnique = singleData[i]._id;
+      alamatUnique = singleData[i]._id;
       if (alamatUnique == id) {
         arrayNum = i;
       }
@@ -29,7 +33,7 @@ export default async function updateAlamat(req) {
       return badRequest({ message: "Update Alamat Failed! data not found" });
     }
 
-    inputAlamat = {
+    const inputAlamat = {
       _id: id,
       negara: req.body.negara || singleData[arrayNum].negara,
       jenis_alamat: req.body.jenis_alamat || singleData[arrayNum].jenis_alamat,
@@ -76,9 +80,9 @@ export default async function updateAlamat(req) {
       }
     }
 
-    return await wrapper.update(clientId, { alamat: newData });
-  } catch (error) {
-    console.log("Error add client address:", error);
+    return await wrapper.update(clientId, { data_alamat: newData });
+  } catch (err) {
+    console.log("Error update client address:", err);
     return error({ message: "An error occurred while the system was running" });
   }
 }
