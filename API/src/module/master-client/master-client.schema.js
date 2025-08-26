@@ -122,6 +122,7 @@ export const masterClientSchema = () => {
       tanggal_berakhir: { type: Date },
       jenis_wp: { type: String },
       keterangan: { type: String },
+      kriteria_pemilik_manfaat: { type: String },
     },
   };
 

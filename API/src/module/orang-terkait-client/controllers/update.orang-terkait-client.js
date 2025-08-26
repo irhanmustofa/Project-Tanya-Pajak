@@ -49,6 +49,8 @@ export default async function updateOrangTerkait(req) {
       tanggal_berakhir: req.body.tanggal_berakhir || dataFound.tanggal_berakhir,
       jenis_wp: req.body.jenis_wp || dataFound.jenis_wp,
       keterangan: req.body.keterangan || dataFound.keterangan,
+      kriteria_pemilik_manfaat:
+        req.body.kriteria_pemilik_manfaat || dataFound.kriteria_pemilik_manfaat,
     };
 
     const dataValid = new OrangTerkait(input);

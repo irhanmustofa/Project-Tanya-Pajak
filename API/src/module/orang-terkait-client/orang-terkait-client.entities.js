@@ -19,6 +19,7 @@ export default class OrangTerkait {
       tanggal_berakhir,
       jenis_wp,
       keterangan,
+      kriteria_pemilik_manfaat,
     } = input;
 
     const data = {
@@ -38,6 +39,7 @@ export default class OrangTerkait {
       tanggal_berakhir,
       jenis_wp,
       keterangan,
+      kriteria_pemilik_manfaat,
     };
 
     const baseRules = {
@@ -57,6 +59,7 @@ export default class OrangTerkait {
       tanggal_berakhir: "string",
       jenis_wp: "string",
       keterangan: "string",
+      kriteria_pemilik_manfaat: "string",
     };
 
     const validator = new Validator(data, baseRules);
@@ -78,6 +81,7 @@ export default class OrangTerkait {
     this.tanggal_berakhir = tanggal_berakhir;
     this.jenis_wp = jenis_wp;
     this.keterangan = keterangan;
+    this.kriteria_pemilik_manfaat = kriteria_pemilik_manfaat;
 
     if (result.error.length > 0) this.errors = result.error;
   }

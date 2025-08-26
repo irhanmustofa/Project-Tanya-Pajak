@@ -4,9 +4,38 @@ import { dateShort } from "@/components/custom/DateFormatted";
 export const dataOrangTerkait = () => {
   var data = [];
   const { clientState } = useClient();
+  const kodeJenisPihak = jenisPihak.map((item) => item.kode);
+  const kodeJenisOT = jenisOrangTerkait.map((item) => item.kode);
+  const kodeSubJenisOT = subJenisOrangTerkait.map((item) => item.kode);
+  const kodeWN = kewarganegaraanTerkait.map((item) => item.kode);
+  const kodeJenisWP = jenisWajibPajakTerkait.map((item) => item.kode);
+  const kodeKPM = kriteriaPemilikManfaat.map((item) => item.kode);
 
   if (clientState.success && clientState?.data.length > 0) {
-    data;
+    const getData = clientState.data[0].orang_terkait;
+    if (getData.length > 0) {
+      getData.map((item) => {
+        data.push({
+          _id: item._id,
+          jenis_pihak: item.jenis_pihak,
+          pic: item.pic,
+          jenis_orang_terkait: item.jenis_orang_terkait,
+          sub_jenis_orang_terkait: item.sub_jenis_orang_terkait,
+          identitas: item.identitas,
+          name: item.name,
+          nomor_paspor: item.nomor_paspor,
+          kewarganegaraan: item.kewarganegaraan,
+          negara_asal: item.negara_asal,
+          email: item.email,
+          nomor_telepon: item.nomor_telepon,
+          tanggal_mulai: item.tanggal_mulai,
+          tanggal_berakhir: item.tanggal_berakhir,
+          jenis_wp: item.jenis_wp,
+          keterangan: item.keterangan,
+          kriteria_pemilik_manfaat: item.kriteria_pemilik_manfaat,
+        });
+      });
+    }
   }
 };
 
@@ -15,7 +44,7 @@ export const jenisPihak = [
   { kode: "jp-2", name: "Related Taxpayer" },
 ];
 
-export const JenisOrangTerkait = [
+export const jenisOrangTerkait = [
   { kode: "jot-1", name: "Direktur" },
   { kode: "jot-2", name: "Komisaris" },
   { kode: "jot-3", name: "Lainnya" },
