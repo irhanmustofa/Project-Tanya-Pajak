@@ -140,11 +140,11 @@ export default function KontakUpdateForm({ id, onClose }) {
           <DialogTrigger asChild>
             <Button variant="outline">
               <LucideUserPlus2 className="mr-2 h-4 w-4" />
-              Update User
+              Update Contact
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[650px] max-h-[100vh] overflow-auto">
-            <DialogTitle>Update User</DialogTitle>
+            <DialogTitle>Update Contact</DialogTitle>
             <DialogDescription>
               Make changes an existing account.
             </DialogDescription>

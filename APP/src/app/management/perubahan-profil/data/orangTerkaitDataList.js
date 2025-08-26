@@ -1,5 +1,5 @@
 import { useClient } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
-import { dateShort } from "@/components/custom/DateFormatted";
+import { countryList } from "./country";
 
 export const dataOrangTerkait = () => {
   var data = [];
@@ -10,33 +10,86 @@ export const dataOrangTerkait = () => {
   const kodeWN = kewarganegaraanTerkait.map((item) => item.kode);
   const kodeJenisWP = jenisWajibPajakTerkait.map((item) => item.kode);
   const kodeKPM = kriteriaPemilikManfaat.map((item) => item.kode);
+  const kodeNegara = countryList.map((item) => item.kode);
+  var jenisPihakName = "",
+    jenisOTName = "",
+    subJenisOTName = "",
+    wargaNegaraName = "",
+    jenisWPName = "",
+    kpmName = "",
+    arrayNum = -1;
 
   if (clientState.success && clientState?.data.length > 0) {
     const getData = clientState.data[0].orang_terkait;
     if (getData.length > 0) {
       getData.map((item) => {
+        jenisPihakName =
+          jenisOTName =
+          subJenisOTName =
+          wargaNegaraName =
+          jenisWPName =
+          kpmName =
+            "";
+
+        arrayNum = kodeJenisPihak.indexOf(item.jenis_pihak);
+        if (arrayNum > -1) {
+          jenisPihakName = jenisPihak[arrayNum].name;
+        }
+
+        arrayNum = kodeJenisOT.indexOf(item.jenis_orang_terkait);
+        if (arrayNum > -1) {
+          jenisOTName = jenisOrangTerkait[arrayNum].name;
+        }
+
+        arrayNum = kodeSubJenisOT.indexOf(item.sub_jenis_orang_terkait);
+        if (arrayNum > -1) {
+          subJenisOTName = subJenisOrangTerkait[arrayNum].name;
+        }
+
+        arrayNum = kodeWN.indexOf(item.kewarganegaraan);
+        if (arrayNum > -1) {
+          wargaNegaraName = kewarganegaraanTerkait[arrayNum].name;
+        }
+
+        arrayNum = kodeJenisWP.indexOf(item.jenis_wp);
+        if (arrayNum > -1) {
+          jenisWPName = jenisWajibPajakTerkait[arrayNum].name;
+        }
+
+        arrayNum = kodeKPM.indexOf(item.kriteria_pemilik_manfaat);
+        if (arrayNum > -1) {
+          kpmName = kriteriaPemilikManfaat[arrayNum].name;
+        }
+
+        arrayNum = kodeNegara.indexOf(item.negara_asal);
+        if (arrayNum > -1) {
+          negaraName = countryList[arrayNum].name;
+        }
+
         data.push({
           _id: item._id,
-          jenis_pihak: item.jenis_pihak,
-          pic: item.pic,
-          jenis_orang_terkait: item.jenis_orang_terkait,
-          sub_jenis_orang_terkait: item.sub_jenis_orang_terkait,
-          identitas: item.identitas,
-          name: item.name,
-          nomor_paspor: item.nomor_paspor,
-          kewarganegaraan: item.kewarganegaraan,
-          negara_asal: item.negara_asal,
-          email: item.email,
-          nomor_telepon: item.nomor_telepon,
-          tanggal_mulai: item.tanggal_mulai,
-          tanggal_berakhir: item.tanggal_berakhir,
-          jenis_wp: item.jenis_wp,
-          keterangan: item.keterangan,
-          kriteria_pemilik_manfaat: item.kriteria_pemilik_manfaat,
+          jenis_pihak: item.jenis_pihak || "",
+          pic: item.pic || 0,
+          jenis_orang_terkait: item.jenis_orang_terkait || "",
+          sub_jenis_orang_terkait: item.sub_jenis_orang_terkait || "",
+          identitas: item.identitas || "",
+          name: item.name || "",
+          nomor_paspor: item.nomor_paspor || "",
+          kewarganegaraan: item.kewarganegaraan || "",
+          negara_asal: item.negara_asal || "",
+          email: item.email || "",
+          nomor_telepon: item.nomor_telepon || "",
+          tanggal_mulai: item.tanggal_mulai || "",
+          tanggal_berakhir: item.tanggal_berakhir || "",
+          jenis_wp: jenisWPName || "",
+          keterangan: item.keterangan || "",
+          kriteria_pemilik_manfaat: kpmName || "",
         });
       });
     }
   }
+
+  return data;
 };
 
 export const jenisPihak = [

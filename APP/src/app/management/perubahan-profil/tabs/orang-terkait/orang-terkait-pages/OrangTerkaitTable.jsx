@@ -1,21 +1,21 @@
 import DataTables from "@/components/datatables/Datatables";
-import useKontakTableConfig from "../kontak-components/KontakColumn";
-import KontakSubject from "../kontak-components/KontakSubject";
-import { dataKontak } from "@/app/management/perubahan-profil/data/kontakDataList";
+import useOrangTerkaitTableConfig from "../orang-terkait-components/OrangTerkaitColumn";
+import OrangTerkaitSubject from "../orang-terkait-components/OrangTerkaitSubject";
+import { dataOrangTerkait } from "@/app/management/perubahan-profil/data/orangTerkaitDataList";
 
 export default function KontakTable() {
-  const { kontakColumn, filterFields } = useKontakTableConfig();
-  const data = dataKontak();
-
+  const { orangTerkaitColumn, filterFields } = useOrangTerkaitTableConfig();
+  const data = [];
+  // console.log("data:", data);
   return (
     <>
-      <KontakSubject />
+      <OrangTerkaitSubject />
 
       <DataTables
-        columns={kontakColumn}
+        columns={orangTerkaitColumn}
         data={data}
         filterFields={filterFields}
-        path="kontak-client"
+        path="orang-terkait-client"
       />
     </>
   );
