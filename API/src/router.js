@@ -16,6 +16,7 @@ import kontakClientRouter from "./module/kontak-client/kontak-client.route.js";
 import documentRouter from "./module/document/document.route.js";
 import pajakKeluaranRouter from "./module/faktur-pajak/pajak-keluaran/pajak-keluaran.route.js";
 import orangTerkaitRouter from "./module/orang-terkait-client/orang-terkait-client.route.js";
+import tkuRouter from "./module/tku-client/tku.route.js";
 
 const noValidate = ["/auth", "/register", "/permission"];
 
@@ -48,6 +49,7 @@ router.use("/alamat-client", alamatRouter);
 router.use("/ekonomi-client", dataEkonomiRouter);
 router.use("/kontak-client", kontakClientRouter);
 router.use("/orang-terkait-client", orangTerkaitRouter);
+router.use("/tku-client", tkuRouter);
 router.use("/users", userRouter);
 
 // Profile
