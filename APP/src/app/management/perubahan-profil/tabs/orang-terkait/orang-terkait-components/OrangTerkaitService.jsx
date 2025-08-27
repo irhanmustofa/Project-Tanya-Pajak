@@ -2,12 +2,12 @@ import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
 
 export const orangTerkaitEndpoint = {
-  create: `${base_url}/orang-terkait`,
-  import: `${base_url}/orang-terkait/import`,
-  deleteSome: `${base_url}/orang-terkait/delete`,
-  get: (id) => `${base_url}/orang-terkait/${id}`,
-  update: (id) => `${base_url}/orang-terkait/${id}`,
-  delete: (id) => `${base_url}/orang-terkait/${id}`,
+  create: `${base_url}/orang-terkait-client`,
+  import: `${base_url}/orang-terkait-client/import`,
+  deleteSome: `${base_url}/orang-terkait-client/delete`,
+  get: (id) => `${base_url}/orang-terkait-client/${id}`,
+  update: (id) => `${base_url}/orang-terkait-client/${id}`,
+  delete: (id) => `${base_url}/orang-terkait-client/${id}`,
 };
 
 export const orangTerkaitFirst = async (id) => {

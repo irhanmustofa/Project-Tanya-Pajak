@@ -33,11 +33,13 @@ import {
   jenisAlamat,
   kppOption,
   pengawasOption,
+  jenisNitku,
 } from "@/app/management/perubahan-profil/data/alamatDataList";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { kewarganegaraanOption } from "@/helpers/variables";
 
 export default function ClientAddForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -50,6 +52,7 @@ export default function ClientAddForm({ onClose }) {
   const [isCheck, setIsCheck] = useState(false);
   const [isCountry, setIsCountry] = useState("");
   const [kodeArea, setKodeArea] = useState("");
+  const [jenisState, setJenisState] = useState("");
 
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
@@ -69,6 +72,15 @@ export default function ClientAddForm({ onClose }) {
       const formData = new FormData();
       formData.append("negara", event.target.negara.value);
       formData.append("jenis_alamat", event.target.jenis_alamat.value);
+      formData.append("identitas_pic", event.target.identitas_pic.value);
+      formData.append("nama_pic", event.target.nama_pic.value);
+      formData.append(
+        "kewarganegaraan_pic",
+        event.target.kewarganegaraan_pic.value
+      );
+      formData.append("nama_nitku", event.target.nama_nitku.value);
+      formData.append("jenis_nitku", event.target.jenis_nitku.value);
+      formData.append("kode_klu", event.target.kode_klu.value);
       formData.append("alamat", event.target.alamat.value);
       formData.append(
         "rt",
@@ -187,7 +199,7 @@ export default function ClientAddForm({ onClose }) {
           <form onSubmit={inputHandler}>
             <div className="grid grid-cols-1 my-4  items-end overflow-auto">
               <div className="col-span-1 gap-3 p-2">
-                <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-2">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mb-2">
                   <div>
                     <h1 className="font-medium mb-2">
                       Negara <span className="text-[13px] text-red-500">*</span>
@@ -225,6 +237,7 @@ export default function ClientAddForm({ onClose }) {
                       name="jenis_alamat"
                       onValueChange={(e) => {
                         handleChange("jenis_alamat", e);
+                        setJenisState(e);
                       }}
                       value={"" || undefined}
                     >
@@ -244,6 +257,53 @@ export default function ClientAddForm({ onClose }) {
                     {errors.jenis_alamat}
                   </div>
                 </div>
+
+                {jenisState === "JA-4" && (
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-5 my-5 items-end">
+                    <Input
+                      name="identitas_pic"
+                      placeholder="PIC TKU NIK/NPWP"
+                    />
+                    <Input name="nama_pic" placeholder="Nama PIC TKU" />
+                    <div className="grid grid-cols-1 gap-3 ">
+                      <Label>Kewarganegaraan PIC TKU</Label>
+                      <Select name="kewarganegaraan_pic" value={undefined}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pilih" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {kewarganegaraanOption.map((item, key) => {
+                            return (
+                              <SelectItem key={key} value={String(item.kode)}>
+                                {item.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Input name="nama_nitku" placeholder="Nama NITKU" />
+                    <div className="grid grid-cols-1 gap-3 ">
+                      <Label>Jenis NITKU</Label>
+                      <Select name="jenis_nitku" value={undefined}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pilih" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {jenisNitku.map((item, key) => {
+                            return (
+                              <SelectItem key={key} value={String(item.name)}>
+                                {item.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Input name="kode_klu" placeholder="Kode KLU" />
+                  </div>
+                )}
+
                 <div className="grid md:grid-cols-6 grid-cols-1 gap-4 my-4">
                   <Textarea
                     placeholder="Detail Alamat"

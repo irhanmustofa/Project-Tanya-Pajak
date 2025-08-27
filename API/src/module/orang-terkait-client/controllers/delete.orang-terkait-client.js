@@ -1,6 +1,6 @@
-import { badRequest, error } from "../../../app/response";
-import MongodbWrapper from "../../../database/mongo/mongo.wrapper";
-import { masterClientSchema } from "../../master-client/master-client.schema";
+import { badRequest, error } from "../../../app/response.js";
+import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
+import { masterClientSchema } from "../../master-client/master-client.schema.js";
 
 export default async function deleteOrangTerkait(req) {
   const id = req.params.id;

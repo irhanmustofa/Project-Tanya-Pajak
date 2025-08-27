@@ -17,6 +17,7 @@ export const dataOrangTerkait = () => {
     wargaNegaraName = "",
     jenisWPName = "",
     kpmName = "",
+    negaraName = "",
     arrayNum = -1;
 
   if (clientState.success && clientState?.data.length > 0) {
@@ -29,6 +30,7 @@ export const dataOrangTerkait = () => {
           wargaNegaraName =
           jenisWPName =
           kpmName =
+          negaraName =
             "";
 
         arrayNum = kodeJenisPihak.indexOf(item.jenis_pihak);
@@ -70,13 +72,13 @@ export const dataOrangTerkait = () => {
           _id: item._id,
           jenis_pihak: item.jenis_pihak || "",
           pic: item.pic || 0,
-          jenis_orang_terkait: item.jenis_orang_terkait || "",
-          sub_jenis_orang_terkait: item.sub_jenis_orang_terkait || "",
+          jenis_orang_terkait: jenisOTName || "",
+          sub_jenis_orang_terkait: subJenisOTName || "",
           identitas: item.identitas || "",
           name: item.name || "",
           nomor_paspor: item.nomor_paspor || "",
-          kewarganegaraan: item.kewarganegaraan || "",
-          negara_asal: item.negara_asal || "",
+          kewarganegaraan: wargaNegaraName || "",
+          negara_asal: negaraName || "",
           email: item.email || "",
           nomor_telepon: item.nomor_telepon || "",
           tanggal_mulai: item.tanggal_mulai || "",

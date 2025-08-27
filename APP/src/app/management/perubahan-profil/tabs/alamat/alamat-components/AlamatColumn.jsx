@@ -38,12 +38,9 @@ export default function useAlamatTableConfig() {
         enableHiding: false,
       },
       {
-        accessorKey: "no",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="No" />
-        ),
-        cell: ({ row }) => <div>{row.index + 1}</div>,
-        enableSorting: false,
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => <AlamatAction row={row} />,
       },
       {
         accessorKey: "negara",
@@ -116,11 +113,6 @@ export default function useAlamatTableConfig() {
         cell: ({ row }) => (
           <div className="lowercase">{row.getValue("bagian_pengawasan")}</div>
         ),
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => <AlamatAction row={row} />,
       },
     ],
     [clientState]

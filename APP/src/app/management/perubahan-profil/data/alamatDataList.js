@@ -1,22 +1,36 @@
 import { useClient } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
 import { countryList } from "./country";
+import { kewarganegaraanOption } from "@/helpers/variables";
 export const dataAlamat = () => {
   var negara,
     kpp,
-    pengawas = "";
+    pengawas,
+    wargaNegara,
+    jenisNitkuName = "";
   var data = [];
   const { clientState } = useClient();
 
   const kodeNegara = countryList.map((item) => item.kode);
   const kodeKPP = kppOption.map((item) => item.kode);
   const kodePengawas = pengawasOption.map((item) => item.kode);
+  const kodeWN = kewarganegaraanOption.map((item) => item.kode);
+  const kodeJenisNitku = jenisNitku.map((item) => item.kode);
 
   if (clientState.success) {
     if (clientState.data[0].data_alamat.length > 0) {
       clientState.data[0].data_alamat.map((item) => {
-        negara = kpp = pengawas = "";
+        negara = kpp = pengawas = wargaNegara = jenisNitkuName = "";
         if (kodeNegara.indexOf(item.negara) > -1) {
           negara = countryList[kodeNegara.indexOf(item.negara)].name;
+        }
+
+        if (kodeWN.indexOf(item.kewarganegaraan_pic) > -1) {
+          wargaNegara =
+            kewarganegaraanOption[kodeWN.indexOf(item.kewarganegaraan_pic)]
+              .name;
+        }
+        if (kodeJenisNitku.indexOf(item.jenis_nitku) > -1) {
+          jenisNitkuName = jenisNitku[kodeWN.indexOf(item.jenis_nitku)].name;
         }
 
         if (kodeKPP.indexOf(item.kode_kpp) > -1) {
@@ -51,6 +65,12 @@ export const dataAlamat = () => {
           tanggal_berakhir: item.tanggal_berakhir,
           kode_kpp: kpp,
           bagian_pengawasan: pengawas,
+          identitas_pic: item.identitas_pic,
+          nama_pic: item.nama_pic,
+          kewarganegaraan_pic: wargaNegara,
+          nama_nitku: item.nama_nitku,
+          jenis_nitku: jenisNitkuName,
+          kode_klu: item.kode_klu,
         });
       });
     }
@@ -58,6 +78,21 @@ export const dataAlamat = () => {
 
   return data;
 };
+
+export const jenisNitku = [
+  { kode: "JNTKU-1", name: "Cabang Kecamatan" },
+  { kode: "JNTKU-2", name: "Cabang Kelurahan/Desa" },
+  { kode: "JNTKU-3", name: "Cabang Kota/Kabupaten" },
+  { kode: "JNTKU-4", name: "Cabang Wilayah/Provinsi" },
+  { kode: "JNTKU-5", name: "Cabang Distribusi" },
+  { kode: "JNTKU-6", name: "Cabang Gudang" },
+  { kode: "JNTKU-7", name: "Kantor Pusat" },
+  { kode: "JNTKU-8", name: "Manajemen" },
+  { kode: "JNTKU-9", name: "Objek Pajak Karbon" },
+  { kode: "JNTKU-10", name: "Objek Pajak PBB P5L" },
+  { kode: "JNTKU-11", name: "Pemasaran" },
+  { kode: "JNTKU-12", name: "Produksi" },
+];
 
 export const kppOption = [
   { kode: "1", name: "KPP Pratama Jakarta Matraman (001)" },
@@ -73,7 +108,7 @@ export const jenisAlamat = [
   { jenis: "Alamat Korespondensi", kode: "JA-1" },
   { jenis: "Alamat Lokasi Aset", kode: "JA-2" },
   { jenis: "Alamat Sesuai E-KTP", kode: "JA-3" },
-  { jenis: "Alamat Tempat Kegiatan Usaha", kode: "JA-4" },
+  { jenis: "Tempat Kegiatan Usaha", kode: "JA-4" },
 ];
 
 export const pengawasOption = [

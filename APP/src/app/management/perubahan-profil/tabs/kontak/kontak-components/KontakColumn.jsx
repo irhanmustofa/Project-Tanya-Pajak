@@ -38,13 +38,11 @@ export default function useKontakTableConfig() {
         enableHiding: false,
       },
       {
-        accessorKey: "no",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="No" />
-        ),
-        cell: ({ row }) => <div>{row.index + 1}</div>,
-        enableSorting: false,
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => <KontakAction row={row} />,
       },
+
       {
         accessorKey: "jenis_kontak",
         header: ({ column }) => (
@@ -133,11 +131,6 @@ export default function useKontakTableConfig() {
         cell: ({ row }) => (
           <div className=" capitalize">{row.getValue("tanggal_berakhir")}</div>
         ),
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => <KontakAction row={row} />,
       },
     ],
     [clientState]

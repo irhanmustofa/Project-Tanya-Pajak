@@ -3,9 +3,9 @@ import useOrangTerkaitTableConfig from "../orang-terkait-components/OrangTerkait
 import OrangTerkaitSubject from "../orang-terkait-components/OrangTerkaitSubject";
 import { dataOrangTerkait } from "@/app/management/perubahan-profil/data/orangTerkaitDataList";
 
-export default function KontakTable() {
+export default function OrangTerkaitTable() {
   const { orangTerkaitColumn, filterFields } = useOrangTerkaitTableConfig();
-  const data = [];
+  const data = dataOrangTerkait();
   // console.log("data:", data);
   return (
     <>

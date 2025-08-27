@@ -1,4 +1,4 @@
-import Validator from "../../database/database.validator";
+import Validator from "../../database/database.validator.js";
 
 export default class OrangTerkait {
   constructor(input) {
@@ -45,7 +45,7 @@ export default class OrangTerkait {
     const baseRules = {
       _id: "required|string",
       jenis_pihak: "string",
-      pic: "string",
+      pic: "number",
       jenis_orang_terkait: "string",
       sub_jenis_orang_terkait: "string",
       identitas: "string",
@@ -67,7 +67,7 @@ export default class OrangTerkait {
 
     this._id = _id;
     this.jenis_pihak = jenis_pihak;
-    this.pic = pic;
+    this.pic = Number(pic);
     this.jenis_orang_terkait = jenis_orang_terkait;
     this.sub_jenis_orang_terkait = sub_jenis_orang_terkait;
     this.identitas = identitas;

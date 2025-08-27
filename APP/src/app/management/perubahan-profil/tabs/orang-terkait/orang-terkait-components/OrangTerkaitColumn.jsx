@@ -38,12 +38,9 @@ export default function useOrangTerkaitTableConfig() {
         enableHiding: false,
       },
       {
-        accessorKey: "no",
-        header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="No" />
-        ),
-        cell: ({ row }) => <div>{row.index + 1}</div>,
-        enableSorting: false,
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => <OrangTerkaitAction row={row} />,
       },
       {
         accessorKey: "identitas",
@@ -115,10 +112,7 @@ export default function useOrangTerkaitTableConfig() {
       {
         accessorKey: "identitas_negara_asal",
         header: ({ column }) => (
-          <DatatableColumnHeader
-            column={column}
-            title="Nomor Pokok Wajib Pajak dari Negara Asal"
-          />
+          <DatatableColumnHeader column={column} title="NPWP Negara Asal" />
         ),
         cell: ({ row }) => (
           <div className=" capitalize">{row.getValue("identitas") ?? ""}</div>
@@ -179,7 +173,9 @@ export default function useOrangTerkaitTableConfig() {
           />
         ),
         cell: ({ row }) => (
-          <div className=" capitalize">{row.getValue("pic") ?? ""}</div>
+          <div className=" capitalize">
+            {row.getValue("pic") === 1 ? "Ya" : "Tidak"}
+          </div>
         ),
       },
       {
@@ -203,11 +199,6 @@ export default function useOrangTerkaitTableConfig() {
             {dateShort(row.getValue("tanggal_berakhir")) ?? ""}
           </div>
         ),
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => <OrangTerkaitAction row={row} />,
       },
     ],
     [clientState]

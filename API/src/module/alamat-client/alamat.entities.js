@@ -25,6 +25,12 @@ export default class Alamat {
       tanggal_berakhir,
       kode_kpp,
       bagian_pengawasan,
+      identitas_pic,
+      nama_pic,
+      kewarganegaraan_pic,
+      nama_nitku,
+      jenis_nitku,
+      kode_klu,
     } = input;
 
     const data = {
@@ -50,6 +56,12 @@ export default class Alamat {
       tanggal_berakhir,
       kode_kpp,
       bagian_pengawasan,
+      identitas_pic,
+      nama_pic,
+      kewarganegaraan_pic,
+      nama_nitku,
+      jenis_nitku,
+      kode_klu,
     };
 
     const baseRules = {
@@ -75,6 +87,12 @@ export default class Alamat {
       tanggal_berakhir: "string",
       kode_kpp: "string",
       bagian_pengawasan: "string",
+      identitas_pic: "string",
+      nama_pic: "string",
+      kewarganegaraan_pic: "string",
+      nama_nitku: "string",
+      jenis_nitku: "string",
+      kode_klu: "string",
     };
 
     const validator = new Validator(data, baseRules);
@@ -93,7 +111,7 @@ export default class Alamat {
     this.kode_area = kode_area;
     this.kode_pos = kode_pos;
     this.data_geometrik = data_geometrik;
-    this.disewa = Boolean(disewa);
+    this.disewa = Number(disewa);
     this.identitas_pemilik = identitas_pemilik;
     this.nama_pemilik = nama_pemilik;
     this.tanggal_mulai_sewa = tanggal_mulai_sewa;
@@ -102,6 +120,12 @@ export default class Alamat {
     this.tanggal_berakhir = tanggal_berakhir;
     this.kode_kpp = kode_kpp;
     this.bagian_pengawasan = bagian_pengawasan;
+    this.identitas_pic = identitas_pic;
+    this.nama_pic = nama_pic;
+    this.kewarganegaraan_pic = kewarganegaraan_pic;
+    this.nama_nitku = nama_nitku;
+    this.jenis_nitku = jenis_nitku;
+    this.kode_klu = kode_klu;
 
     if (result.error.length > 0) this.errors = result.error;
   }

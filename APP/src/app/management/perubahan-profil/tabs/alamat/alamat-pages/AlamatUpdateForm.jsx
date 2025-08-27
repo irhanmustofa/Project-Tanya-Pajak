@@ -37,10 +37,12 @@ import {
   jenisAlamat,
   kppOption,
   pengawasOption,
+  jenisNitku,
 } from "@/app/management/perubahan-profil/data/alamatDataList";
 import { countryList } from "@/app/management/perubahan-profil/data/country";
 import { provinceList } from "@/app/management/perubahan-profil/data/province";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { kewarganegaraanOption } from "@/helpers/variables";
 
 export default function AlamatClientUpdateForm({ id, onClose }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +57,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
   const clientId = useLocalStorage.get("clientId");
   const [isCountry, setIsCountry] = useState("");
   const [kodeArea, setKodeArea] = useState("");
+  const [jenisState, setJenisState] = useState("");
 
   const { errors, handleChange } = useValidateInput({
     schema: {
@@ -94,7 +97,14 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
       tanggal_berakhir: getData.tanggal_berakhir ?? "yyyy-mm-dd",
       kode_kpp: getData.kode_kpp,
       bagian_pengawasan: getData.bagian_pengawasan,
+      identitas_pic: getData.identitas_pic,
+      nama_pic: getData.nama_pic,
+      kewarganegaraan_pic: getData.kewarganegaraan_pic,
+      nama_nitku: getData.nama_nitku,
+      jenis_nitku: getData.jenis_nitku,
+      kode_klu: getData.kode_klu,
     });
+    setJenisState(getData.jenis_alamat);
     setIsCountry(getData.negara);
     setIsCheck(getData.disewa === "false" ? false : true);
     setKodeArea(getData.kode_area);
@@ -108,7 +118,13 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
     startTransition(async () => {
       const formData = new FormData();
       formData.append("negara", input.negara);
-      formData.append("jenis_alamat", input.jenis_alamat);
+      formData.append("jenis_alamat", jenisState);
+      formData.append("identitas_pic", input.identitas_pic);
+      formData.append("nama_pic", input.nama_pic);
+      formData.append("kewarganegaraan_pic", input.kewarganegaraan_pic);
+      formData.append("nama_nitku", input.nama_nitku);
+      formData.append("jenis_nitku", input.jenis_nitku);
+      formData.append("kode_klu", input.kode_klu);
       formData.append("alamat", input.alamat);
       formData.append("rt", input.rt);
       formData.append("rw", input.rw);
@@ -240,6 +256,7 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                             ...input,
                             jenis_alamat: e,
                           });
+                          setJenisState(e);
                         }}
                         value={input.jenis_alamat}
                       >
@@ -259,6 +276,89 @@ export default function AlamatClientUpdateForm({ id, onClose }) {
                       {errors.jenis_alamat}
                     </div>
                   </div>
+
+                  {jenisState === "JA-4" && (
+                    <div className="grid md:grid-cols-2 grid-cols-1 gap-5 my-5 items-end">
+                      <Input
+                        name={"identitas_pic"}
+                        placeholder="PIC TKU NIK/NPWP"
+                        value={String(input.identitas_pic)}
+                        onChange={(e) => {
+                          setInput({ ...input, identitas_pic: e.target.value });
+                        }}
+                      />
+                      <Input
+                        name="nama_pic"
+                        placeholder="Nama PIC TKU"
+                        value={String(input.nama_pic)}
+                        onChange={(e) => {
+                          setInput({ ...input, nama_pic: e.target.value });
+                        }}
+                      />
+                      <div className="grid grid-cols-1 gap-3 ">
+                        <Label>Kewarganegaraan PIC TKU</Label>
+                        <Select
+                          name="kewarganegaraan_pic"
+                          value={String(input.kewarganegaraan_pic)}
+                          onValueChange={(e) => {
+                            setInput({ ...input, kewarganegaraan_pic: e });
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Pilih" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {kewarganegaraanOption.map((item, key) => {
+                              return (
+                                <SelectItem key={key} value={String(item.kode)}>
+                                  {item.name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <Input
+                        name="nama_nitku"
+                        placeholder="Nama NITKU"
+                        value={String(input.nama_nitku)}
+                        onChange={(e) => {
+                          setInput({ ...input, nama_nitku: e.target.value });
+                        }}
+                      />
+                      <div className="grid grid-cols-1 gap-3 ">
+                        <Label>Jenis NITKU</Label>
+                        <Select
+                          name="jenis_nitku"
+                          value={String(input.jenis_nitku)}
+                          onValueChange={(e) => {
+                            setInput({ ...input, jenis_nitku: e });
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Pilih" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {jenisNitku.map((item, key) => {
+                              return (
+                                <SelectItem key={key} value={String(item.name)}>
+                                  {item.name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <Input
+                        name="kode_klu"
+                        placeholder="Kode KLU"
+                        value={String(input.kode_klu)}
+                        onChange={(e) => {
+                          setInput({ ...input, kode_klu: e.target.value });
+                        }}
+                      />
+                    </div>
+                  )}
 
                   <div className="grid xl:grid-cols-6 grid-cols-4 gap-4 my-4">
                     <Textarea

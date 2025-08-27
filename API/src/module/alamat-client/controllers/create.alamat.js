@@ -15,30 +15,7 @@ export default async function createAlamat(req) {
 
   try {
     const singleData = getData.data[0].data_alamat;
-    const inputAlamat = {
-      _id: generateId(),
-      negara: req.body.negara,
-      jenis_alamat: req.body.jenis_alamat,
-      alamat: req.body.alamat,
-      rt: req.body.rt,
-      rw: req.body.rw,
-      provinsi: req.body.provinsi,
-      kabupaten: req.body.kabupaten,
-      kecamatan: req.body.kecamatan,
-      desa: req.body.desa,
-      kode_area: req.body.kode_area,
-      kode_pos: req.body.kode_pos,
-      data_geometrik: req.body.data_geometrik,
-      disewa: req.body.disewa,
-      identitas_pemilik: req.body.identitas_pemilik,
-      nama_pemilik: req.body.nama_pemilik,
-      tanggal_mulai_sewa: req.body.tanggal_mulai_sewa,
-      tanggal_sewa_berakhir: req.body.tanggal_sewa_berakhir,
-      tanggal_mulai: req.body.tanggal_mulai,
-      tanggal_berakhir: req.body.tanggal_berakhir,
-      kode_kpp: req.body.kode_kpp,
-      bagian_pengawasan: req.body.bagian_pengawasan,
-    };
+    const inputAlamat = { ...req.body, _id: generateId() };
 
     const alamatClient = new Alamat(inputAlamat);
     if (alamatClient.errors) {

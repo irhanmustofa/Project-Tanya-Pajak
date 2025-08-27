@@ -64,6 +64,15 @@ export default async function updateAlamat(req) {
       kode_kpp: req.body.kode_kpp || singleData[arrayNum].kode_kpp,
       bagian_pengawasan:
         req.body.bagian_pengawasan || singleData[arrayNum].bagian_pengawasan,
+      identitas_pic:
+        req.body.identitas_pic || singleData[arrayNum].identitas_pic,
+      nama_pic: req.body.nama_pic || singleData[arrayNum].nama_pic,
+      kewarganegaraan_pic:
+        req.body.kewarganegaraan_pic ||
+        singleData[arrayNum].kewarganegaraan_pic,
+      nama_nitku: req.body.nama_nitku || singleData[arrayNum].nama_nitku,
+      jenis_nitku: req.body.jenis_nitku || singleData[arrayNum].jenis_nitku,
+      kode_klu: req.body.kode_klu || singleData[arrayNum].kode_klu,
     };
 
     const alamatClient = new Alamat(inputAlamat);
