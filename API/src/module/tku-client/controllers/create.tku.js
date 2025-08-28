@@ -15,9 +15,9 @@ export default async function createTku(req) {
     }
 
     const singleData =
-      getData.data[0].tempat_kegiatan_usaha.length < 1
+      getData.data[0].tempat_kegiatan_usaha.length === undefined
         ? []
-        : tempat_kegiatan_usaha;
+        : getData.data[0].tempat_kegiatan_usaha;
 
     const input = { ...req.body, _id: generateId() };
     const dataValidation = new TKU(input);

@@ -10,13 +10,13 @@ import AlamatTable from "../tabs/alamat/alamat-pages/AlamatTable";
 import EkonomiTabs from "../tabs/ekonomi/EkonomiTabs";
 import KontakTable from "../tabs/kontak/kontak-pages/KontakTable";
 import OrangTerkaitTable from "../tabs/orang-terkait/orang-terkait-pages/OrangTerkaitTable";
+import TkuTable from "../tabs/tku/tku-pages/TkuTable";
 
 export default function PerubahanProfilPages() {
-  const { clientState, clientAction } = useClient();
   return (
     <>
       <h1 className="text-2xl font-medium mb-10">PROFIL WAJIB PAJAK</h1>
-      <TabsRoot defaultValue="orang-terkait">
+      <TabsRoot defaultValue="tku">
         <TabsList className="p-4 border-0">
           <TabsTrigger
             className="border rounded-full xl:text-[14px] text-[10px]"
@@ -48,6 +48,12 @@ export default function PerubahanProfilPages() {
           >
             Orang Terkait
           </TabsTrigger>
+          <TabsTrigger
+            className="border rounded-full xl:text-[14px] text-[10px]"
+            value="tku"
+          >
+            TKU
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="profil">
           <div className=" px-6">
@@ -65,6 +71,9 @@ export default function PerubahanProfilPages() {
         </TabsContent>
         <TabsContent value="orang-terkait">
           <OrangTerkaitTable />
+        </TabsContent>
+        <TabsContent value="tku">
+          <TkuTable />
         </TabsContent>
       </TabsRoot>
     </>

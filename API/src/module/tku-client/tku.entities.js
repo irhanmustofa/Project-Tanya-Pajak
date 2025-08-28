@@ -30,12 +30,13 @@ export default class TKU {
       tanggal_mulai,
       tanggal_berakhir,
       toko_retail,
-      virtual_office,
+      kawasan_bebas,
       kawasan_ekonomi_khusus,
       tempat_penimbunan_berikat,
       nomor_surat,
       date_valid_from,
       date_valid_to,
+      kantor_virtual,
       alamat_utama_pkp,
     } = input;
 
@@ -67,12 +68,13 @@ export default class TKU {
       tanggal_mulai,
       tanggal_berakhir,
       toko_retail,
-      virtual_office,
+      kawasan_bebas,
       kawasan_ekonomi_khusus,
       tempat_penimbunan_berikat,
       nomor_surat,
       date_valid_from,
       date_valid_to,
+      kantor_virtual,
       alamat_utama_pkp,
     };
 
@@ -96,21 +98,22 @@ export default class TKU {
       kode_pos: "required|string",
       data_geometrik: "string",
       seksi_pengawasan: "string",
-      lokasi_disewa: "string",
+      lokasi_disewa: "number",
       identitas_pemilik: "string",
       nama_pemilik: "string",
       tanggal_mulai_sewa: "string",
       tanggal_sewa_berakhir: "string",
       tanggal_mulai: "required|string",
       tanggal_berakhir: "string",
-      toko_retail: "string",
-      virtual_office: "string",
-      kawasan_ekonomi_khusus: "string",
-      tempat_penimbunan_berikat: "string",
+      toko_retail: "number",
+      kawasan_bebas: "number",
+      kawasan_ekonomi_khusus: "number",
+      tempat_penimbunan_berikat: "number",
       nomor_surat: "string",
       date_valid_from: "string",
       date_valid_to: "string",
-      alamat_utama_pkp: "string",
+      kantor_virtual: "number",
+      alamat_utama_pkp: "number",
     };
 
     const validator = new Validator(data, baseRules);
@@ -143,12 +146,13 @@ export default class TKU {
     this.tanggal_mulai = tanggal_mulai;
     this.tanggal_berakhir = tanggal_berakhir;
     this.toko_retail = toko_retail;
-    this.virtual_office = virtual_office;
+    this.kawasan_bebas = kawasan_bebas;
     this.kawasan_ekonomi_khusus = kawasan_ekonomi_khusus;
     this.tempat_penimbunan_berikat = tempat_penimbunan_berikat;
     this.nomor_surat = nomor_surat;
     this.date_valid_from = date_valid_from;
     this.date_valid_to = date_valid_to;
+    this.kantor_virtual = kantor_virtual;
     this.alamat_utama_pkp = alamat_utama_pkp;
 
     if (result.error.length > 0) this.errors = result.error;

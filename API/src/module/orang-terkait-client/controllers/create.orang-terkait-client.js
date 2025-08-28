@@ -17,7 +17,6 @@ export default async function createOrangTerkait(req) {
       getData.data[0].orang_terkait.length > 0
         ? getData.data[0].orang_terkait
         : [];
-    console.log("singleData:", singleData);
     const dataValid = new OrangTerkait({ ...req.body, _id: generateId() });
     if (dataValid.errors) {
       return badRequest({ message: dataValid.errors.join(", ") });
@@ -27,6 +26,9 @@ export default async function createOrangTerkait(req) {
     return await wrapper.update(clientId, { orang_terkait: singleData });
   } catch (err) {
     console.log("create Related Person client err:", err);
-    return error({ message: "An error occurred while the system was running" });
+    return error({
+      message:
+        "An error occurred while the system was running, Refreshn your page",
+    });
   }
 }

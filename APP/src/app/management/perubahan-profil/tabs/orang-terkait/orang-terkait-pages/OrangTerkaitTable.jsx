@@ -6,7 +6,6 @@ import { dataOrangTerkait } from "@/app/management/perubahan-profil/data/orangTe
 export default function OrangTerkaitTable() {
   const { orangTerkaitColumn, filterFields } = useOrangTerkaitTableConfig();
   const data = dataOrangTerkait();
-  // console.log("data:", data);
   return (
     <>
       <OrangTerkaitSubject />

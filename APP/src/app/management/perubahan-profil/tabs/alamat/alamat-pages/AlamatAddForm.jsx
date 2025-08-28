@@ -540,6 +540,7 @@ export default function ClientAddForm({ onClose }) {
                     }}
                   />
                 </div>
+
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2">
                   <div>
                     <Label>

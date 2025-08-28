@@ -62,6 +62,9 @@ export default async function updateOrangTerkait(req) {
     return await wrapper.update(clientId, { orang_terkait: singleData });
   } catch (err) {
     console.log("create Related Person client err:", err);
-    return error({ message: "An error occurred while the system was running" });
+    return error({
+      message:
+        "An error occurred while the system was running, Refresh your page",
+    });
   }
 }
