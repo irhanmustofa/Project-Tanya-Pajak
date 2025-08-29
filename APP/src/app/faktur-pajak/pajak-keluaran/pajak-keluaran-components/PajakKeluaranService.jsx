@@ -83,10 +83,14 @@ export const pajakKeluaranUpdate = async (id, data) => {
 };
 
 export const pajakKeluaranImport = async (data) => {
+  console.log("Importing data:", data);
   try {
     const request = await HttpRequest.method("POST")
-      .url(clientsEndpoint.import)
+      .url(pajakKeluaransEndpoint.import)
       .body(data)
+      .headers({
+        clientid: useLocalStorage.get("clientId"),
+      })
       .send();
     return request;
   } catch (error) {

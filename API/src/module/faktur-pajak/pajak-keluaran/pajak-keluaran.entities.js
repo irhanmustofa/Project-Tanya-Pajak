@@ -21,7 +21,7 @@ export default class PajakKeluaran {
             nomor_faktur: "required|string",
             kode_transaksi: "required|string",
             tanggal_faktur: "required|date",
-            jenis_faktur: "required|number",
+            jenis_faktur: "required|string",
             referensi_faktur: "string",
             alamat: "required|string",
             idtku: "required|string",

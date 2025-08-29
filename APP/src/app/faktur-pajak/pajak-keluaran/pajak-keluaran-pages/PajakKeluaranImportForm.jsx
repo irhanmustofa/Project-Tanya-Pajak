@@ -55,11 +55,9 @@ export default function PajakKeluaranImportForm({ onClose }) {
         return;
       }
 
-      // 🔑 Gabungkan items berdasarkan nomor faktur
       const groupedData = pajakSheet.map((row) => {
         const nomorFaktur = row["No Faktur"];
 
-        // cari semua items yg punya nomor faktur sama
         const fakturItems = itemsSheet.filter(
           (i) => i["No Faktur"] === nomorFaktur
         );
@@ -72,7 +70,7 @@ export default function PajakKeluaranImportForm({ onClose }) {
           jenis_faktur: row["Jenis Faktur"],
           referensi_faktur: row["Referensi Faktur"],
           alamat: row["Alamat"],
-          id_tku: row["IDTKU"],
+          idtku: row["IDTKU"],
           lawan_transaksi: {
             nama: row["Nama Pembeli"],
             npwp: row["NPWP Pembeli"],
@@ -83,9 +81,17 @@ export default function PajakKeluaranImportForm({ onClose }) {
           items: fakturItems.map((i) => ({
             tipe: i["Tipe"],
             nama: i["Nama"],
+            kode: i["Kode"],
             qty: i["Qty"],
+            satuan: i["Satuan"],
             harga_satuan: i["Harga Satuan"],
             total_harga: i["Total Harga"],
+            diskon: i["Diskon"],
+            tarif_ppn: i["Tarif PPN"],
+            dpp: i["DPP"],
+            dpp_nilai_lain: i["DPP Nilai Lain"],
+            tarif_ppnbm: i["Tarif PPNBM"],
+            ppnbm: i["PPNBM"],
             ppn: i["PPN"],
           })),
         };
@@ -158,9 +164,6 @@ export default function PajakKeluaranImportForm({ onClose }) {
           <DialogDescription>
             Upload file Excel sesuai template untuk mengimpor banyak data faktur
             pajak sekaligus.
-            <Button variant="outline" onClick={downloadPajakKeluaranTemplate}>
-              Download Template Excel
-            </Button>
           </DialogDescription>
 
           <div className="space-y-4">
@@ -174,19 +177,23 @@ export default function PajakKeluaranImportForm({ onClose }) {
               />
             </div>
 
-            {data.length > 0 && (
-              <pre className="bg-muted p-4 text-xs max-h-60 overflow-auto rounded">
-                {JSON.stringify(data, null, 2)}
-              </pre>
-            )}
-
-            <div className="flex justify-end gap-2 pt-4 border-t">
-              <Button type="button" variant="outline" onClick={onClose}>
-                Batal
+            <div className="flex justify-between gap-2 pt-4 border-t">
+              <Button variant="outline" onClick={downloadPajakKeluaranTemplate}>
+                Download Template Excel
               </Button>
-              <Button type="button" onClick={handleSubmit} pending={isPending}>
-                Import
-              </Button>
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={onClose}>
+                  Batal
+                </Button>
+                <Button
+                  type="button"
+                  disabled={!file}
+                  onClick={handleSubmit}
+                  pending={isPending}
+                >
+                  Import
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>
