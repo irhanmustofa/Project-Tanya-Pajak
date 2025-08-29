@@ -31,25 +31,13 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useState } from "react";
-import ProfilePeriodeList from "@/app/management/clients/profile/profile-perusahaan/components/ProfilePeriodeList";
 
-export function NavSetting({ items }) {
-  const [showPDF, setShowPDF] = useState(false);
-
-  const handleShowPDF = () => {
-    setShowPDF(true);
-  };
-
-  const handleClosePDF = () => {
-    setShowPDF(false);
-  };
-
+export function NavSpt({ items }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Settings</SidebarGroupLabel>
+      <SidebarGroupLabel>Surat Pemberitahuan SPT</SidebarGroupLabel>
       <SidebarMenu>
-        {showPDF && <ProfilePeriodeList onClose={handleClosePDF} />}
-        {items.is_settings.map((item) => (
+        {items.is_spt.map((item) => (
           <Collapsible
             key={item.title}
             asChild
@@ -84,7 +72,7 @@ export function NavSetting({ items }) {
                         </Link>
                       </SidebarMenuSubButton>
 
-                      {subItem.title === "View Profile" && (
+                      {subItem?.subMenus && (
                         <div className="absolute right-2 top-1/2 -translate-y-1/2">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -95,10 +83,7 @@ export function NavSetting({ items }) {
                             <DropdownMenuContent side="right" className="w-48">
                               {subItem.subMenus.map((action) => (
                                 <DropdownMenuItem key={action.title} asChild>
-                                  <button
-                                    onClick={handleShowPDF}
-                                    className="flex items-center gap-2 w-full px-2 py-1 text-left hover:bg-gray-100"
-                                  >
+                                  <button className="flex items-center gap-2 w-full px-2 py-1 text-left hover:bg-gray-100">
                                     <action.icon className="w-4 h-4 " />
                                     {action.title}
                                   </button>
@@ -108,48 +93,6 @@ export function NavSetting({ items }) {
                           </DropdownMenu>
                         </div>
                       )}
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </SidebarMenuItem>
-          </Collapsible>
-        ))}
-
-        {items.is_settings_coa.map((item) => (
-          <Collapsible
-            key={item.title}
-            asChild
-            defaultOpen={item.isActive}
-            className="group/collapsible"
-          >
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem
-                      key={subItem.title}
-                      className="relative group"
-                    >
-                      <SidebarMenuSubButton
-                        asChild
-                        className={
-                          subItem.url === window.location.pathname
-                            ? "font-bold italic bg-sidebar-accent text-sidebar-accent-foreground"
-                            : ""
-                        }
-                      >
-                        <Link to={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </Link>
-                      </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub>

@@ -1,13 +1,11 @@
 import Response, { badRequest, success } from "../../app/response.js";
 import MongodbWrapper from "../../database/mongo/mongo.wrapper.js";
-import Permission from "./permission.entities.js";
 import { permissionSchema } from "./permission.schema.js";
 
 const wrapper = new MongodbWrapper(permissionSchema());
 
 const createPermission = async (req, res) => {
-  const permission = new Permission(req.body);
-  const result = await wrapper.create(permission);
+  const result = await wrapper.create(req.body);
 
   if (result.error) {
     return Response(res, badRequest({ message: result.message }));

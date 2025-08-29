@@ -21,14 +21,13 @@ import DialogLogout from "@/dialogs/DialogLogout";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { LucideLayoutDashboard } from "lucide-react";
 import logo from "@/public/vite.svg";
-import { TeamSwitcher } from "./team-switcher";
 import { CompanySetting } from "./company-setting";
 
 export function AppSidebar({ ...props }) {
   const { dialogState, dialogAction } = useDialog();
   const dispatch = useDialogDispatch();
   const { toggleSidebar } = useSidebar();
-  const { users, sidebars } = sidebarData();
+  const { users, sidebars, is_spt } = sidebarData();
   const isOpen = useLocalStorage.get("sb") === "true";
   const handleClick = () => {
     if (!isOpen) {
@@ -50,7 +49,6 @@ export function AppSidebar({ ...props }) {
               </SidebarGroupLabel>
             </div>
 
-            {/* Wrap dengan Suspense dan error boundary */}
             <Suspense fallback={<div>Loading...</div>}>
               <CompanySetting />
             </Suspense>

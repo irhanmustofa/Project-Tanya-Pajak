@@ -13,13 +13,5 @@ export const usePermissions = () => {
 
   return {
     checkPermission,
-    hasPermission: checkPermission,
-    userPermissions,
-    role,
-    isAdmin: role === 0,
-    canCreate: (resource) => checkPermission(`${resource}.create`),
-    canRead: (resource) => checkPermission(`${resource}.read`),
-    canUpdate: (resource) => checkPermission(`${resource}.update`),
-    canDelete: (resource) => checkPermission(`${resource}.delete`),
   };
 };

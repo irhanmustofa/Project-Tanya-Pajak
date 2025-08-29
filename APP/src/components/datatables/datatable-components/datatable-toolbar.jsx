@@ -28,7 +28,6 @@ export function DatatableToolbar({ table, filterFields, pathCustom }) {
       );
     }
   }, [table.getFilteredSelectedRowModel().rows.length]);
-
   const handleDelete = () => {
     dispatch({
       type: dialogAction.DIALOG_DELETE_SOME,

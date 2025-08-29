@@ -75,13 +75,13 @@ class Validator {
 
     return errMessage.length > 0
       ? {
-          success: false,
-          error: errMessage,
-        }
+        success: false,
+        error: errMessage,
+      }
       : {
-          success: true,
-          error: [],
-        };
+        success: true,
+        error: [],
+      };
   }
 
   getResult() {

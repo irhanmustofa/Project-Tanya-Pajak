@@ -49,10 +49,8 @@ export const validatingUser = async (headers) => {
 };
 
 export const checkPermission = (requiredPermissions) => {
-  console.log('Checking permissions:');
   const userWrapper = new MongodbWrapper(userSchema());
   return async (req, res, next) => {
-    console.log('User data:', req.headers);
     try {
       const user = await userWrapper.getByFilter({
         email: req.headers.email,
@@ -73,9 +71,6 @@ export const checkPermission = (requiredPermissions) => {
         : [requiredPermissions];
 
       const userPermissions = userData.permissions || userData.permission || [];
-
-      console.log('Required permissions:', permissionsToCheck);
-      console.log('User permissions:', userPermissions);
 
       const hasPermission = permissionsToCheck.every((perm) =>
         userPermissions.includes(perm)
