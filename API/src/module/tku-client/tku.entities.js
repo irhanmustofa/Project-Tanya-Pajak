@@ -25,8 +25,8 @@ export default class TKU {
       lokasi_disewa,
       identitas_pemilik,
       nama_pemilik,
-      tanggal_mulai_sewa,
-      tanggal_sewa_berakhir,
+      tanggal_awal_sewa,
+      tanggal_akhir_sewa,
       tanggal_mulai,
       tanggal_berakhir,
       toko_retail,
@@ -34,8 +34,8 @@ export default class TKU {
       kawasan_ekonomi_khusus,
       tempat_penimbunan_berikat,
       nomor_surat,
-      date_valid_from,
-      date_valid_to,
+      tanggal_awal_keputusan,
+      tanggal_akhir_keputusan,
       kantor_virtual,
       alamat_utama_pkp,
     } = input;
@@ -63,8 +63,8 @@ export default class TKU {
       lokasi_disewa,
       identitas_pemilik,
       nama_pemilik,
-      tanggal_mulai_sewa,
-      tanggal_sewa_berakhir,
+      tanggal_awal_sewa,
+      tanggal_akhir_sewa,
       tanggal_mulai,
       tanggal_berakhir,
       toko_retail,
@@ -72,8 +72,8 @@ export default class TKU {
       kawasan_ekonomi_khusus,
       tempat_penimbunan_berikat,
       nomor_surat,
-      date_valid_from,
-      date_valid_to,
+      tanggal_awal_keputusan,
+      tanggal_akhir_keputusan,
       kantor_virtual,
       alamat_utama_pkp,
     };
@@ -101,8 +101,8 @@ export default class TKU {
       lokasi_disewa: "number",
       identitas_pemilik: "string",
       nama_pemilik: "string",
-      tanggal_mulai_sewa: "string",
-      tanggal_sewa_berakhir: "string",
+      tanggal_awal_sewa: "string",
+      tanggal_akhir_sewa: "string",
       tanggal_mulai: "required|string",
       tanggal_berakhir: "string",
       toko_retail: "number",
@@ -110,8 +110,8 @@ export default class TKU {
       kawasan_ekonomi_khusus: "number",
       tempat_penimbunan_berikat: "number",
       nomor_surat: "string",
-      date_valid_from: "string",
-      date_valid_to: "string",
+      tanggal_awal_keputusan: "string",
+      tanggal_akhir_keputusan: "string",
       kantor_virtual: "number",
       alamat_utama_pkp: "number",
     };
@@ -141,8 +141,8 @@ export default class TKU {
     this.lokasi_disewa = lokasi_disewa;
     this.identitas_pemilik = identitas_pemilik;
     this.nama_pemilik = nama_pemilik;
-    this.tanggal_mulai_sewa = tanggal_mulai_sewa;
-    this.tanggal_sewa_berakhir = tanggal_sewa_berakhir;
+    this.tanggal_awal_sewa = tanggal_awal_sewa;
+    this.tanggal_akhir_sewa = tanggal_akhir_sewa;
     this.tanggal_mulai = tanggal_mulai;
     this.tanggal_berakhir = tanggal_berakhir;
     this.toko_retail = toko_retail;
@@ -150,8 +150,8 @@ export default class TKU {
     this.kawasan_ekonomi_khusus = kawasan_ekonomi_khusus;
     this.tempat_penimbunan_berikat = tempat_penimbunan_berikat;
     this.nomor_surat = nomor_surat;
-    this.date_valid_from = date_valid_from;
-    this.date_valid_to = date_valid_to;
+    this.tanggal_awal_keputusan = tanggal_awal_keputusan;
+    this.tanggal_akhir_keputusan = tanggal_akhir_keputusan;
     this.kantor_virtual = kantor_virtual;
     this.alamat_utama_pkp = alamat_utama_pkp;
 

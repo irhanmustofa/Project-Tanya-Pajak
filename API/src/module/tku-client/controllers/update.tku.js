@@ -55,11 +55,10 @@ export default async function updateTku(req) {
       identitas_pemilik:
         req.body.identitas_pemilik || singleData[arrayNum].identitas_pemilik,
       nama_pemilik: req.body.nama_pemilik || singleData[arrayNum].nama_pemilik,
-      tanggal_mulai_sewa:
-        req.body.tanggal_mulai_sewa || singleData[arrayNum].tanggal_mulai_sewa,
-      tanggal_sewa_berakhir:
-        req.body.tanggal_sewa_berakhir ||
-        singleData[arrayNum].tanggal_sewa_berakhir,
+      tanggal_awal_sewa:
+        req.body.tanggal_awal_sewa || singleData[arrayNum].tanggal_awal_sewa,
+      tanggal_akhir_sewa:
+        req.body.tanggal_akhir_sewa || singleData[arrayNum].tanggal_akhir_sewa,
       tanggal_mulai:
         req.body.tanggal_mulai || singleData[arrayNum].tanggal_mulai,
       tanggal_berakhir:
@@ -74,10 +73,12 @@ export default async function updateTku(req) {
         req.body.tempat_penimbunan_berikat ||
         singleData[arrayNum].tempat_penimbunan_berikat,
       nomor_surat: req.body.nomor_surat || singleData[arrayNum].nomor_surat,
-      date_valid_from:
-        req.body.date_valid_from || singleData[arrayNum].date_valid_from,
-      date_valid_to:
-        req.body.date_valid_to || singleData[arrayNum].date_valid_to,
+      tanggal_awal_keputusan:
+        req.body.tanggal_awal_keputusan ||
+        singleData[arrayNum].tanggal_awal_keputusan,
+      tanggal_akhir_keputusan:
+        req.body.tanggal_akhir_keputusan ||
+        singleData[arrayNum].tanggal_akhir_keputusan,
       kantor_virtual:
         req.body.kantor_virtual || singleData[arrayNum].kantor_virtual,
       alamat_utama_pkp:

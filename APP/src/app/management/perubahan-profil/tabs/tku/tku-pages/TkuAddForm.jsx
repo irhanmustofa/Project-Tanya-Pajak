@@ -14,10 +14,25 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useValidateInput } from "@/hooks/use-validate-input";
 import { tkuCreate } from "@/app/management/perubahan-profil/tabs/tku/tku-components/TkuService";
 import { clientFirst } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilService";
@@ -41,6 +56,8 @@ export default function TkuAddForm({ onClose }) {
 
   const clientId = useLocalStorage.get("clientId") ?? "";
   const [isOpen, setIsOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
   const [kodeArea, setKodeArea] = useState("");
   const [isDiSewa, setIsDiSewa] = useState(0);
   const [isRetail, setIsRetail] = useState(0);
@@ -52,7 +69,17 @@ export default function TkuAddForm({ onClose }) {
 
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
-      jenis_pihak: "required|string",
+      nitku: "required",
+      jenis_tku: "required",
+      alamat: "required",
+      rt: "required",
+      rw: "required",
+      provinsi: "required",
+      kabupaten: "required",
+      kecamatan: "required",
+      desa: "required",
+      kode_kpp: "required",
+      seksi_pengawasan: "required",
     },
   });
 
@@ -61,7 +88,69 @@ export default function TkuAddForm({ onClose }) {
 
     startTrasition(async () => {
       const formData = new FormData();
-      formData.append("jenis_pihak", pihak);
+      formData.append("nitku", event.target.nitku.value);
+      formData.append("jenis_tku", value);
+      formData.append("nama_tku", event.target.nama_tku.value);
+      formData.append("deskripsi_tku", event.target.deskripsi_tku.value);
+      formData.append("klu_tku", event.target.klu_tku.value);
+      formData.append(
+        "deskripsi_klu_tku",
+        event.target.deskripsi_klu_tku.value
+      );
+      formData.append("alamat", event.target.alamat.value);
+      formData.append("rt", event.target.rt.value);
+      formData.append("rw", event.target.rw.value);
+      formData.append("provinsi", event.target.provinsi.value);
+      formData.append("kabupaten", event.target.kabupaten.value);
+      formData.append("kecamatan", event.target.kecamatan.value);
+      formData.append("desa", event.target.desa.value);
+      formData.append("kode_kpp", event.target.kode_kpp.value);
+      formData.append("kode_wilayah", event.target.kode_wilayah.value);
+      formData.append("kode_pos", event.target.kode_pos.value);
+      formData.append("data_geometrik", event.target.data_geometrik.value);
+      formData.append("seksi_pengawasan", event.target.seksi_pengawasan.value);
+      formData.append("lokasi_disewa", isDiSewa);
+      formData.append(
+        "identitas_pemilik",
+        event.target.identitas_pemilik !== undefined
+          ? event.target.identitas_pemilik.value
+          : ""
+      );
+      formData.append(
+        "nama_pemilik",
+        event.target.nama_pemilik !== undefined
+          ? event.target.nama_pemilik.value
+          : ""
+      );
+      formData.append(
+        "tanggal_awal_sewa",
+        event.target.tanggal_awal_sewa !== undefined
+          ? event.target.tanggal_awal_sewa.value
+          : ""
+      );
+      formData.append(
+        "tanggal_akhir_sewa",
+        event.target.tanggal_akhir_sewa !== undefined
+          ? event.target.tanggal_akhir_sewa.value
+          : ""
+      );
+      formData.append("tanggal_mulai", event.target.tanggal_mulai.value);
+      formData.append("tanggal_berakhir", event.target.tanggal_berakhir.value);
+      formData.append("toko_retail", isRetail);
+      formData.append("kawasan_bebas", isKawasanBebas);
+      formData.append("kawasan_ekonomi_khusus", isKawasanKhusus);
+      formData.append("tempat_penimbunan_berikat", isPenimbun);
+      formData.append("nomor_surat", event.target.nomor_surat.value);
+      formData.append(
+        "tanggal_awal_keputusan",
+        event.target.tanggal_awal_keputusan.value
+      );
+      formData.append(
+        "tanggal_akhir_keputusan",
+        event.target.tanggal_akhir_keputusan.value
+      );
+      formData.append("kantor_virtual", isVirtual);
+      formData.append("alamat_utama_pkp", isUtama);
 
       await tkuCreate(formData).then((response) => {
         if (response.success) {
@@ -113,30 +202,73 @@ export default function TkuAddForm({ onClose }) {
             <div className="grid grid-cols-1 my-4  items-end overflow-auto justify-center p-1">
               <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mb-2">
                 <InputVertical name="nitku" title="NITKU" />
+
                 <div className="grid  grid-cols-1 md:col-span-1 col-span-2 content-between h-16">
                   <h1 className="leading-none text-sm font-medium">
                     Jenis TKU{" "}
                     <span className="text-[13px] text-red-500">*</span>
                   </h1>
-                  <Select
+
+                  <Popover
+                    open={open}
+                    onOpenChange={setOpen}
                     name="jenis_tku"
-                    onVlueChange={(e) => {
+                    onChange={(e) => {
                       handleChange("jenis_tku", e);
+                      setValue(e);
                     }}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {jenisNitku.map((item, key) => {
-                        return (
-                          <SelectItem key={key} value={item.kode}>
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="w-full justify-between"
+                      >
+                        {value
+                          ? jenisNitku.find((item) => item.kode === value)?.name
+                          : "Pilih..."}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] h-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search framework..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>No framework found.</CommandEmpty>
+                          <CommandGroup>
+                            {jenisNitku.map((item, key) => (
+                              <CommandItem
+                                key={key}
+                                value={item.name}
+                                onSelect={(myVal) => {
+                                  setValue(myVal === value ? "" : item.kode);
+                                  setOpen(false);
+                                  handleChange(
+                                    "jenis_tku",
+                                    myVal === value ? "" : item.kode
+                                  );
+                                }}
+                              >
+                                {item.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    value === item.kode
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   {errors.jenis_tku}
                 </div>
 
@@ -184,8 +316,7 @@ export default function TkuAddForm({ onClose }) {
 
                 <div className="grid  grid-cols-1 md:col-span-1 col-span-2 content-between h-16">
                   <h1 className="leading-none text-sm font-medium">
-                    Tambah PIC TKU{" "}
-                    <span className="text-[13px] text-red-500">*</span>
+                    PIC TKU <span className="text-[13px] text-red-500">*</span>
                   </h1>
                   <Input
                     name="pic"
@@ -312,7 +443,7 @@ export default function TkuAddForm({ onClose }) {
                       {kppOption.map((item, key) => {
                         return (
                           <SelectItem key={key} value={String(item.kode)}>
-                            {item.jenis_wp}
+                            {item.name}
                           </SelectItem>
                         );
                       })}
@@ -341,7 +472,7 @@ export default function TkuAddForm({ onClose }) {
                       {kppOption.map((item, key) => {
                         return (
                           <SelectItem key={key} value={String(item.kode)}>
-                            {item.jenis_wp}
+                            {item.name}
                           </SelectItem>
                         );
                       })}
@@ -355,13 +486,14 @@ export default function TkuAddForm({ onClose }) {
                 <div className="md:col-span-3 col-span-full flex gap-4">
                   <Input
                     value={kodeArea}
-                    name="kode_area"
+                    name="kode_wilayah"
                     onChange={(e) => {
-                      handleChange("kode_area", e.target.value);
+                      handleChange("kode_wilayah", e.target.value);
                     }}
                     disabled={true}
                     placeholder="Kode Wilayah automatically"
                   />
+
                   <Input
                     name="kode_pos"
                     title="Kode Pos"
@@ -419,9 +551,9 @@ export default function TkuAddForm({ onClose }) {
                   </Label>
                   <Select
                     value={"" || undefined}
-                    name="bagian_pengawasan"
+                    name="seksi_pengawasan"
                     onValueChange={(e) => {
-                      handleChange("bagian_pengawasan", e);
+                      handleChange("seksi_pengawasan", e);
                     }}
                   >
                     <SelectTrigger>
@@ -437,12 +569,11 @@ export default function TkuAddForm({ onClose }) {
                       })}
                     </SelectContent>
                   </Select>
-                  {errors.bagian_pengawasan}
+                  {errors.seksi_pengawasan}
                 </div>
               </div>
 
-              <div className="flex gap-4 my-4 items-center">
-                <Label>Lokasi yang Disewa</Label>
+              <div className="flex items-end gap-2 my-4">
                 <Checkbox
                   name="lokasi_disewa"
                   className="mt-2"
@@ -451,10 +582,11 @@ export default function TkuAddForm({ onClose }) {
                     setIsDiSewa(isDiSewa ? 0 : 1);
                   }}
                 />
+                <Label className="col-span-2">Lokasi yang Disewa</Label>
               </div>
 
               {Boolean(isDiSewa) && (
-                <div className="grid md:grid-cols-2 grid-cols-1 gap-4  mb-8">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2 border rounded p-2">
                   <Input
                     placeholder="NIK/NPWP Pemilik Tempat Sewa"
                     name="identitas_pemilik"
@@ -470,23 +602,22 @@ export default function TkuAddForm({ onClose }) {
                       handleChange("nama_pemilik", e.target.value);
                     }}
                   />
-                  {errors.identitas_pemilik}
 
                   <InputVertical
-                    name="tanggal_mulai_sewa"
+                    name="tanggal_awal_sewa"
                     type="date"
                     title="Tanggal Mulai Sewa"
                     onChange={(e) => {
-                      handleChange("tanggal_mulai_sewa", e.target.value);
+                      handleChange("tanggal_awal_sewa", e.target.value);
                     }}
                   />
 
                   <InputVertical
-                    name="tanggal_sewa_berakhir"
+                    name="tanggal_akhir_sewa"
                     type="date"
                     title="Tanggal Sewa Berakhir"
                     onChange={(e) => {
-                      handleChange("tanggal_sewa_berakhir", e.target.value);
+                      handleChange("tanggal_akhir_sewa", e.target.value);
                     }}
                   />
                 </div>
@@ -516,96 +647,92 @@ export default function TkuAddForm({ onClose }) {
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-4">
-                <div className="grid grid-cols-3  items-center">
-                  <Label className="col-span-2">Toko Retail</Label>
+              <div className="grid md:grid-cols-1 grid-cols-1 gap-4 my-4">
+                <div className="flex items-end gap-2">
                   <Checkbox
-                    name="toko_retail"
                     className="mt-2"
                     onCheckedChange={(e) => {
                       setIsRetail(isRetail ? 0 : 1);
                     }}
                   />
+                  <Label className="col-span-2">Toko Retail</Label>
                 </div>
 
-                <div className="grid grid-cols-3  items-center">
-                  <Label className="col-span-2">Kawasan Bebas</Label>
+                <div className="flex items-end gap-2">
                   <Checkbox
-                    name="kawasan_bebas"
                     className="mt-2"
                     onCheckedChange={(e) => {
                       setIsKawasanBebas(isKawasanBebas ? 0 : 1);
                     }}
                   />
+                  <Label className="col-span-2">Kawasan Bebas</Label>
                 </div>
 
-                <div className="grid grid-cols-3  items-center">
-                  <Label className="col-span-2">Kawasan Ekonomi Khusus</Label>
+                <div className="flex items-end gap-2">
                   <Checkbox
-                    name="kawasan_ekonomi_khusus"
                     className="mt-2"
                     onCheckedChange={(e) => {
                       setIsKawasanKhusus(isKawasanKhusus ? 0 : 1);
                     }}
                   />
+                  <Label>Kawasan Ekonomi Khusus</Label>
                 </div>
 
-                <div className="grid grid-cols-3  items-center">
-                  <Label className="col-span-2">Tempat Penimbun Berikat?</Label>
+                <div className="flex items-end gap-2">
                   <Checkbox
-                    name="tempat_penimbun_berikat"
                     className="mt-2"
                     onCheckedChange={(e) => {
                       setIsPenimbun(isPenimbun ? 0 : 1);
                     }}
                   />
+                  <Label>Tempat Penimbun Berikat?</Label>
                 </div>
               </div>
 
               <InputVertical
-                name="nomor_surat_keputusan"
+                name="nomor_surat"
                 placeholder="Nomor Surat Keputusan"
                 className="my-4"
               />
 
               <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2">
                 <InputVertical
-                  name="tanggal_mulai_keputusan"
+                  name="tanggal_awal_keputusan"
                   type="date"
                   title="Decree Number Date Valid From"
                 />
 
                 <InputVertical
-                  name="tanggal_keputusan_berakhir"
+                  name="tanggal_akhir_keputusan"
                   type="date"
                   title="Decree Number Date Valid To"
                 />
+              </div>
 
-                <div className="grid grid-cols-3 items-center">
-                  <Label className="col-span-2">Kantor Virtual</Label>
-                  <Checkbox
-                    name="kantor_virtual"
-                    className="mt-2"
-                    onCheckedChange={(e) => {
-                      setIsVirtual(isVirtual ? 0 : 1);
-                    }}
-                  />
-                </div>
+              <div className="flex gap-2 mb-2 items-end">
+                <Checkbox
+                  name="kantor_virtual"
+                  className="mt-2"
+                  onCheckedChange={(e) => {
+                    setIsVirtual(isVirtual ? 0 : 1);
+                  }}
+                />
+                <Label>Kantor Virtual</Label>
+              </div>
 
-                <div className="grid grid-cols-3 items-center">
-                  <Label className="col-span-2">Alamat Utama KPK</Label>
-                  <Checkbox
-                    name="alamat_utama_kpk"
-                    className="mt-2"
-                    onCheckedChange={(e) => {
-                      setIsUtama(isUtama ? 0 : 1);
-                    }}
-                  />
-                </div>
+              <div className="flex gap-2 mb-2 items-end">
+                <Checkbox
+                  name="alamat_utama_kpk"
+                  className="mt-2"
+                  onCheckedChange={(e) => {
+                    setIsUtama(isUtama ? 0 : 1);
+                  }}
+                />
+                <Label>Alamat Utama KPK</Label>
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" disabled={!valid} pending={isPending}>
+              <Button type="submit" pending={isPending}>
                 Submit
               </Button>
             </DialogFooter>

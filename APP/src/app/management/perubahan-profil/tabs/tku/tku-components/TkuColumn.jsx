@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import OrangTerkaitAction from "@/app/management/perubahan-profil/tabs/orang-terkait/orang-terkait-components/OrangTerkaitAction";
+import TkuAction from "@/app/management/perubahan-profil/tabs/tku/tku-components/TkuAction";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
 import { useClient } from "../../../perubahan-profil-components/PerubahanProfilProvider";
 import { dateShort } from "@/components/custom/DateFormatted";
@@ -40,16 +40,18 @@ export default function useTkuTableConfig() {
       {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => <OrangTerkaitAction row={row} />,
+        cell: ({ row }) => <TkuAction row={row} />,
       },
 
       {
-        accessorKey: "identitas",
+        accessorKey: "identitas_pemilik",
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="NIK/NPWP Orang" />
         ),
         cell: ({ row }) => (
-          <div className=" capitalize">{row.getValue("identitas") ?? ""}</div>
+          <div className=" capitalize">
+            {row.getValue("identitas_pemilik") ?? ""}
+          </div>
         ),
       },
       {

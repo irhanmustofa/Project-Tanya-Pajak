@@ -12,17 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { clientFirst } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilService";
 
-import { orangTerkaitEndpoint } from "./OrangTerkaitService";
+import { tkuEndpoint } from "./TkuService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import {
   useClient,
   useClientDispatch,
 } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
-import OrangTerkaitUpdateForm from "@/app/management/perubahan-profil/tabs/orang-terkait/orang-terkait-pages/OrangTerkaitUpdateForm";
+import TkuUpdateForm from "@/app/management/perubahan-profil/tabs/tku/tku-pages/TkuUpdateForm";
 import LoaderOverlay from "@/components/custom/loader-overlay";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
-export default function OrangTerkaitAction({ row }) {
+export default function TkuAction({ row }) {
   const dispatch = useDialogDispatch();
   const clientDispatch = useClientDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
@@ -37,11 +37,11 @@ export default function OrangTerkaitAction({ row }) {
       type: dialogAction.DIALOG_DELETE,
       payload: {
         isOpen: true,
-        title: "Delete Related Person",
+        title: "Delete TKU",
         message:
           "Are you sure you want to delete this data? This action cannot be undone.",
         status: "warning",
-        url: orangTerkaitEndpoint.delete(id),
+        url: tkuEndpoint.delete(id),
       },
     });
   };
@@ -89,10 +89,7 @@ export default function OrangTerkaitAction({ row }) {
       </DropdownMenu>
 
       {onUpdate && (
-        <OrangTerkaitUpdateForm
-          id={item._id}
-          onClose={() => setOnUpdate(false)}
-        />
+        <TkuUpdateForm id={item._id} onClose={() => setOnUpdate(false)} />
       )}
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
