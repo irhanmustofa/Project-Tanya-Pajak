@@ -50,7 +50,7 @@ export const sidebarData = () => {
   const is_administration = path === "/users" || path === "/client-group";
   const is_efaktur = path === "/efaktur" || path === "/efaktur/transactions";
   const is_ebupot = path === "/ebupot" || path === "/ebupot/transactions";
-  const is_spt = path === "/spt" || path === "/spt/transactions";
+  const is_spt = path === "/konsep-spt" || path === "/spt/transactions";
   const navigate = useNavigate();
   const fullSidebar = [
     {
@@ -58,18 +58,42 @@ export const sidebarData = () => {
       url: "#",
       icon: FolderCogIcon,
       isActive: is_administration,
-      items: [{ title: "Master Users", url: "/users" }],
+      permission: ["users.read"],
+      items: [
+        {
+          title: "Master Users",
+          url: "/users",
+          permission: ["users.read"],
+        },
+      ],
     },
     {
       title: "E-Faktur",
       url: "#",
       icon: FileTextIcon,
       isActive: is_efaktur,
+      permission: ["efaktur.read", "pajak-keluaran.read", "pajak-masukan.read"],
       items: [
-        { title: "Pajak Keluaran", url: "/pajak-keluaran" },
-        { title: "Pajak Masukan", url: "#" },
-        { title: "Retur Pajak Keluaran", url: "#" },
-        { title: "Retur Pajak Masukan", url: "#" },
+        {
+          title: "Pajak Keluaran",
+          url: "/pajak-keluaran",
+          permission: ["pajak-keluaran.read"],
+        },
+        {
+          title: "Pajak Masukan",
+          url: "#",
+          permission: ["pajak-masukan.read"],
+        },
+        {
+          title: "Retur Pajak Keluaran",
+          url: "#",
+          permission: ["retur-keluaran.read"],
+        },
+        {
+          title: "Retur Pajak Masukan",
+          url: "#",
+          permission: ["retur-masukan.read"],
+        },
       ],
     },
     {
@@ -126,16 +150,19 @@ export const sidebarData = () => {
       url: "#",
       icon: FileTextIcon,
       isActive: is_spt,
+      permission: ["konsep-spt.read"],
       items: [
         {
           title: "Surat Pemberitahuan (SPT)",
           icon: WalletIcon,
+          permission: ["konsep-spt.read"],
           subMenus: [
             {
               title: "Konsep SPT",
               onClick: () => {
-                navigate("/spt/konsep-spt");
+                navigate("/konsep-spt");
               },
+              permission: ["konsep-spt.read"],
             },
             {
               title: "SPT Menunggu Pembayaran",

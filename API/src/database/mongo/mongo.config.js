@@ -14,5 +14,6 @@ export const mongoConfig = {
     permission: "permission",
     documents: "documents",
     pajak_keluaran: "pajak_keluaran",
+    konsep_spt: "konsep_spt",
   },
 };

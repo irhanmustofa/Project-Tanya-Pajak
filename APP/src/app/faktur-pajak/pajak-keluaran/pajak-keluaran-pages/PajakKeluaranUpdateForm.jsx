@@ -453,15 +453,6 @@ export default function PajakKeluaranUpdateForm({ onClose, id }) {
   const isIndeterminate =
     selectedItems.length > 0 && selectedItems.length < items.length;
 
-  console.log("Update Form Debug:", {
-    valid,
-    errors,
-    tipeTransaksi,
-    dataLoaded,
-    itemsCount: items.length,
-    selectedCount: selectedItems.length,
-  });
-
   return (
     <div className="relative">
       {dialogState.isOpen && <DialogInfo />}

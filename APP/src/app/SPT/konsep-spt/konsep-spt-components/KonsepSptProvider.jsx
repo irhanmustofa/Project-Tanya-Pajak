@@ -32,7 +32,7 @@ export default function KonsepSptProvider({ children }) {
 
   return (
     <konsepSptContext.Provider
-      value={{ konsepSptState, documentAction: actionReducer }}
+      value={{ konsepSptState, konsepSptAction: actionReducer }}
     >
       <konsepSptDispatchContext.Provider value={konsepSptDispatch}>
         {children}

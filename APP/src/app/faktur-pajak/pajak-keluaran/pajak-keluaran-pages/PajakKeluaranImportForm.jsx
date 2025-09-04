@@ -31,7 +31,6 @@ export default function PajakKeluaranImportForm({ onClose }) {
 
   const handleLoadFile = (e) => {
     const file = e.target.files[0];
-    console.log("Selected file:", file);
     if (!file) return;
     setFile(file);
 
@@ -102,7 +101,6 @@ export default function PajakKeluaranImportForm({ onClose }) {
 
     reader.readAsArrayBuffer(file);
   };
-  console.log("Parsed data:", data);
 
   const handleSubmit = () => {
     startTransition(() => {

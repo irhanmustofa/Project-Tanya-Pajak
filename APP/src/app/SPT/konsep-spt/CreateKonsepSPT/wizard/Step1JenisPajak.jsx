@@ -8,9 +8,9 @@ export default function Step1JenisPajak({ data, onChange, onNext }) {
         {pilihan.map((item) => (
           <button
             key={item}
-            onClick={() => onChange("jenisPajak", item)}
+            onClick={() => onChange("jenis_pajak", item)}
             className={`p-4 border rounded-lg  ${
-              data.jenisPajak === item
+              data.jenis_pajak === item
                 ? "bg-gray-300 border-gray-400 text-black"
                 : ""
             }`}
@@ -22,7 +22,7 @@ export default function Step1JenisPajak({ data, onChange, onNext }) {
       <div className="mt-6 text-right">
         <button
           onClick={onNext}
-          disabled={!data.jenisPajak}
+          disabled={!data.jenis_pajak}
           className="px-6 py-2 rounded-lg disabled:opacity-50 bg-gray-500 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-black"
         >
           Lanjut

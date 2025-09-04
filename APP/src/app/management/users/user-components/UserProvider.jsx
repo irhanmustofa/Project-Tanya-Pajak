@@ -19,8 +19,6 @@ export default function UserProvider({ children }) {
     });
   }, []);
 
-  console.log("UserProvider", userState);
-
   if (userState.loading) {
     return <Loader />;
   }

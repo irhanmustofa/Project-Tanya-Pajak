@@ -45,53 +45,80 @@ export default function useKonsepSptTableConfig() {
         enableSorting: false,
       },
       {
-        accessorKey: "file",
+        accessorKey: "jenis_pajak",
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="File" />
+          <DatatableColumnHeader column={column} title="Jenis Pajak" />
         ),
         cell: ({ row }) => (
-          <div className=" ">
-            <a
-              href={`${base_url + row.getValue("file")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="dark:bg-gray-100 bg-gray-800 hover:bg-gray-200 dark:text-gray-800 text-gray-200 font-semibold py-1 px-2 rounded-md"
-            >
-              View
-            </a>
-          </div>
+          <div className=" ">{row.getValue("jenis_pajak")}</div>
         ),
       },
       {
-        accessorKey: "nama_jenis_dokumen",
+        accessorKey: "jenis_surat_pemberitahuan",
         header: ({ column }) => (
           <DatatableColumnHeader column={column} title="Nama Jenis Dokumen" />
         ),
         cell: ({ row }) => (
           <div className=" capitalize">
-            {row.getValue("nama_jenis_dokumen")}
+            {row.getValue("jenis_surat_pemberitahuan")}
           </div>
         ),
       },
       {
-        accessorKey: "nomor_dokumen",
+        accessorKey: "masa_pajak",
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Nomor Dokumen" />
+          <DatatableColumnHeader column={column} title="Masa Pajak" />
         ),
         cell: ({ row }) => (
-          <div className="lowercase">{row.getValue("nomor_dokumen")}</div>
+          <div className="lowercase">{row.getValue("masa_pajak")}</div>
         ),
       },
       {
-        accessorKey: "tanggal_dokumen",
+        accessorKey: "nop",
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="Tanggal Dokumen" />
+          <DatatableColumnHeader column={column} title="NOP" />
+        ),
+
+        cell: ({ row }) => {
+          return <div className="lowercase">{row.getValue("nop")}</div>;
+        },
+      },
+      {
+        accessorKey: "nama_object_pajak",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Nama Object Pajak" />
+        ),
+
+        cell: ({ row }) => {
+          return (
+            <div className="lowercase">{row.getValue("nama_object_pajak")}</div>
+          );
+        },
+      },
+      {
+        accessorKey: "model_spt",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Model SPT" />
+        ),
+
+        cell: ({ row }) => {
+          return (
+            <div className="Capitalize">
+              {row.getValue("model_spt") === 1 ? "Pembetulan" : "Normal"}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "tanggal_jatuh_tempo",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Tanggal Jatuh Tempo" />
         ),
 
         cell: ({ row }) => {
           return (
             <div className="w-[150px] lowercase">
-              {new Date(row.getValue("tanggal_dokumen")).toLocaleDateString(
+              {new Date(row.getValue("tanggal_jatuh_tempo")).toLocaleDateString(
                 "id-ID",
                 {
                   year: "numeric",
@@ -107,6 +134,22 @@ export default function useKonsepSptTableConfig() {
 
           return value.includes(dateShort(date));
         },
+      },
+      {
+        accessorKey: "status_spt",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Status" />
+        ),
+        cell: ({ row }) => {
+          const status = row.getValue("status_spt");
+          const statusItem = statusType.find((item) => item.code === status);
+          return (
+            <div className="capitalize">
+              {statusItem ? statusItem.name : status}
+            </div>
+          );
+        },
+        filterFn: (row, id, value) => value.includes(row.getValue(id)),
       },
       {
         id: "actions",
@@ -133,12 +176,7 @@ export default function useKonsepSptTableConfig() {
         value: filterColumnTeamValue,
         setValue: setFilterColumnTeamValue,
       },
-      filterColumn: {
-        status: {
-          title: "Status",
-          values: filterColumnStatusValue,
-        },
-      },
+      filterColumn: {},
     };
   }, [filterColumnTeamValue]);
 

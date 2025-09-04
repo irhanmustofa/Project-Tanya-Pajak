@@ -20,7 +20,6 @@ const getUserClient = async (req, res) => {
 
         const combinedUsers = users.map(user => {
             const client = clients.find(c => c._id?.toString() === user.client_id?.toString());
-
             return {
                 _id: user._id,
                 client_id: user.client_id,
@@ -29,6 +28,7 @@ const getUserClient = async (req, res) => {
                 role: user.role,
                 status: user.status,
                 company_name: client?.company_name || null,
+                permission: user.permission || []
             };
         });
 

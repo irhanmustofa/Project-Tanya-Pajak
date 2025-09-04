@@ -19,7 +19,6 @@ export const documentAll = async () => {
         clientid: useLocalStorage.get("clientId"),
       })
       .send();
-    console.log("document All Request:", request);
     return request;
   } catch (error) {
     return {

@@ -1,13 +1,13 @@
 import { useLayouts } from "@/layouts/LayoutContextProvider";
 
 export const usePermissions = () => {
-  const { hasPermission, userPermissions, role } = useLayouts();
-
+  const { hasPermission, role } = useLayouts();
   const checkPermission = (permissionKey) => {
-    if (role === 0) {
-      return true;
+    if (!permissionKey) return false;
+    if (role === 0) return true;
+    if (Array.isArray(permissionKey)) {
+      return permissionKey.some((perm) => hasPermission(perm));
     }
-
     return hasPermission(permissionKey);
   };
 
