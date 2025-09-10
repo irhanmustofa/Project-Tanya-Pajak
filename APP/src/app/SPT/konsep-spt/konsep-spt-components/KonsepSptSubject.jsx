@@ -27,6 +27,7 @@ import { useKonsepSpt } from "./KonsepSptProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useNavigate } from "react-router-dom";
+import KonsepSptAddForm from "../konsep-spt-pages/KonsepSptAddForm";
 
 export default function KonsepSptSubject() {
   const { checkPermission } = usePermissions();
@@ -85,15 +86,15 @@ export default function KonsepSptSubject() {
             Konsep SPT Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {checkPermission("spt.create") && (
+          {checkPermission("konsep-spt.create") && (
             <DropdownMenuItem
-              onClick={() => navigate("/spt/create-konsep-spt")}
+              onClick={() => navigate("/konsep-/create-konsep-konsep-")}
             >
               <LucideFilePlus className="mr-2 h-4 w-4" />
               <span>Buat Konsep SPT</span>
             </DropdownMenuItem>
           )}
-          {checkPermission("spt.create") && (
+          {checkPermission("konsep-spt.create") && (
             <DropdownMenuItem onClick={() => setOpenAdd(true)}>
               <LucideFilePen className="mr-2 h-4 w-4" />
               <span>Add New</span>
@@ -122,6 +123,14 @@ export default function KonsepSptSubject() {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {openAdd && (
+        <KonsepSptAddForm
+          openAdd={openAdd}
+          setOpenAdd={setOpenAdd}
+          title="Add Konsep SPT"
+        />
+      )}
 
       {showExportPdf && (
         <ExportPDF

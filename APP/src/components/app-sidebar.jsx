@@ -20,7 +20,6 @@ import { sidebarData } from "@/layouts/SidebarData";
 import DialogLogout from "@/dialogs/DialogLogout";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { LucideLayoutDashboard } from "lucide-react";
-import logo from "@/public/vite.svg";
 import { CompanySetting } from "./company-setting";
 
 export function AppSidebar({ ...props }) {
@@ -42,7 +41,7 @@ export function AppSidebar({ ...props }) {
           <SidebarHeader>
             <div className="flex items-center p-2">
               <Link to="/dashboard">
-                <img src={logo} alt="logo" className="w-10" />
+                <img src="/vite.svg" alt="logo" className="w-10" />
               </Link>
               <SidebarGroupLabel className="ml-2 text-xl">
                 Tanya Pajak

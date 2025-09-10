@@ -17,6 +17,7 @@ export const LayoutProvider = ({ children }) => {
         setLoading(true);
 
         const clientId = useLocalStorage.get("clientId");
+        const email = useLocalStorage.get("email");
 
         if (!clientId) {
           setError("Client ID not found in localStorage");
@@ -25,10 +26,13 @@ export const LayoutProvider = ({ children }) => {
         }
 
         const response = await userClientAll(clientId);
+
         if (response.success) {
-          setCompany(response.data[0]);
-          setRole(response.data[0].role);
-          setUserPermissions(response.data[0].permission || []);
+          const data = response.data[0];
+
+          setCompany(data);
+          setRole(data.role);
+          setUserPermissions(data.permission || []);
           setError(null);
         } else {
           setError(response.message || "Failed to fetch company");
@@ -44,10 +48,9 @@ export const LayoutProvider = ({ children }) => {
         setLoading(false);
       }
     };
+
     fetchCompany();
   }, []);
-
-  // Permission checker function
   const hasPermission = (permissionKey) => {
     if (!userPermissions || userPermissions.length === 0) {
       return false;
@@ -64,6 +67,8 @@ export const LayoutProvider = ({ children }) => {
         loading,
         error,
         hasPermission,
+        userPermissions,
+        setUserPermissions,
       }}
     >
       {children}

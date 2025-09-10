@@ -83,7 +83,6 @@ export const pajakKeluaranUpdate = async (id, data) => {
 };
 
 export const pajakKeluaranImport = async (data) => {
-  console.log("Importing data:", data);
   try {
     const request = await HttpRequest.method("POST")
       .url(pajakKeluaransEndpoint.import)

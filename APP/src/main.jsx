@@ -19,6 +19,7 @@ import UpdateProfil from "./app/management/perubahan-profil/PerubahanProfil";
 import PajakKeluarans from "./app/faktur-pajak/pajak-keluaran/PajakKeluarans";
 import KonsepSpt from "./app/SPT/konsep-spt/KonsepSpt";
 import CreateKonsepSPT from "./app/SPT/konsep-spt/CreateKonsepSPT/CreateKonsepSPT";
+import CreatePage from "./app/SPT/konsep-spt/CreateKonsepSPT/CreatePage";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -43,11 +44,8 @@ createRoot(document.getElementById("root")).render(
             <Route path="/documents" element={<Documents />} />
             <Route path="/update-profile" element={<UpdateProfil />} />
             <Route path="/pajak-keluaran" element={<PajakKeluarans />} />
-            <Route path="/spt/konsep-spt" element={<KonsepSpt />} />
-            <Route
-              path="/spt/create-konsep-spt"
-              element={<CreateKonsepSPT />}
-            />
+            <Route path="/konsep-spt" element={<KonsepSpt />} />
+            <Route path="/spt/create-konsep-spt" element={<CreatePage />} />
           </Routes>
         </Router>
       </PendingRequestProvider>

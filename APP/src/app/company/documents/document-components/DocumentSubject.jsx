@@ -85,7 +85,7 @@ export default function DocumentSubject() {
             Document Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {checkPermission("document.create") && (
+          {checkPermission(["document.create"]) && (
             <DropdownMenuItem onClick={() => setOpenAdd(true)}>
               <LucideFilePen className="mr-2 h-4 w-4" />
               <span>Add New</span>

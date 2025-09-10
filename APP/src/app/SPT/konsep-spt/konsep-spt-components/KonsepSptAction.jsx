@@ -14,8 +14,11 @@ import { sptAll, konsepSptEndpoint } from "./KonsepSptService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useKonsepSpt, useKonsepSptDispatch } from "./KonsepSptProvider";
 import LoaderOverlay from "@/components/custom/loader-overlay";
+import KonsepSptUpdateForm from "../konsep-spt-pages/KonsepSptUpdateForm";
+import { usePermissions } from "@/hooks/use-permissions";
 
 export default function KonsepSptAction({ row }) {
+  const { checkPermission } = usePermissions();
   const dispatch = useDialogDispatch();
   const konsepSptDispatch = useKonsepSptDispatch();
   const { dialogState, dialogAction, DialogDelete } = useDialog();
@@ -72,18 +75,29 @@ export default function KonsepSptAction({ row }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOnUpdate(true)}>
-            <LucideEdit className="mr-2 h-4 w-4" />
-            <Label>Update</Label>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDelete(item._id)}>
-            <LucideTrash className="mr-2 h-4 w-4" />
-            <Label>Delete</Label>
-          </DropdownMenuItem>
+          {checkPermission("konsep-spt.update") && (
+            <DropdownMenuItem onClick={() => setOnUpdate(true)}>
+              <LucideEdit className="mr-2 h-4 w-4" />
+              <Label>Update</Label>
+            </DropdownMenuItem>
+          )}
+          {checkPermission("konsep-spt.delete") && (
+            <DropdownMenuItem onClick={() => handleDelete(item._id)}>
+              <LucideTrash className="mr-2 h-4 w-4" />
+              <Label>Delete</Label>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
       {dialogState.isOpen && <DialogDelete onClose={handleOnCloseDelete} />}
+      {onUpdate && (
+        <KonsepSptUpdateForm
+          isOpen={onUpdate}
+          onClose={() => setOnUpdate(false)}
+          id={item._id}
+        />
+      )}
     </div>
   );
 }

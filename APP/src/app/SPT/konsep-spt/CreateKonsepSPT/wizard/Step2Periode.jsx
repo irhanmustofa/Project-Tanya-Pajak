@@ -7,8 +7,8 @@ export default function Step2Periode({ data, onChange, onNext, onBack }) {
       </h2>
       <input
         type="month"
-        value={data.periode}
-        onChange={(e) => onChange("periode", e.target.value)}
+        value={data.masa_pajak}
+        onChange={(e) => onChange("masa_pajak", e.target.value)}
         className="border p-2 rounded-lg w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200"
       />
       <div className="mt-6 flex justify-between">
@@ -20,7 +20,7 @@ export default function Step2Periode({ data, onChange, onNext, onBack }) {
         </button>
         <button
           onClick={onNext}
-          disabled={!data.periode}
+          disabled={!data.masa_pajak}
           className="px-6 py-2 rounded-lg disabled:opacity-50 bg-gray-500 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-black"
         >
           Lanjut

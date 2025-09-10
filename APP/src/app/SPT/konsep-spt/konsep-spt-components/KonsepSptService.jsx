@@ -3,30 +3,29 @@ import { base_url } from "@/api/http-endpoints";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export const konsepSptEndpoint = {
-  all: `${base_url}/spt`,
-  create: `${base_url}/spt`,
-  deleteSome: `${base_url}/spt/delete`,
-  get: (id) => `${base_url}/spt/${id}`,
-  update: (id) => `${base_url}/spt/${id}`,
-  delete: (id) => `${base_url}/spt/${id}`,
+  all: `${base_url}/konsep-spt`,
+  create: `${base_url}/konsep-spt`,
+  deleteSome: `${base_url}/konsep-spt/delete`,
+  get: (id) => `${base_url}/konsep-spt/${id}`,
+  update: (id) => `${base_url}/konsep-spt/${id}`,
+  delete: (id) => `${base_url}/konsep-spt/${id}`,
 };
 
 export const sptAll = async () => {
-  // buatkan data dummy untuk testing
-  const dataAll = {
-    success: true,
-    data: [
-      {
-        id: 1,
-        nama_jenis_dokumen: "SPT",
-        nomor_dokumen: "123456",
-        nik_npwp: "1234567890",
-        paspor: "1234567890",
-      },
-    ],
-  };
-
-  return dataAll;
+  try {
+    const request = await HttpRequest.method("GET")
+      .url(konsepSptEndpoint.all)
+      .headers({
+        clientid: useLocalStorage.get("clientId"),
+      })
+      .send();
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
 };
 
 export const sptFirst = async (id) => {
