@@ -11,6 +11,7 @@ export const usersEndpoint = {
   delete: (id) => `${base_url}/users/${id}`,
   email: (email) => `${base_url}/users/email/${email}`,
   import: `${base_url}/user/import`,
+  permission: `${base_url}/permission`,
 };
 
 export const userAll = async () => {
@@ -21,7 +22,6 @@ export const userAll = async () => {
         clientid: useLocalStorage.get("clientId"),
       })
       .send();
-    console.log("User All Request:", request);
     return request;
   } catch (error) {
     return {
@@ -101,6 +101,21 @@ export const userImport = async (data) => {
     const request = await HttpRequest.method("POST")
       .url(usersEndpoint.import)
       .body(data)
+      .send();
+
+    return request;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const permissionAll = async () => {
+  try {
+    const request = await HttpRequest.method("GET")
+      .url(usersEndpoint.permission)
       .send();
 
     return request;

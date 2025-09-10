@@ -27,6 +27,7 @@ import {
 } from "@/app/management/users/user-components/UserProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { userLevel } from "@/helpers/variables";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function UserAddForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -35,7 +36,16 @@ export default function UserAddForm({ onClose }) {
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const userDispatch = useUserDispatch();
-  const { userAction } = useUser();
+  const { userAction, permissions } = useUser();
+
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
+
+  const handlePermissionChange = (key, checked) => {
+    setSelectedPermissions((prev) =>
+      checked ? [...prev, key] : prev.filter((perm) => perm !== key)
+    );
+  };
 
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
@@ -54,7 +64,7 @@ export default function UserAddForm({ onClose }) {
       formData.append("email", event.target.email.value);
       formData.append("password", event.target.password.value);
       formData.append("role", event.target.role.value);
-
+      formData.append("permission", JSON.stringify(selectedPermissions));
       await userCreate(formData).then((response) => {
         if (response.success) {
           dialogDispatch({
@@ -130,6 +140,7 @@ export default function UserAddForm({ onClose }) {
                   name="role"
                   onValueChange={(value) => {
                     handleChange("role", Number(value));
+                    setSelectedRole(Number(value));
                   }}
                 >
                   <SelectTrigger className="col-span-3 rounded-md border">
@@ -141,6 +152,47 @@ export default function UserAddForm({ onClose }) {
                   </SelectContent>
                 </Select>
               </div>
+
+              {selectedRole === 1 && (
+                <div className="grid gap-4 p-4 border rounded-md bg-muted/50">
+                  <Label className="text-sm font-medium">Permissions</Label>
+                  <div className="grid grid-cols-1 gap-3 max-h-48 overflow-y-auto">
+                    {permissions && permissions.length > 0 ? (
+                      permissions.map((permission) => (
+                        <div
+                          key={permission.key}
+                          className="flex items-center space-x-2"
+                        >
+                          <Checkbox
+                            id={`permission-${permission.key}`}
+                            checked={selectedPermissions.includes(
+                              permission.key
+                            )}
+                            onCheckedChange={(checked) =>
+                              handlePermissionChange(permission.key, checked)
+                            }
+                          />
+                          <Label
+                            htmlFor={`permission-${permission.key}`}
+                            className="text-sm font-normal cursor-pointer"
+                          >
+                            {permission.description}
+                          </Label>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-sm text-muted-foreground">
+                        No permissions available
+                      </div>
+                    )}
+                  </div>
+                  {selectedPermissions.length > 0 && (
+                    <div className="text-xs text-muted-foreground">
+                      Selected: {selectedPermissions.length} permission(s)
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <DialogFooter>
               <Button type="submit" disabled={!valid} pending={isPending}>

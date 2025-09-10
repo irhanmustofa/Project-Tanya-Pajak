@@ -17,7 +17,7 @@ export default class PajakKeluaran {
         };
 
         const rules = {
-            tipe_transaksi: "required|number",
+            tipe_transaksi: "required",
             nomor_faktur: "required|string",
             kode_transaksi: "required|string",
             tanggal_faktur: "required|date",

@@ -12,6 +12,7 @@ import {
   LucideWalletCards,
   LucideWalletMinimal,
   LucideDollarSign,
+  LucideCircleCheck,
 } from "lucide-react";
 
 export const serviceDivision = [
@@ -42,6 +43,11 @@ export const serviceUnit = [
 export const statusType = [
   { code: 0, name: "Draft", icon: LucideCircleMinus },
   { code: 1, name: "Accept", icon: LucideCircleCheckBig },
+];
+
+export const statusActive = [
+  { code: 1, name: "Active", icon: LucideCircleCheckBig },
+  { code: 0, name: "Inactive", icon: LucideCircleMinus },
 ];
 
 export const quotationStatus = [

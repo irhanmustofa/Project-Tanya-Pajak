@@ -48,7 +48,7 @@ export const sidebarData = () => {
 
   const path = window.location.pathname;
   const is_administration = path === "/users" || path === "/client-group";
-  const is_efaktur = path === "/efaktur" || path === "/efaktur/transactions";
+  const is_efaktur = path === "/pajak-keluaran";
   const is_ebupot = path === "/ebupot" || path === "/ebupot/transactions";
   const is_spt = path === "/konsep-spt" || path === "/spt/transactions";
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ export const sidebarData = () => {
         },
         {
           title: "Pajak Masukan",
-          url: "#",
+          url: "/pajak-masukan",
           permission: ["pajak-masukan.read"],
         },
         {

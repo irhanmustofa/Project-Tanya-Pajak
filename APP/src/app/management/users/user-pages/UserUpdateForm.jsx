@@ -21,7 +21,7 @@ import { userUpdate, userAll } from "../user-components/UserService";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { InputHorizontal } from "@/components/custom/input-custom";
 import { useValidateInput } from "@/hooks/use-validate-input";
-import { userLevel, statusType } from "@/helpers/variables";
+import { userLevel, statusActive } from "@/helpers/variables";
 
 export default function UserUpdateForm({ id, onClose }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -39,7 +39,7 @@ export default function UserUpdateForm({ id, onClose }) {
       name: "required|string|min:3",
       email: "required|email",
       password: "string|min:6",
-      role: "required|number",
+      role: "required",
       status: "required|number",
     },
   });
@@ -94,7 +94,7 @@ export default function UserUpdateForm({ id, onClose }) {
       formData.append("name", input.name);
       formData.append("email", input.email);
       formData.append("status", input.status);
-      formData.append("role", input.role);
+      formData.append("role", Number(input.role));
 
       if (input.password && input.password.trim() !== "") {
         formData.append("password", input.password);
@@ -212,11 +212,12 @@ export default function UserUpdateForm({ id, onClose }) {
                 <Label>Role</Label>
                 <Select
                   name="role"
-                  value={String(input.role)}
+                  value={Number(input.role)}
                   onValueChange={handleRoleChange}
                 >
                   <SelectTrigger className="col-span-3 rounded-md border">
                     <SelectValue placeholder="Select Role">
+                      {console.log(Number(input.role))}
                       {userLevel.find(
                         (level) => level.code === Number(input.role)
                       )?.name || "Select Role"}
@@ -224,7 +225,7 @@ export default function UserUpdateForm({ id, onClose }) {
                   </SelectTrigger>
                   <SelectContent>
                     {userLevel.map((level) => (
-                      <SelectItem key={level.code} value={String(level.code)}>
+                      <SelectItem key={level.code} value={level.code}>
                         {level.name}
                       </SelectItem>
                     ))}
@@ -290,13 +291,13 @@ export default function UserUpdateForm({ id, onClose }) {
                 >
                   <SelectTrigger className="col-span-3 rounded-md border">
                     <SelectValue placeholder="Select Status">
-                      {statusType.find(
+                      {statusActive.find(
                         (status) => status.code === Number(input.status)
                       )?.name || "Select Status"}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {statusType.map((status) => (
+                    {statusActive.map((status) => (
                       <SelectItem key={status.code} value={String(status.code)}>
                         {status.name}
                       </SelectItem>

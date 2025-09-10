@@ -135,7 +135,6 @@ const bulkImport = async (req, res) => {
     }
 
     const results = { success: [], skipped: [], errors: [] };
-
     for (let i = 0; i < importData.length; i++) {
         let record = importData[i];
 
@@ -186,8 +185,8 @@ const bulkImport = async (req, res) => {
             });
         }
     }
+    console.log("Bulk import results:", results);
 
-    // 🔔 Respon berbeda tergantung hasil
     if (results.errors.length > 0 || results.skipped.length > 0) {
         return Response(res, badRequest({
             message: `Bulk import completed with some issues. 
@@ -205,11 +204,6 @@ const bulkImport = async (req, res) => {
         data: results.success
     }));
 };
-
-
-
-
-
 
 const pajakKeluaranController = {
     getAll,

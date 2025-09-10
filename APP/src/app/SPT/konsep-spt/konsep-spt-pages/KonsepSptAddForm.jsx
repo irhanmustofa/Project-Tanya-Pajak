@@ -30,11 +30,10 @@ import {
 export default function KonsepSptAddForm({ onClose }) {
   const [isOpen, setIsOpen] = useState(true);
   const [isPending, startTrasition] = useTransition();
-  const [input, setInput] = useState({});
   const dialogDispatch = useDialogDispatch();
   const { dialogAction, dialogState, DialogInfo } = useDialog();
   const konsepSptDispatch = useKonsepSptDispatch();
-  const { documentAction } = useKonsepSpt();
+  const { konsepSptAction } = useKonsepSpt();
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
       jenis_pajak: "required",
@@ -48,11 +47,11 @@ export default function KonsepSptAddForm({ onClose }) {
 
     startTrasition(async () => {
       const formData = new FormData();
-      formData.append("jenis_pajak", input.jenis_pajak);
-      formData.append("masa_pajak", input.masa_pajak);
+      formData.append("jenis_pajak", event.target.jenis_pajak.value);
+      formData.append("masa_pajak", event.target.masa_pajak.value);
       formData.append(
         "jenis_surat_pemberitahuan",
-        input.jenis_surat_pemberitahuan
+        event.target.jenis_surat_pemberitahuan.value
       );
 
       await sptCreate(formData).then((response) => {
@@ -70,7 +69,7 @@ export default function KonsepSptAddForm({ onClose }) {
           sptAll().then((res) => {
             if (res.success) {
               konsepSptDispatch({
-                type: documentAction.SUCCESS,
+                type: konsepSptAction.SUCCESS,
                 payload: res.data,
               });
             }
@@ -82,7 +81,7 @@ export default function KonsepSptAddForm({ onClose }) {
             type: dialogAction.DIALOG_INFO,
             payload: {
               show: true,
-              title: "Add Document Failed",
+              title: "Add Konsep SPT Failed",
               message: response.message,
               status: "error",
             },
@@ -102,76 +101,23 @@ export default function KonsepSptAddForm({ onClose }) {
       {dialogState.isOpen && <DialogInfo />}
       <Dialog open={isOpen} onOpenChange={handleOnClose}>
         <DialogContent className="sm:max-w-[800px]">
-          <DialogTitle>Input New Document</DialogTitle>
+          <DialogTitle>Tambah Konsep SPT Baru</DialogTitle>
           <DialogDescription>
-            Add a new Document to the system.
+            Silahkan isi form di bawah ini untuk menambahkan konsep SPT baru.
           </DialogDescription>
           <form onSubmit={inputHandler}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 max-h-[60vh] overflow-y-auto">
-              <div className="col-span-1 md:col-span-2 flex lg:flex-row flex-col items-center border border-gray-300 rounded-md p-3">
+            <div className="grid grid-cols-1 gap-4 p-4 max-h-[60vh] overflow-y-auto">
+              <div className="border border-gray-300 rounded-md p-3 w-full">
                 <div className="space-y-4 mx-3">
-                  <InputHorizontal
-                    title="Nama Jenis Dokumen"
-                    name="nama_jenis_dokumen"
-                    type="text"
-                    value={input.nama_jenis_dokumen}
-                    onChange={(e) => {
-                      handleChange("nama_jenis_dokumen", e.target.value);
-                      setInput({
-                        ...input,
-                        nama_jenis_dokumen: e.target.value,
-                      });
-                    }}
-                    error={errors.nama_jenis_dokumen}
-                  />
-                  <InputHorizontal
-                    title="Nomor Dokumen"
-                    name="nomor_dokumen"
-                    type="text"
-                    value={input.nomor_dokumen}
-                    onChange={(e) => {
-                      handleChange("nomor_dokumen", e.target.value);
-                      setInput({ ...input, nomor_dokumen: e.target.value });
-                    }}
-                    error={errors.nomor_dokumen}
-                  />
-                </div>
-                <div className="space-y-4 mx-3">
-                  <InputHorizontal
-                    title="Pengirim Dokumen"
-                    name="pengirim_dokumen"
-                    type="text"
-                    value={input.pengirim_dokumen}
-                    onChange={(e) => {
-                      setInput({ ...input, pengirim_dokumen: e.target.value });
-                      handleChange("pengirim_dokumen", e.target.value);
-                    }}
-                    error={errors.pengirim_dokumen}
-                  />
-                  <InputHorizontal
-                    title="Penerima Dokumen"
-                    name="penerima"
-                    type="text"
-                    value={input.penerima}
-                    onChange={(e) => {
-                      setInput({ ...input, penerima: e.target.value });
-                      handleChange("penerima", e.target.value);
-                    }}
-                    error={errors.penerima}
-                  />
-                </div>
-              </div>
-              <div className="col-span-1 md:col-span-2 flex lg:flex-row flex-col items-center border border-gray-300 rounded-md p-3">
-                <div className="space-y-4 mx-3">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label>Jenis Pajak</Label>
+                  <div className="grid grid-cols-4 items-center gap-4 w-full">
+                    <Label className="col-span-1">Jenis Pajak</Label>
                     <Select
                       name="jenis_pajak"
-                      onValueChange={(value) => {
-                        handleChange("jenis_pajak", value);
-                      }}
+                      onValueChange={(value) =>
+                        handleChange("jenis_pajak", value)
+                      }
                     >
-                      <SelectTrigger className="col-span-3 rounded-md border">
+                      <SelectTrigger className="col-span-3 rounded-md border w-full">
                         <SelectValue placeholder="Select Jenis Pajak" />
                       </SelectTrigger>
                       <SelectContent>
@@ -179,6 +125,32 @@ export default function KonsepSptAddForm({ onClose }) {
                         <SelectItem value="PPh Badan">PPh Badan</SelectItem>
                         <SelectItem value="PPh Final">PPh Final</SelectItem>
                         <SelectItem value="PPh 21/26">PPh 21/26</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <InputHorizontal
+                    title="Masa Pajak (Bulan)"
+                    type="month"
+                    name="masa_pajak"
+                    onChange={(e) => handleChange("masa_pajak", e.target.value)}
+                    error={errors.masa_pajak}
+                  />
+                  <div className="grid grid-cols-4 items-center gap-4 w-full">
+                    <Label className="col-span-1">Pilih Jenis SPT</Label>
+                    <Select
+                      name="jenis_surat_pemberitahuan"
+                      onValueChange={(value) =>
+                        handleChange("jenis_surat_pemberitahuan", value)
+                      }
+                    >
+                      <SelectTrigger className="col-span-3 rounded-md border w-full">
+                        <SelectValue placeholder="Select Jenis SPT" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Normal">SPT Normal</SelectItem>
+                        <SelectItem value="Pembetulan">
+                          SPT Pembetulan
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

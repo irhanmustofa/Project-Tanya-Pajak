@@ -1,6 +1,6 @@
 import { useReducer, useContext, useEffect, useState } from "react";
 import { userContext, userDispatchContext } from "./UserContext";
-import { userAll } from "./UserService";
+import { permissionAll, userAll } from "./UserService";
 import { useAppReducer } from "@/hooks/use-app-reducer";
 import Loader from "@/components/custom/loader";
 import Error from "@/components/custom/error";
@@ -8,6 +8,7 @@ import Error from "@/components/custom/error";
 export default function UserProvider({ children }) {
   const { initialState, actionReducer, appReducer } = useAppReducer();
   const [userState, userDispatch] = useReducer(appReducer, initialState);
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     userAll().then((res) => {
@@ -16,6 +17,12 @@ export default function UserProvider({ children }) {
       }
 
       userDispatch({ type: actionReducer.FAILURE, payload: res.message });
+    });
+
+    permissionAll().then((res) => {
+      if (res.success) {
+        setPermissions(res.data);
+      }
     });
   }, []);
 
@@ -28,7 +35,9 @@ export default function UserProvider({ children }) {
   }
 
   return (
-    <userContext.Provider value={{ userState, userAction: actionReducer }}>
+    <userContext.Provider
+      value={{ userState, userAction: actionReducer, permissions }}
+    >
       <userDispatchContext.Provider value={userDispatch}>
         {children}
       </userDispatchContext.Provider>
