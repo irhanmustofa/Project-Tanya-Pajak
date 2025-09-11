@@ -86,12 +86,12 @@ export const sidebarData = () => {
         },
         {
           title: "Retur Pajak Keluaran",
-          url: "#",
+          url: "/retur-pajak-keluaran",
           permission: ["retur-keluaran.read"],
         },
         {
           title: "Retur Pajak Masukan",
-          url: "#",
+          url: "/retur-pajak-masukan",
           permission: ["retur-masukan.read"],
         },
       ],

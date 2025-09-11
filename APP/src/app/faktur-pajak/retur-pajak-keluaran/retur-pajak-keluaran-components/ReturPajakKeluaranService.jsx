@@ -2,9 +2,9 @@ import HttpRequest from "@/api/http-request";
 import { base_url } from "@/api/http-endpoints";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
-export const pajakMasukanEndpoint = {};
+export const returPajakKeluaranEndpoint = {};
 
-export const pajakMasukanAll = async () => {
+export const returPajakKeluaranAll = async () => {
   return {
     success: true,
     data: Array.from({ length: 10 }).map((_, index) => ({
@@ -21,7 +21,7 @@ export const pajakMasukanAll = async () => {
       tahun: "2025",
       masa_pajak_pengkreditan: ((index % 12) + 1).toString().padStart(2, "0"),
       tahun_pajak_pengkreditan: "2025",
-      status_faktur: index % 4, // 0 = pending, 1 = approved, 2 = rejected, 3 = processing
+      status_faktur: index % 4,
       dpp_nilai_lain: 1000000 + index * 50000,
       ppn: 100000 + index * 5000,
       ppnbm: 0,

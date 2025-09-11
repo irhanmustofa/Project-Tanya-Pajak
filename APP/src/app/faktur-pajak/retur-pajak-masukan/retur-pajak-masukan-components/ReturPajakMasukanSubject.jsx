@@ -13,7 +13,6 @@ import {
 
 import {
   LucideFileUp,
-  LucideFilePen,
   LucideFileText,
   LucideFileSpreadsheet,
   LucideSettings,
@@ -25,11 +24,11 @@ import {
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useExcelWriter } from "@/hooks/use-excel-writer";
-import { usePajakMasukan } from "./PajakMasukanProvider";
+import { useReturPajakMasukan } from "./ReturPajakMasukanProvider";
 import { useExportPDF } from "@/hooks/use-export-pdf";
 import { usePermissions } from "@/hooks/use-permissions";
 
-export default function PajakMasukanSubject() {
+export default function ReturPajakMasukanSubject() {
   const { checkPermission } = usePermissions();
   const { ExportPDF } = useExportPDF();
   const [isExportExcel, setIsExportExcel] = useState(false);
@@ -40,18 +39,18 @@ export default function PajakMasukanSubject() {
     body: [],
   });
 
-  const { pajakMasukanState } = usePajakMasukan();
+  const { returPajakMasukanState } = useReturPajakMasukan();
 
   useEffect(() => {
     if (isExportExcel || isExportPdf) {
-      if (pajakMasukanState.data.length > 0) {
+      if (returPajakMasukanState.data.length > 0) {
         const exportExcel = [];
         setDataExport({ head: [], body: [] });
 
         dataExport.head = ["Name", "Email"];
         exportExcel.push(dataExport.head);
 
-        pajakMasukanState.data.map((item) =>
+        returPajakMasukanState.data.map((item) =>
           dataExport.body.push([item.name, item.email])
         );
 
@@ -59,7 +58,7 @@ export default function PajakMasukanSubject() {
 
         if (isExportExcel) {
           setIsExportExcel(false);
-          useExcelWriter(exportExcel, "Data Pajak Keluaran.xlsx");
+          useExcelWriter(exportExcel, "Data Pajak Masukan.xlsx");
         } else if (isExportPdf) {
           setDataExport(dataExport);
           setIsExportPdf(false);
@@ -72,18 +71,18 @@ export default function PajakMasukanSubject() {
   return (
     <div className="flex justify-between mb-4">
       <h2 className="text-2xl font-semibold">
-        Pajak Masukan <b>Management </b>
+        Retur Pajak Masukan <b>Management </b>
       </h2>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">
             <LucideSettings className="h-4 w-4" />
-            <span className="">Pajak Masukan Manager</span>
+            <span className="">Retur Pajak Masukan Manager</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="font-light w-36">
-            Pajak Masukan Manager
+            retur Pajak Masukan Manager
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setOpenAdd(true)}>
@@ -101,7 +100,7 @@ export default function PajakMasukanSubject() {
             <span>Kembali ke Status Approved</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          {pajakMasukanState.data.length > 0 && (
+          {returPajakMasukanState.data.length > 0 && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <LucideFileUp className="mr-2 h-4 w-4" />
@@ -125,7 +124,7 @@ export default function PajakMasukanSubject() {
       </DropdownMenu>
       {showExportPdf && (
         <ExportPDF
-          title="Data Pajak Keluaran"
+          title="Data Pajak Masukan"
           columns={dataExport.head}
           data={dataExport.body}
           onClose={() => setShowExportPdf(false)}

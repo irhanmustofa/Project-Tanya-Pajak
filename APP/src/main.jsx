@@ -21,6 +21,8 @@ import KonsepSpt from "./app/SPT/konsep-spt/KonsepSpt";
 import CreateKonsepSPT from "./app/SPT/konsep-spt/CreateKonsepSPT/CreateKonsepSPT";
 import CreatePage from "./app/SPT/konsep-spt/CreateKonsepSPT/CreatePage";
 import PajakMasukans from "./app/faktur-pajak/pajak-masukan/PajakMasukans";
+import ReturPajakKeluarans from "./app/faktur-pajak/retur-pajak-keluaran/ReturPajakKeluarans";
+import ReturPajakMasukans from "./app/faktur-pajak/retur-pajak-masukan/ReturPajakmasukans";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -48,6 +50,14 @@ createRoot(document.getElementById("root")).render(
             <Route path="/konsep-spt" element={<KonsepSpt />} />
             <Route path="/spt/create-konsep-spt" element={<CreatePage />} />
             <Route path="/pajak-masukan" element={<PajakMasukans />} />
+            <Route
+              path="/retur-pajak-keluaran"
+              element={<ReturPajakKeluarans />}
+            />
+            <Route
+              path="/retur-pajak-masukan"
+              element={<ReturPajakMasukans />}
+            />
           </Routes>
         </Router>
       </PendingRequestProvider>

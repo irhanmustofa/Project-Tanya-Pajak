@@ -2,12 +2,12 @@ import { useState, useMemo } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DatatableColumnHeader } from "@/components/datatables/datatable-components/datatable-column-header";
 import { statusType } from "@/helpers/variables";
-import PajakMasukanAction from "./PajakMasukanAction";
+import ReturPajakKeluaranAction from "./ReturPajakKeluaranAction";
 
-export default function usePajakMasukanTableConfig() {
+export default function useReturPajakKeluaranTableConfig() {
   const [filterColumnTeamValue, setFilterColumnTeamValue] = useState([]);
 
-  const pajakMasukanColumn = useMemo(
+  const returPajakKeluaranColumn = useMemo(
     () => [
       {
         id: "select",
@@ -243,7 +243,7 @@ export default function usePajakMasukanTableConfig() {
       {
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => <PajakMasukanAction row={row} />,
+        cell: ({ row }) => <ReturPajakKeluaranAction row={row} />,
       },
     ],
     []
@@ -274,5 +274,5 @@ export default function usePajakMasukanTableConfig() {
     };
   }, [filterColumnTeamValue]);
 
-  return { pajakMasukanColumn, filterFields };
+  return { returPajakKeluaranColumn, filterFields };
 }
