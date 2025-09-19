@@ -2,7 +2,7 @@ import { badRequest, error } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import { masterClientSchema } from "../../master-client/master-client.schema.js";
 
-export default async function deleteKontakClient(req) {
+export default async function deleteKontak(req) {
   const id = req.params.id;
   const clientId = req.headers.clientid;
   const wrapper = new MongodbWrapper(masterClientSchema());

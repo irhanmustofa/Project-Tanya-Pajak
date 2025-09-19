@@ -19,11 +19,11 @@ export default async function deleteTku(req) {
     }
 
     const dataId = singleData.map((item) => item._id);
-    if (dataId.indexOf(id) < 0) {
+    const arrayNum = dataId.indexOf(id);
+    if (arrayNum < 0) {
       return badRequest({ message: "Delete TKU failed! Data not found" });
     }
 
-    const arrayNum = dataId.indexOf(id);
     singleData.splice(arrayNum, 1);
     return await wrapper.update(clientId, {
       tempat_kegiatan_usaha: singleData,

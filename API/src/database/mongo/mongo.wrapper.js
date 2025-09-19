@@ -13,11 +13,12 @@ export default class MongodbWrapper {
     return await MongodbORM.collection(this.model).orderBy(field, order).get();
   }
 
-  async getByFilter(filter) {
+  async getByFilter(filter, column = []) {
     const orm = MongodbORM.collection(this.model);
     Object.entries(filter).forEach(([key, value]) => {
       orm.where(key, "=", value);
     });
+    orm.select(column);
     return await orm.get();
   }
 

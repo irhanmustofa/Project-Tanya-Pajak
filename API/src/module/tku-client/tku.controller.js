@@ -21,11 +21,11 @@ const deleteSome = async (req, res) => {
   return Response(res, result);
 };
 
-const MasterClientController = {
+const TkuController = {
   create,
   update,
   remove,
   deleteSome,
 };
 
-export default MasterClientController;
+export default TkuController;

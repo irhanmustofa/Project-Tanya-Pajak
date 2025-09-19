@@ -25,6 +25,7 @@ import {
   periodePembukuan,
 } from "@/helpers/variables";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function ProfilTabs() {
   const id = useLocalStorage.get("clientId") ?? "";
@@ -118,18 +119,23 @@ export default function ProfilTabs() {
     <>
       {dialogState.isOpen && <DialogInfo />}
       <form onSubmit={inputHandler}>
-        <div className="px-6 grid xl:grid-cols-4 grid-cols-3">
-          <div className="xl:col-span-2 col-span-full">
+        <div className="grid md:grid-cols-1 grid-cols-3 2xl:ml-40   2xl:mr-40  ">
+          <div className="md:col-span-2 col-span-full">
             <div className="grid grid-cols-1 gap-4 mb-4">
-              <InputVertical
-                name="merek"
-                title="Merek"
-                value={String(input.merek)}
-                onChange={(e) => {
-                  handleChange("merek", e.target.value);
-                  setInput({ ...input, merek: e.target.value });
-                }}
-              />
+              <div className="grid xl:grid-cols-4 grid-cols-1 gap-2 items-center content-between justify-center w-full">
+                <h1 className="text-[14px] font-medium col-span-3">Merek</h1>
+                <div className="col-span-1">
+                  <Input
+                    name="merek"
+                    title="Merek"
+                    value={String(input.merek)}
+                    onChange={(e) => {
+                      handleChange("merek", e.target.value);
+                      setInput({ ...input, merek: e.target.value });
+                    }}
+                  />
+                </div>
+              </div>
 
               <div>
                 <Label>Jumlah Karyawan</Label>

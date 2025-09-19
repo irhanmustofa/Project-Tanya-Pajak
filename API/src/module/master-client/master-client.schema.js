@@ -133,6 +133,7 @@ export const masterClientSchema = () => {
       deskripsi_tku: { type: String },
       klu_tku: { type: String },
       deskripsi_klu_tku: { type: String },
+      pic_tku: { type: String },
       alamat: { type: String },
       rt: { type: String },
       rw: { type: String },
@@ -161,6 +162,40 @@ export const masterClientSchema = () => {
       tanggal_akhir_keputusan: { type: Date },
       kantor_virtual: { type: Number },
       alamat_utama_pkp: { type: Number },
+    },
+
+    data_bank: {
+      _id: { type: String, required: true, unique: true },
+      nama_bank: { type: String },
+      nomor_rekening: { type: String },
+      jenis_rekening: { type: String },
+      nama_pemilik_rekening: { type: String },
+      tanggal_mulai: { type: Date },
+      tanggal_berakhir: { type: Date },
+    },
+
+    nomor_eksternal: {
+      _id: { type: String, required: true, unique: true },
+      tipe: { type: String },
+      nomor_identifikasi: { type: String },
+      tanggal_mulai: { type: Date },
+      tanggal_berakhir: { type: Date },
+    },
+
+    data_keluarga: {
+      _id: { type: String, required: true, unique: true },
+      nik: { type: String },
+      jenis_kelamin: { type: String },
+      tempat_lahir: { type: String },
+      tanggal_lahir: { type: Date },
+      nomor_kk: { type: String },
+      nama: { type: String },
+      status_keluarga: { type: String },
+      pekerjaan: { type: String },
+      status_unit_pajak: { type: String },
+      status_ptkp: { type: String },
+      tanggal_mulai: { type: Date },
+      tanggal_berakhir: { type: Date },
     },
   };
 

@@ -18,8 +18,7 @@ export default async function deleteSomeTku(req) {
     if (singleData.length < 1) {
       return badRequest({ message: "Delete TKU failed! Data not found" });
     }
-    console.log("singleData:", singleData);
-    return badRequest({ message: "banyak kali kuahmu!!!" });
+
     const dataId = singleData.map((item) => item._id);
     for (let i = 0; i < ids.length; i++) {
       if (dataId.indexOf(ids[i]) < 0) {

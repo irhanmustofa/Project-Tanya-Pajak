@@ -6,7 +6,7 @@ export default async function deleteAlamat(req) {
   var newData = [];
   let alamatUnique = "";
   const id = req.params.id;
-  const clientId = req.params.clientId;
+  const clientId = req.headers.clientid;
   const wrapper = new MongodbWrapper(masterClientSchema());
   const getData = await wrapper.getByFilter({ _id: clientId });
   if (!getData.success) {

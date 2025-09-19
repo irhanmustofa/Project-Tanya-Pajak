@@ -36,6 +36,7 @@ export default async function updateTku(req) {
       klu_tku: req.body.klu_tku || singleData[arrayNum].klu_tku,
       deskripsi_klu_tku:
         req.body.deskripsi_klu_tku || singleData[arrayNum].deskripsi_klu_tku,
+      pic_tku: req.body.pic_tku || singleData[arrayNum].pic_tku,
       alamat: req.body.alamat || singleData[arrayNum].alamat,
       rt: req.body.rt || singleData[arrayNum].rt,
       rw: req.body.rw || singleData[arrayNum].rw,
@@ -84,18 +85,18 @@ export default async function updateTku(req) {
       alamat_utama_pkp:
         req.body.alamat_utama_pkp || singleData[arrayNum].alamat_utama_pkp,
     };
-    const dataValidation = new TKU(input);
+    const validation = new TKU(input);
 
-    if (dataValidation.errors) {
-      return badRequest({ message: dataValidation.errors.join(", ") });
+    if (validation.errors) {
+      return badRequest({ message: validation.errors.join(", ") });
     }
 
-    singleData[arrayNum] = dataValidation;
+    singleData[arrayNum] = validation;
     return await wrapper.update(clientId, {
       tempat_kegiatan_usaha: singleData,
     });
   } catch (err) {
-    console.log("Create TKU client error:", err);
+    console.log("Update TKU client error:", err);
     return error({
       message:
         "An error occurred while the system was running, Refresh your page!",

@@ -44,13 +44,58 @@ export default function useTkuTableConfig() {
       },
 
       {
-        accessorKey: "identitas_pemilik",
+        accessorKey: "nitku",
         header: ({ column }) => (
-          <DatatableColumnHeader column={column} title="NIK/NPWP Orang" />
+          <DatatableColumnHeader column={column} title="NITKU" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("nitku") ?? ""}</div>
+        ),
+      },
+      {
+        accessorKey: "jenis_tku",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Jenis TKU" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("jenis_tku") ?? ""}</div>
+        ),
+      },
+      {
+        accessorKey: "nama_tku",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Nama TKU" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("nama_tku") ?? ""}</div>
+        ),
+      },
+      {
+        accessorKey: "klu_tku",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="KLU TKU" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("klu_tku") ?? ""}</div>
+        ),
+      },
+      {
+        accessorKey: "alamat",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Alamat" />
+        ),
+        cell: ({ row }) => (
+          <div className=" capitalize">{row.getValue("alamat") ?? ""}</div>
+        ),
+      },
+      {
+        accessorKey: "lokasi_disewa",
+        header: ({ column }) => (
+          <DatatableColumnHeader column={column} title="Lokasi Disewa" />
         ),
         cell: ({ row }) => (
           <div className=" capitalize">
-            {row.getValue("identitas_pemilik") ?? ""}
+            {row.getValue("lokasi_disewa") == 1 ? "YA" : "TIDAK"}
           </div>
         ),
       },

@@ -20,13 +20,13 @@ export default async function createTku(req) {
         : getData.data[0].tempat_kegiatan_usaha;
 
     const input = { ...req.body, _id: generateId() };
-    const dataValidation = new TKU(input);
+    const validation = new TKU(input);
 
-    if (dataValidation.errors) {
-      return badRequest({ message: dataValidation.errors.join(", ") });
+    if (validation.errors) {
+      return badRequest({ message: validation.errors.join(", ") });
     }
 
-    singleData.push(dataValidation);
+    singleData.push(validation);
     return await wrapper.update(clientId, {
       tempat_kegiatan_usaha: singleData,
     });

@@ -1,12 +1,12 @@
 import express from "express";
-import kontakClientController from "./kontak-client.controller.js";
+import kontakController from "./kontak-client.controller.js";
 
-const kontakClientRouter = express.Router();
-kontakClientRouter.post("/delete", kontakClientController.deleteSome);
-kontakClientRouter.route("/").post(kontakClientController.create);
-kontakClientRouter
+const kontakRouter = express.Router();
+kontakRouter.post("/delete", kontakController.deleteSome);
+kontakRouter.route("/").post(kontakController.create);
+kontakRouter
   .route("/:id")
-  .put(kontakClientController.update)
-  .delete(kontakClientController.remove);
+  .put(kontakController.update)
+  .delete(kontakController.remove);
 
-export default kontakClientRouter;
+export default kontakRouter;

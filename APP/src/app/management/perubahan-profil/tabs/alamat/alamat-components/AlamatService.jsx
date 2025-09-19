@@ -7,7 +7,7 @@ export const alamatClientEndpoint = {
   deleteSome: `${base_url}/alamat-client/delete`,
   get: (id) => `${base_url}/alamat-client/${id}`,
   update: (id) => `${base_url}/alamat-client/${id}`,
-  delete: (id, clientId) => `${base_url}/alamat-client/${id}/${clientId}`,
+  delete: (id) => `${base_url}/alamat-client/${id}`,
 };
 
 export const alamatClientFirst = async (id) => {

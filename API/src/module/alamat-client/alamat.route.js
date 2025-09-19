@@ -1,12 +1,13 @@
 import express from "express";
-import ClientController from "./alamat.controller.js";
+import alamatController from "./alamat.controller.js";
 
 const alamatRouter = express.Router();
 
-alamatRouter.post("/delete", ClientController.deleteSome);
-alamatRouter.route("/").post(ClientController.create);
-alamatRouter.route("/:id").put(ClientController.update);
-
-alamatRouter.route("/:id/:clientId").delete(ClientController.remove);
+alamatRouter.post("/delete", alamatController.deleteSome);
+alamatRouter.route("/").post(alamatController.create);
+alamatRouter
+  .route("/:id")
+  .put(alamatController.update)
+  .delete(alamatController.remove);
 
 export default alamatRouter;

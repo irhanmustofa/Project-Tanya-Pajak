@@ -1,4 +1,7 @@
-import { InputVertical } from "@/components/custom/input-custom";
+import {
+  InputHorizontal,
+  InputVertical,
+} from "@/components/custom/input-custom";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -31,6 +34,7 @@ import {
 } from "../../perubahan-profil-components/PerubahanProfilService";
 import { dateStrip } from "@/components/custom/DateFormatted";
 import { countryList } from "../../data/country";
+import { Input } from "@/components/ui/input";
 
 export default function ProfilTabs() {
   const id = useLocalStorage.get("clientId") ?? "";
@@ -209,357 +213,507 @@ export default function ProfilTabs() {
     setInput({});
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  window.onscroll = function () {
+    scrollFunction();
+  };
+
+  function scrollFunction() {
+    if (
+      document.body.scrollTop > 20 ||
+      document.documentElement.scrollTop > 20
+    ) {
+      document.getElementById("btnScroll").style.display = "block";
+    } else {
+      document.getElementById("btnScroll").style.display = "none";
+    }
+  }
+
   return (
     <>
       {dialogState.isOpen && <DialogInfo />}
       <form onSubmit={inputHandler}>
-        <div className="px-6 grid xl:grid-cols-4 grid-cols-3">
-          <div className="grid xl:grid-cols-3 grid-cols-1 md:grid-cols-2 col-span-3  gap-6 mb-10">
-            <InputVertical
-              title={"Nomor NPWP"}
-              name="company_npwp"
-              onChange={(e) => {
-                handleChange("company_npwp", e.target.value);
-                setInput({ ...input, company_npwp: e.target.value });
-              }}
-              value={String(input.company_npwp)}
-            />
-
-            <div className="mb-2">
-              <h1 className="mb-2">Jenis Wajib Pajak</h1>
-              <Select
-                name="jenis_wp"
-                value={String(input.jenis_wp)}
-                onValueChange={(e) => {
-                  handleChange("jenis_wp", e);
-                  setInput({ ...input, jenis_wp: e });
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih" />
-                </SelectTrigger>
-                <SelectContent>
-                  {jenisWpOption.map((item, key) => {
-                    return (
-                      <SelectItem key={key} value={String(item.kode)}>
-                        {item.jenis_wp}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+        <div className="grid md:grid-cols-4 grid-cols-3 2xl:ml-40   2xl:mr-40  relative">
+          <h1 className="col-span-full text-[15px] text-slate-300/50 italic mb-4">
+            Company
+          </h1>
+          <div className="grid md:grid-cols-1 grid-cols-1  col-span-full justify-center  gap-4 mb-20 ">
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">NPWP</h1>
+              <div className="col-span-3">
+                <Input
+                  name="company_npwp"
+                  onChange={(e) => {
+                    handleChange("company_npwp", e.target.value);
+                    setInput({ ...input, company_npwp: e.target.value });
+                  }}
+                  value={String(input.company_npwp)}
+                />
+              </div>
             </div>
 
-            <InputVertical
-              title={"Nama Perusahaan"}
-              name="company_name"
-              onChange={(e) => {
-                handleChange("company_name", e.target.value);
-                setInput({ ...input, company_name: e.target.value });
-              }}
-              value={String(input.company_name)}
-            />
-
-            <div className="mb-2">
-              <h1 className="mb-2">Kategori Wajib Pajak</h1>
-              <Select
-                name="bentuk_badan_hukum"
-                value={String(input.bentuk_badan_hukum)}
-                onValueChange={(e) => {
-                  handleChange("bentuk_badan_hukum", e);
-                  setInput({ ...input, bentuk_badan_hukum: e });
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih" />
-                </SelectTrigger>
-                <SelectContent>
-                  {badanHukumOption.map((item, key) => {
-                    return (
-                      <SelectItem key={key} value={String(item.kode)}>
-                        {item.badan_hukum}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">
+                Nama Perusahaan
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="company_name"
+                  onChange={(e) => {
+                    handleChange("company_name", e.target.value);
+                    setInput({ ...input, company_name: e.target.value });
+                  }}
+                  value={String(input.company_name)}
+                />
+              </div>
             </div>
 
-            <div className="mb-2">
-              <h1 className="mb-2">Negara Asal</h1>
-              <Select
-                name="negara_asal"
-                value={String(input.negara_asal)}
-                onValueChange={(e) => {
-                  handleChange("negara_asal", e);
-                  setInput({ ...input, negara_asal: e });
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih" />
-                </SelectTrigger>
-                <SelectContent>
-                  {countryList.map((item, key) => {
-                    return (
-                      <SelectItem key={key} value={String(item.kode)}>
-                        {item.name}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">
+                Kegiatan Utama
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  title="Kegiatan Utama"
+                  name="kegiatan_utama"
+                  onChange={(e) => {
+                    handleChange("kegiatan_utama", e.target.value);
+                    setInput({ ...input, kegiatan_utama: e.target.value });
+                  }}
+                  value={String(input.kegiatan_utama)}
+                />
+              </div>
             </div>
 
-            <InputVertical
-              title="Kegiatan Utama"
-              name="kegiatan_utama"
-              onChange={(e) => {
-                handleChange("kegiatan_utama", e.target.value);
-                setInput({ ...input, kegiatan_utama: e.target.value });
-              }}
-              value={String(input.kegiatan_utama)}
-            />
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">
+                Jenis Wajib Pajak
+              </h1>
+              <div className="col-span-3">
+                <Select
+                  className=""
+                  name="jenis_wp"
+                  value={String(input.jenis_wp)}
+                  onValueChange={(e) => {
+                    handleChange("jenis_wp", e);
+                    setInput({ ...input, jenis_wp: e });
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {jenisWpOption.map((item, key) => {
+                      return (
+                        <SelectItem key={key} value={String(item.kode)}>
+                          {item.jenis_wp}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">
+                Kategori Wajib Pajak
+              </h1>
+              <div className="col-span-3">
+                <Select
+                  name="bentuk_badan_hukum"
+                  value={String(input.bentuk_badan_hukum)}
+                  onValueChange={(e) => {
+                    handleChange("bentuk_badan_hukum", e);
+                    setInput({ ...input, bentuk_badan_hukum: e });
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {badanHukumOption.map((item, key) => {
+                      return (
+                        <SelectItem key={key} value={String(item.kode)}>
+                          {item.badan_hukum}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">
+                Negara Asal
+              </h1>
+              <div className="col-span-3">
+                <Select
+                  name="negara_asal"
+                  value={String(input.negara_asal)}
+                  onValueChange={(e) => {
+                    handleChange("negara_asal", e);
+                    setInput({ ...input, negara_asal: e });
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countryList.map((item, key) => {
+                      return (
+                        <SelectItem key={key} value={String(item.kode)}>
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">
+                Jenis Perusahaan
+              </h1>
+              <div className="col-span-3">
+                <Select
+                  name="jenis_perusahaan"
+                  value={String(input.jenis_perusahaan)}
+                  onValueChange={(e) => {
+                    handleChange("jenis_perusahaan", e);
+                    setInput({ ...input, jenis_perusahaan: e });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Pilih" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {jenisPerusahaan.map((item, key) => {
+                      return (
+                        <SelectItem key={key} value={item.kode}>
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">
+                Kewarganegaraan
+              </h1>
+              <div className="col-span-3">
+                <Select
+                  name="kewarganegaraan"
+                  value={String(input.kewarganegaraan)}
+                  onValueChange={(e) => {
+                    handleChange("kewarganegaraan", e);
+                    setInput({ ...input, kewarganegaraan: e });
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {kewarganegaraanOption.map((item, key) => {
+                      return (
+                        <SelectItem key={key} value={String(item.kode)}>
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-none text-[14px] font-medium">Bahasa</h1>
+              <div className="col-span-3">
+                <Select
+                  name="bahasa"
+                  value={input.bahasa ? String(input.bahasa) : ""}
+                  onValueChange={(e) => {
+                    handleChange("bahasa", e);
+                    setInput({ ...input, bahasa: e });
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {bahasaOption.map((item, key) => {
+                      return (
+                        <SelectItem key={key} value={String(item.kode)}>
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 col-span-2 mb-2">
-            <InputVertical
-              name="nomor_keputusan_pengesahan"
-              value={String(input.nomor_keputusan_pengesahan)}
-              title="Nomor Keputusan Pengesahan"
-              onChange={(e) => {
-                handleChange("nomor_keputusan_pengesahan", e.target.value);
-                setInput({
-                  ...input,
-                  nomor_keputusan_pengesahan: e.target.value,
-                });
-              }}
-              className="mb-4"
-            />
+          <h1 className="col-span-full text-[15px] text-slate-300/50 italic mb-4">
+            Nomor Keputusan
+          </h1>
+          <div className="col-span-full grid grid-cols-1 gap-4  mb-16">
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Nomor Keputusan Pengesahan
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="nomor_keputusan_pengesahan"
+                  value={String(input.nomor_keputusan_pengesahan)}
+                  onChange={(e) => {
+                    handleChange("nomor_keputusan_pengesahan", e.target.value);
+                    setInput({
+                      ...input,
+                      nomor_keputusan_pengesahan: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
 
-            <InputVertical
-              name="tanggal_keputusan_pengesahan"
-              value={dateStrip(input.tanggal_keputusan_pengesahan)}
-              title="Tanggal Keputusan Pengesahan"
-              type="date"
-              onChange={(e) => {
-                handleChange("tanggal_keputusan_pengesahan", e.target.value);
-                setInput({
-                  ...input,
-                  tanggal_keputusan_pengesahan: e.target.value,
-                });
-              }}
-              className="mb-4"
-            />
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Tanggal Keputusan Pengesahan
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="tanggal_keputusan_pengesahan"
+                  value={dateStrip(input.tanggal_keputusan_pengesahan)}
+                  type="date"
+                  onChange={(e) => {
+                    handleChange(
+                      "tanggal_keputusan_pengesahan",
+                      e.target.value
+                    );
+                    setInput({
+                      ...input,
+                      tanggal_keputusan_pengesahan: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
 
-            <InputVertical
-              name="nomor_keputusan_pengesahan_perubahan"
-              value={String(input.nomor_keputusan_pengesahan_perubahan)}
-              title="Nomor Keputusan Pengesahan Perubahan"
-              onChange={(e) => {
-                handleChange(
-                  "nomor_keputusan_pengesahan_perubahan",
-                  e.target.value
-                );
-                setInput({
-                  ...input,
-                  nomor_keputusan_pengesahan_perubahan: e.target.value,
-                });
-              }}
-              className="mb-4"
-            />
+            <div className="grid  md:grid-cols-4 grid-cols-1 gap-2  content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Nomor Keputusan Pengesahan Perubahan
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="nomor_keputusan_pengesahan_perubahan"
+                  value={String(input.nomor_keputusan_pengesahan_perubahan)}
+                  title="Nomor Keputusan Pengesahan Perubahan"
+                  onChange={(e) => {
+                    handleChange(
+                      "nomor_keputusan_pengesahan_perubahan",
+                      e.target.value
+                    );
+                    setInput({
+                      ...input,
+                      nomor_keputusan_pengesahan_perubahan: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
 
-            <InputVertical
-              name="tanggal_keputusan_pengesahan_perubahan"
-              value={dateStrip(input.tanggal_keputusan_pengesahan_perubahan)}
-              title="Tanggal Keputusan Pengesahan Perubahan"
-              type="date"
-              onChange={(e) => {
-                handleChange(
-                  "tanggal_keputusan_pengesahan_perubahan",
-                  e.target.value
-                );
-                setInput({
-                  ...input,
-                  tanggal_keputusan_pengesahan_perubahan: e.target.value,
-                });
-              }}
-              className="mb-4"
-            />
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Tanggal Keputusan Pengesahan Perubahan
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="tanggal_keputusan_pengesahan_perubahan"
+                  value={dateStrip(
+                    input.tanggal_keputusan_pengesahan_perubahan
+                  )}
+                  type="date"
+                  onChange={(e) => {
+                    handleChange(
+                      "tanggal_keputusan_pengesahan_perubahan",
+                      e.target.value
+                    );
+                    setInput({
+                      ...input,
+                      tanggal_keputusan_pengesahan_perubahan: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="grid xl:grid-cols-3 grid-cols-1 md:grid-cols-2 col-span-3 gap-6 my-8">
-            <InputVertical
-              name="nomor_akta_pendirian"
-              value={String(input.nomor_akta_pendirian)}
-              title="Nomor Akta Pendirian"
-              onChange={(e) => {
-                handleChange("nomor_akta_pendirian", e.target.value);
-                setInput({
-                  ...input,
-                  nomor_akta_pendirian: e.target.value,
-                });
-              }}
-            />
-
-            <InputVertical
-              name="tempat_pendirian"
-              value={String(input.tempat_pendirian)}
-              title="Tempat Pendirian"
-              onChange={(e) => {
-                handleChange("tempat_pendirian", e.target.value);
-                setInput({
-                  ...input,
-                  tempat_pendirian: e.target.value,
-                });
-              }}
-            />
-
-            <InputVertical
-              name="tanggal_pendirian"
-              value={dateStrip(input.tanggal_pendirian)}
-              title="Tanggal Pendirian"
-              type="date"
-              onChange={(e) => {
-                handleChange("tanggal_pendirian", e.target.value);
-                setInput({
-                  ...input,
-                  tanggal_pendirian: e.target.value,
-                });
-              }}
-            />
-
-            <InputVertical
-              name="nik_notaris"
-              value={String(input.nik_notaris)}
-              title="NIK Notaris"
-              onChange={(e) => {
-                handleChange("nik_notaris", e.target.value);
-                setInput({
-                  ...input,
-                  nik_notaris: e.target.value,
-                });
-              }}
-            />
-
-            <InputVertical
-              name="nama_notaris"
-              value={String(input.nama_notaris)}
-              title="Nama Notaris"
-              onChange={(e) => {
-                handleChange("nama_notaris", e.target.value);
-                setInput({
-                  ...input,
-                  nama_notaris: e.target.value,
-                });
-              }}
-            />
-
-            <div className="mb-2">
-              <h1 className="mb-2">Jenis Perusahaan</h1>
-              <Select
-                name="jenis_perusahaan"
-                value={String(input.jenis_perusahaan)}
-                onValueChange={(e) => {
-                  handleChange("jenis_perusahaan", e);
-                  setInput({ ...input, jenis_perusahaan: e });
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih" />
-                </SelectTrigger>
-                <SelectContent>
-                  {jenisPerusahaan.map((item, key) => {
-                    return (
-                      <SelectItem key={key} value={item.kode}>
-                        {item.name}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+          <h1 className="col-span-full text-[15px] text-slate-300/50 italic mb-4">
+            Akta Pendirian
+          </h1>
+          <div className="grid grid-cols-1 col-span-full gap-4 mb-16">
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Nomor Akta Pendirian
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="nomor_akta_pendirian"
+                  value={String(input.nomor_akta_pendirian)}
+                  onChange={(e) => {
+                    handleChange("nomor_akta_pendirian", e.target.value);
+                    setInput({
+                      ...input,
+                      nomor_akta_pendirian: e.target.value,
+                    });
+                  }}
+                />
+              </div>
             </div>
 
-            <InputVertical
-              name="modal_dasar"
-              value={String(input.modal_dasar)}
-              title="Modal Dasar"
-              type="number"
-              onChange={(e) => {
-                handleChange("modal_dasar", e.target.value);
-                setInput({ ...input, modal_dasar: e.target.value });
-              }}
-            />
-
-            <InputVertical
-              name="modal_ditempatkan"
-              value={String(input.modal_ditempatkan)}
-              title="Modal Ditempatkan"
-              type="number"
-              onChange={(e) => {
-                handleChange("modal_ditempatkan", e.target.value);
-                setInput({ ...input, modal_ditempatkan: e.target.value });
-              }}
-            />
-
-            <InputVertical
-              name="modal_disetor"
-              value={String(input.modal_disetor)}
-              title="Modal Disetor"
-              type="number"
-              onChange={(e) => {
-                handleChange("modal_disetor", e.target.value);
-                setInput({ ...input, modal_disetor: e.target.value });
-              }}
-            />
-
-            <div className="mb-2">
-              <h1 className="mb-2">Kewarganegaraan</h1>
-              <Select
-                name="kewarganegaraan"
-                value={String(input.kewarganegaraan)}
-                onValueChange={(e) => {
-                  handleChange("kewarganegaraan", e);
-                  setInput({ ...input, kewarganegaraan: e });
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih" />
-                </SelectTrigger>
-                <SelectContent>
-                  {kewarganegaraanOption.map((item, key) => {
-                    return (
-                      <SelectItem key={key} value={String(item.kode)}>
-                        {item.name}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Tempat Pendirian
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="tempat_pendirian"
+                  value={String(input.tempat_pendirian)}
+                  onChange={(e) => {
+                    handleChange("tempat_pendirian", e.target.value);
+                    setInput({
+                      ...input,
+                      tempat_pendirian: e.target.value,
+                    });
+                  }}
+                />
+              </div>
             </div>
 
-            <div className="mb-2">
-              <h1 className="mb-2">Bahasa</h1>
-              <Select
-                name="bahasa"
-                value={input.bahasa ? String(input.bahasa) : ""}
-                onValueChange={(e) => {
-                  handleChange("bahasa", e);
-                  setInput({ ...input, bahasa: e });
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih" />
-                </SelectTrigger>
-                <SelectContent>
-                  {bahasaOption.map((item, key) => {
-                    return (
-                      <SelectItem key={key} value={String(item.kode)}>
-                        {item.name}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Tanggal Pendirian
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="tanggal_pendirian"
+                  value={dateStrip(input.tanggal_pendirian)}
+                  type="date"
+                  onChange={(e) => {
+                    handleChange("tanggal_pendirian", e.target.value);
+                    setInput({
+                      ...input,
+                      tanggal_pendirian: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                NIK Notaris
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="nik_notaris"
+                  value={String(input.nik_notaris)}
+                  onChange={(e) => {
+                    handleChange("nik_notaris", e.target.value);
+                    setInput({
+                      ...input,
+                      nik_notaris: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Nama Notaris
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="nama_notaris"
+                  value={String(input.nama_notaris)}
+                  onChange={(e) => {
+                    handleChange("nama_notaris", e.target.value);
+                    setInput({
+                      ...input,
+                      nama_notaris: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <h1 className="col-span-full text-[15px] text-slate-300/50 italic mb-4">
+            Modal
+          </h1>
+          <div className="grid grid-cols-1 col-span-full gap-4 mb-12">
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Modal Dasar
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="modal_dasar"
+                  value={String(input.modal_dasar)}
+                  type="number"
+                  onChange={(e) => {
+                    handleChange("modal_dasar", e.target.value);
+                    setInput({ ...input, modal_dasar: e.target.value });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Modal Ditempatkan
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="modal_ditempatkan"
+                  value={String(input.modal_ditempatkan)}
+                  type="number"
+                  onChange={(e) => {
+                    handleChange("modal_ditempatkan", e.target.value);
+                    setInput({ ...input, modal_ditempatkan: e.target.value });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2 content-between items-center">
+              <h1 className="leading-sm text-[14px] font-medium">
+                Modal Disetor
+              </h1>
+              <div className="col-span-3">
+                <Input
+                  name="modal_disetor"
+                  value={String(input.modal_disetor)}
+                  type="number"
+                  onChange={(e) => {
+                    handleChange("modal_disetor", e.target.value);
+                    setInput({ ...input, modal_disetor: e.target.value });
+                  }}
+                />
+              </div>
             </div>
           </div>
 
@@ -727,11 +881,24 @@ export default function ProfilTabs() {
               </div>
             </div>
           )}
-        </div>
-        <div className="float-end">
-          <Button pending={isPending} className="px-10 rounded-full">
-            Submit
-          </Button>
+
+          <div className=" col-span-full">
+            <Button
+              pending={isPending}
+              className="px-10 rounded-full float-end"
+            >
+              Submit
+            </Button>
+          </div>
+          <div id="btnScroll" className="hidden fixed right-0 bottom-0 ">
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="py-2 px-4 border rounded-lg m-2 dark:text-white"
+            >
+              ^ <br /> Top
+            </button>
+          </div>
         </div>
       </form>
     </>

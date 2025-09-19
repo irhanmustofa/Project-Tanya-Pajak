@@ -11,12 +11,15 @@ import registerRouter from "./module/register/register.route.js";
 import userClientRouter from "./module/user-client/user.client.route.js";
 import permissionRouter from "./module/permission/permission.route.js";
 import alamatRouter from "./module/alamat-client/alamat.route.js";
-import dataEkonomiRouter from "./module/ekonomi-client/ekonomi-client.route.js";
-import kontakClientRouter from "./module/kontak-client/kontak-client.route.js";
+import ekonomiRouter from "./module/ekonomi-client/ekonomi-client.route.js";
+import kontakRouter from "./module/kontak-client/kontak-client.route.js";
 import documentRouter from "./module/document/document.route.js";
 import pajakKeluaranRouter from "./module/faktur-pajak/pajak-keluaran/pajak-keluaran.route.js";
 import orangTerkaitRouter from "./module/orang-terkait-client/orang-terkait-client.route.js";
 import tkuRouter from "./module/tku-client/tku.route.js";
+import bankRouter from "./module/bank-client/bank-client.route.js";
+import nomorEksternalRouter from "./module/nomor-eksternal-client/nomor-eksternal-client.route.js";
+import keluargaRouter from "./module/keluarga-client/keluarga-client.route.js";
 
 const noValidate = ["/auth", "/register", "/permission"];
 
@@ -46,10 +49,13 @@ router.use("/user-client", userClientRouter);
 // DATA MASTER
 router.use("/client", clientRouter);
 router.use("/alamat-client", alamatRouter);
-router.use("/ekonomi-client", dataEkonomiRouter);
-router.use("/kontak-client", kontakClientRouter);
+router.use("/ekonomi-client", ekonomiRouter);
+router.use("/kontak-client", kontakRouter);
 router.use("/orang-terkait-client", orangTerkaitRouter);
 router.use("/tku-client", tkuRouter);
+router.use("/bank-client", bankRouter);
+router.use("/nomor-eksternal-client", nomorEksternalRouter);
+router.use("/keluarga-client", keluargaRouter);
 router.use("/users", userRouter);
 
 // Profile

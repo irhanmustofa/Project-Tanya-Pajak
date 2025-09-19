@@ -6,6 +6,7 @@ import { dataTku } from "@/app/management/perubahan-profil/data/tkuDataList";
 export default function TkuTable() {
   const { tkuColumn, filterFields } = useTkuTableConfig();
   const data = dataTku();
+
   return (
     <>
       <OrangTerkaitSubject />

@@ -20,11 +20,11 @@ const deleteSome = async (req, res) => {
   return Response(res, await deleteSomeOrangTerkait(req));
 };
 
-const MasterClientController = {
+const orangTerkaitController = {
   create,
   update,
   remove,
   deleteSome,
 };
 
-export default MasterClientController;
+export default orangTerkaitController;

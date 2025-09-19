@@ -42,10 +42,14 @@ import {
 } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { provinceList } from "../../../data/province";
 import { kppOption } from "@/helpers/variables";
 import { jenisNitku, pengawasOption } from "../../../data/alamatDataList";
 import { InputVertical } from "@/components/custom/input-custom";
+import provinceReq, {
+  districtReq,
+  regencyReq,
+  villageReq,
+} from "../../../data/wilayah";
 
 export default function TkuAddForm({ onClose }) {
   const { clientAction } = useClient();
@@ -56,8 +60,14 @@ export default function TkuAddForm({ onClose }) {
 
   const clientId = useLocalStorage.get("clientId") ?? "";
   const [isOpen, setIsOpen] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [provinceOpen, setProvinceOpen] = useState(false);
+  const [province, setProvince] = useState("");
+  const [districtOpen, setDistrictOpen] = useState(false);
+  const [district, setDistrict] = useState("");
+  const [subDistrictOpen, setSubDistrictOpen] = useState(false);
+  const [subDistrict, setSubDistrict] = useState("");
+  const [villageOpen, setVillageOpen] = useState(false);
+  const [village, setVillage] = useState("");
   const [kodeArea, setKodeArea] = useState("");
   const [isDiSewa, setIsDiSewa] = useState(0);
   const [isRetail, setIsRetail] = useState(0);
@@ -66,11 +76,20 @@ export default function TkuAddForm({ onClose }) {
   const [isPenimbun, setIsPenimbun] = useState(0);
   const [isVirtual, setIsVirtual] = useState(0);
   const [isUtama, setIsUtama] = useState(0);
+  const [isDetailAlamat, setIsDetailAlamat] = useState(0);
+  const [provinceState, setProvinceState] = useState([]);
+  const [districtState, setDistrictState] = useState([]);
+  const [subDistrictState, setSubDistrictState] = useState([]);
+  const [villageState, setVillageState] = useState([]);
+  const [isNSK, setIsNSK] = useState(0);
 
   const { valid, handleChange, errors } = useValidateInput({
     schema: {
       nitku: "required",
       jenis_tku: "required",
+      nama_tku: "required",
+      klu_tku: "required",
+      pic_tku: "required",
       alamat: "required",
       rt: "required",
       rw: "required",
@@ -89,7 +108,7 @@ export default function TkuAddForm({ onClose }) {
     startTrasition(async () => {
       const formData = new FormData();
       formData.append("nitku", event.target.nitku.value);
-      formData.append("jenis_tku", value);
+      formData.append("jenis_tku", event.target.jenis_tku.value);
       formData.append("nama_tku", event.target.nama_tku.value);
       formData.append("deskripsi_tku", event.target.deskripsi_tku.value);
       formData.append("klu_tku", event.target.klu_tku.value);
@@ -97,6 +116,7 @@ export default function TkuAddForm({ onClose }) {
         "deskripsi_klu_tku",
         event.target.deskripsi_klu_tku.value
       );
+      formData.append("pic_tku", event.target.pic_tku.value);
       formData.append("alamat", event.target.alamat.value);
       formData.append("rt", event.target.rt.value);
       formData.append("rw", event.target.rw.value);
@@ -191,17 +211,50 @@ export default function TkuAddForm({ onClose }) {
     onClose();
   };
 
+  useEffect(() => {
+    provinceReq(setProvinceState);
+
+    if (province) {
+      regencyReq(setDistrictState, province);
+    }
+
+    if (district) {
+      districtReq(setSubDistrictState, district);
+    }
+
+    if (subDistrict) {
+      villageReq(setVillageState, subDistrict);
+    }
+  }, [isDetailAlamat, province, district, subDistrict]);
+
+  useEffect(() => {
+    setDistrict("");
+    setSubDistrict("");
+    setVillage("");
+    setKodeArea("");
+  }, [province]);
+
   return (
     <div className="relative">
       {dialogState.isOpen && <DialogInfo />}
       <Dialog open={isOpen} onOpenChange={handleOnClose}>
-        <DialogContent className="sm:max-w-[700px] max-h-[100vh] overflow-auto ">
+        <DialogContent className="sm:max-w-[900px] max-h-[100vh] overflow-auto">
           <DialogTitle>Input New TKU</DialogTitle>
           <DialogDescription>Add a new TKU to the system.</DialogDescription>
           <form onSubmit={inputHandler}>
             <div className="grid grid-cols-1 my-4  items-end overflow-auto justify-center p-1">
-              <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mb-2">
-                <InputVertical name="nitku" title="NITKU" />
+              <h1 className="text-slate-300/50 italic font-medium m-2 text-[13px]">
+                TKU Information
+              </h1>
+              <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mb-16 rounded-lg border p-4">
+                <InputVertical
+                  name="nitku"
+                  title="NITKU"
+                  error={errors.nitku}
+                  onChange={(e) => {
+                    handleChange("nitku", e.target.value);
+                  }}
+                />
 
                 <div className="grid  grid-cols-1 md:col-span-1 col-span-2 content-between h-16">
                   <h1 className="leading-none text-sm font-medium">
@@ -209,66 +262,26 @@ export default function TkuAddForm({ onClose }) {
                     <span className="text-[13px] text-red-500">*</span>
                   </h1>
 
-                  <Popover
-                    open={open}
-                    onOpenChange={setOpen}
+                  <Select
                     name="jenis_tku"
-                    onChange={(e) => {
+                    value={"" || undefined}
+                    onValueChange={(e) => {
                       handleChange("jenis_tku", e);
-                      setValue(e);
                     }}
                   >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-full justify-between"
-                      >
-                        {value
-                          ? jenisNitku.find((item) => item.kode === value)?.name
-                          : "Pilih..."}
-                        <ChevronsUpDown className="opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[300px] h-[200px] p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder="Search framework..."
-                          className="h-9"
-                        />
-                        <CommandList>
-                          <CommandEmpty>No framework found.</CommandEmpty>
-                          <CommandGroup>
-                            {jenisNitku.map((item, key) => (
-                              <CommandItem
-                                key={key}
-                                value={item.name}
-                                onSelect={(myVal) => {
-                                  setValue(myVal === value ? "" : item.kode);
-                                  setOpen(false);
-                                  handleChange(
-                                    "jenis_tku",
-                                    myVal === value ? "" : item.kode
-                                  );
-                                }}
-                              >
-                                {item.name}
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    value === item.kode
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih.." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {jenisNitku.map((item, key) => {
+                        return (
+                          <SelectItem key={key} value={String(item.kode)}>
+                            {item.name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
                   {errors.jenis_tku}
                 </div>
 
@@ -314,29 +327,27 @@ export default function TkuAddForm({ onClose }) {
                   {errors.deskripsi_klu_tku}
                 </div>
 
-                <div className="grid  grid-cols-1 md:col-span-1 col-span-2 content-between h-16">
+                <div className="grid  grid-cols-1 md:col-span-2 col-span-2 content-between h-16">
                   <h1 className="leading-none text-sm font-medium">
                     PIC TKU <span className="text-[13px] text-red-500">*</span>
                   </h1>
                   <Input
-                    name="pic"
+                    name="pic_tku"
                     onChange={(e) => {
-                      handleChange("pic", e.target.value);
+                      handleChange("pic_tku", e.target.value);
                     }}
                   />
-                  {errors.pic}
+                  {errors.pic_tku}
                 </div>
+              </div>
 
-                <div>
-                  <h1 className="font-medium mb-2">
-                    Jenis Alamat{" "}
-                    <span className="text-[13px] text-red-500">*</span>
-                  </h1>
-                  <Select
-                    name="jenis_alamat"
-                    disabled={true}
-                    value={"" || undefined}
-                  >
+              <h1 className="text-slate-300/50 italic font-medium m-2 text-[13px]">
+                Address Information
+              </h1>
+              <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-16 rounded-lg border p-4">
+                <div className="col-span-1">
+                  <h1 className="font-medium mb-2">Jenis Alamat</h1>
+                  <Select name="jenis_alamat" disabled={true} value={"tku-01"}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Pilih" />
                     </SelectTrigger>
@@ -347,52 +358,90 @@ export default function TkuAddForm({ onClose }) {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
 
-              <div className="grid md:grid-cols-6 grid-cols-1 gap-4 my-4">
-                <Textarea
-                  placeholder="Detail Alamat"
-                  name="alamat"
-                  className={"md:col-span-5 col-span-full"}
-                  onChange={(e) => {
-                    handleChange("alamat", e.target.value);
-                  }}
-                />
-
-                <div className="col-span-1 grid md:grid-cols-1 grid-cols-2 gap-4">
-                  <Input placeholder="RT" name="rt" className="my-1" />
-                  <Input placeholder="RW" name="rw" className="my-1" />
+                <div className="col-span-full">
+                  <Textarea
+                    placeholder="Detail Alamat"
+                    name="alamat"
+                    onChange={(e) => {
+                      handleChange("alamat", e.target.value);
+                    }}
+                  />
+                  {errors.alamat}
                 </div>
-              </div>
-              {errors.rt}
-              {errors.rw}
-              {errors.alamat}
 
-              <div className="grid md:grid-cols-2 grid-cols-1 my-2 gap-4">
+                <div className="col-span-full">
+                  <div className=" grid  grid-cols-2 gap-4">
+                    <Input placeholder="RT" name="rt" className="my-1" />
+                    <Input placeholder="RW" name="rw" className="my-1" />
+                  </div>
+                  {errors.rt}
+                  {errors.rw}
+                </div>
+
                 <div className="grid  grid-cols-1 md:col-span-1 col-span-2 content-between h-16">
                   <h1 className="leading-none text-sm font-medium">
                     Provinsi <span className="text-[13px] text-red-500">*</span>
                   </h1>
-                  <Select
+                  <Popover
+                    open={provinceOpen}
+                    onOpenChange={setProvinceOpen}
                     name="provinsi"
-                    onValueChange={(e) => {
-                      handleChange("provinsi", e);
-                    }}
-                    value={"" || undefined}
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {provinceList.map((item, key) => {
-                        return (
-                          <SelectItem key={key} value={String(item.kode)}>
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={provinceOpen}
+                        className="w-full justify-between"
+                      >
+                        {province
+                          ? provinceState.find((item) => item.code === province)
+                              ?.name
+                          : "Pilih..."}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] h-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search Provinsi..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>No Provinsi found.</CommandEmpty>
+                          <CommandGroup>
+                            {provinceState.map((item, key) => (
+                              <CommandItem
+                                key={key}
+                                value={item.name}
+                                onSelect={(myVal) => {
+                                  setProvince(
+                                    myVal === province ? "" : item.code
+                                  );
+                                  setProvinceOpen(false);
+                                  handleChange(
+                                    "provinsi",
+                                    myVal === province ? "" : item.code
+                                  );
+                                }}
+                              >
+                                {item.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    province === item.code
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   {errors.provinsi}
                 </div>
 
@@ -401,26 +450,65 @@ export default function TkuAddForm({ onClose }) {
                     Kabupaten{" "}
                     <span className="text-[13px] text-red-500">*</span>
                   </h1>
-                  <Select
+                  <Popover
+                    open={districtOpen}
+                    onOpenChange={setDistrictOpen}
                     name="kabupaten"
-                    onValueChange={(e) => {
-                      handleChange("kabupaten", e);
-                    }}
-                    value={"" || undefined}
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {provinceList.map((item, key) => {
-                        return (
-                          <SelectItem key={key} value={String(item.kode)}>
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={districtOpen}
+                        className="w-full justify-between"
+                      >
+                        {district
+                          ? districtState.find((item) => item.code === district)
+                              ?.name
+                          : "Pilih..."}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] h-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search Kabupaten..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>No Kabupaten found.</CommandEmpty>
+                          <CommandGroup>
+                            {districtState.map((item, key) => (
+                              <CommandItem
+                                key={key}
+                                value={item.name}
+                                onSelect={(myVal) => {
+                                  setDistrict(
+                                    myVal === district ? "" : item.code
+                                  );
+                                  setDistrictOpen(false);
+                                  handleChange(
+                                    "kabupaten",
+                                    myVal === district ? "" : item.code
+                                  );
+                                }}
+                              >
+                                {item.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    district === item.code
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   {errors.kabupaten}
                 </div>
 
@@ -429,26 +517,66 @@ export default function TkuAddForm({ onClose }) {
                     Kecamatan{" "}
                     <span className="text-[13px] text-red-500">*</span>
                   </h1>
-                  <Select
+                  <Popover
+                    open={subDistrictOpen}
+                    onOpenChange={setSubDistrictOpen}
                     name="kecamatan"
-                    onValueChange={(e) => {
-                      handleChange("kecamatan", e);
-                    }}
-                    value={"" || undefined}
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {kppOption.map((item, key) => {
-                        return (
-                          <SelectItem key={key} value={String(item.kode)}>
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={subDistrictOpen}
+                        className="w-full justify-between"
+                      >
+                        {subDistrict
+                          ? subDistrictState.find(
+                              (item) => item.code === subDistrict
+                            )?.name
+                          : "Pilih..."}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] h-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search Kecamatan..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>No Kecamatan found.</CommandEmpty>
+                          <CommandGroup>
+                            {subDistrictState.map((item, key) => (
+                              <CommandItem
+                                key={key}
+                                value={item.name}
+                                onSelect={(myVal) => {
+                                  setSubDistrict(
+                                    myVal === subDistrict ? "" : item.code
+                                  );
+                                  setSubDistrictOpen(false);
+                                  handleChange(
+                                    "kecamatan",
+                                    myVal === subDistrict ? "" : item.code
+                                  );
+                                }}
+                              >
+                                {item.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    subDistrict === item.code
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   {errors.kecamatan}
                 </div>
 
@@ -457,33 +585,67 @@ export default function TkuAddForm({ onClose }) {
                     Desa
                     <span className="text-[13px] text-red-500">*</span>
                   </h1>
-                  <Select
+                  <Popover
+                    open={villageOpen}
+                    onOpenChange={setVillageOpen}
                     name="desa"
-                    onValueChange={(e) => {
-                      handleChange("desa", e);
-                      setKodeArea(e);
-                    }}
-                    value={"" || undefined}
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {kppOption.map((item, key) => {
-                        return (
-                          <SelectItem key={key} value={String(item.kode)}>
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={villageOpen}
+                        className="w-full justify-between"
+                      >
+                        {village
+                          ? villageState.find((item) => item.code === village)
+                              ?.name
+                          : "Pilih..."}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] h-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search Desa..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>No Desa found.</CommandEmpty>
+                          <CommandGroup>
+                            {villageState.map((item, key) => (
+                              <CommandItem
+                                key={key}
+                                value={item.name}
+                                onSelect={(myVal) => {
+                                  setVillage(
+                                    myVal === village ? "" : item.code
+                                  );
+                                  setVillageOpen(false);
+                                  handleChange("desa", item.code);
+                                  setKodeArea(item.code);
+                                }}
+                              >
+                                {item.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    village === item.code
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   {errors.desa}
                 </div>
-              </div>
 
-              <div className="grid grid-cols-6 gap-4 my-4">
-                <div className="md:col-span-3 col-span-full flex gap-4">
+                <div className="md:col-span-1 col-span-full flex gap-4">
                   <Input
                     value={kodeArea}
                     name="kode_wilayah"
@@ -504,7 +666,7 @@ export default function TkuAddForm({ onClose }) {
                   />
                 </div>
 
-                <div className="md:col-span-3 col-span-full">
+                <div className="md:col-span-1 col-span-full">
                   <Input
                     name="data_geometrik"
                     placeholder="Data Geometrik"
@@ -516,7 +678,57 @@ export default function TkuAddForm({ onClose }) {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2">
+              <div className="flex items-end gap-2 mb-6">
+                <Checkbox
+                  name="lokasi_disewa"
+                  className="mt-2"
+                  onCheckedChange={(e) => {
+                    handleChange("lokasi_disewa", isDiSewa);
+                    setIsDiSewa(isDiSewa ? 0 : 1);
+                  }}
+                />
+                <Label className="col-span-2">Lokasi yang Disewa?</Label>
+              </div>
+
+              {Boolean(isDiSewa) && (
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-4  border rounded-lg p-4 mb-16">
+                  <Input
+                    placeholder="NIK/NPWP Pemilik Tempat Sewa"
+                    name="identitas_pemilik"
+                    onChange={(e) => {
+                      handleChange("identitas_pemilik", e.target.value);
+                    }}
+                  />
+
+                  <Input
+                    name="nama_pemilik"
+                    placeholder="Nama Pemilik Tempat Sewa"
+                    onChange={(e) => {
+                      handleChange("nama_pemilik", e.target.value);
+                    }}
+                  />
+
+                  <InputVertical
+                    name="tanggal_awal_sewa"
+                    type="date"
+                    title="Tanggal Mulai Sewa"
+                    onChange={(e) => {
+                      handleChange("tanggal_awal_sewa", e.target.value);
+                    }}
+                  />
+
+                  <InputVertical
+                    name="tanggal_akhir_sewa"
+                    type="date"
+                    title="Tanggal Sewa Berakhir"
+                    onChange={(e) => {
+                      handleChange("tanggal_akhir_sewa", e.target.value);
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-16 rounded-lg border p-4">
                 <div>
                   <Label>
                     Kode KPP <span className="text-[13px] text-red-500">*</span>
@@ -571,59 +783,7 @@ export default function TkuAddForm({ onClose }) {
                   </Select>
                   {errors.seksi_pengawasan}
                 </div>
-              </div>
 
-              <div className="flex items-end gap-2 my-4">
-                <Checkbox
-                  name="lokasi_disewa"
-                  className="mt-2"
-                  onCheckedChange={(e) => {
-                    handleChange("lokasi_disewa", isDiSewa);
-                    setIsDiSewa(isDiSewa ? 0 : 1);
-                  }}
-                />
-                <Label className="col-span-2">Lokasi yang Disewa</Label>
-              </div>
-
-              {Boolean(isDiSewa) && (
-                <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2 border rounded p-2">
-                  <Input
-                    placeholder="NIK/NPWP Pemilik Tempat Sewa"
-                    name="identitas_pemilik"
-                    onChange={(e) => {
-                      handleChange("identitas_pemilik", e.target.value);
-                    }}
-                  />
-
-                  <Input
-                    name="nama_pemilik"
-                    placeholder="Nama Pemilik Tempat Sewa"
-                    onChange={(e) => {
-                      handleChange("nama_pemilik", e.target.value);
-                    }}
-                  />
-
-                  <InputVertical
-                    name="tanggal_awal_sewa"
-                    type="date"
-                    title="Tanggal Mulai Sewa"
-                    onChange={(e) => {
-                      handleChange("tanggal_awal_sewa", e.target.value);
-                    }}
-                  />
-
-                  <InputVertical
-                    name="tanggal_akhir_sewa"
-                    type="date"
-                    title="Tanggal Sewa Berakhir"
-                    onChange={(e) => {
-                      handleChange("tanggal_akhir_sewa", e.target.value);
-                    }}
-                  />
-                </div>
-              )}
-
-              <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2">
                 <div>
                   <Label>
                     Tanggal Mulai{" "}
@@ -647,89 +807,102 @@ export default function TkuAddForm({ onClose }) {
                 />
               </div>
 
-              <div className="grid md:grid-cols-1 grid-cols-1 gap-4 my-4">
-                <div className="flex items-end gap-2">
-                  <Checkbox
-                    className="mt-2"
-                    onCheckedChange={(e) => {
-                      setIsRetail(isRetail ? 0 : 1);
-                    }}
-                  />
-                  <Label className="col-span-2">Toko Retail</Label>
-                </div>
-
-                <div className="flex items-end gap-2">
-                  <Checkbox
-                    className="mt-2"
-                    onCheckedChange={(e) => {
-                      setIsKawasanBebas(isKawasanBebas ? 0 : 1);
-                    }}
-                  />
-                  <Label className="col-span-2">Kawasan Bebas</Label>
-                </div>
-
-                <div className="flex items-end gap-2">
-                  <Checkbox
-                    className="mt-2"
-                    onCheckedChange={(e) => {
-                      setIsKawasanKhusus(isKawasanKhusus ? 0 : 1);
-                    }}
-                  />
-                  <Label>Kawasan Ekonomi Khusus</Label>
-                </div>
-
-                <div className="flex items-end gap-2">
-                  <Checkbox
-                    className="mt-2"
-                    onCheckedChange={(e) => {
-                      setIsPenimbun(isPenimbun ? 0 : 1);
-                    }}
-                  />
-                  <Label>Tempat Penimbun Berikat?</Label>
-                </div>
-              </div>
-
-              <InputVertical
-                name="nomor_surat"
-                placeholder="Nomor Surat Keputusan"
-                className="my-4"
-              />
-
-              <div className="grid md:grid-cols-2 grid-cols-1 gap-4 my-2">
-                <InputVertical
-                  name="tanggal_awal_keputusan"
-                  type="date"
-                  title="Decree Number Date Valid From"
-                />
-
-                <InputVertical
-                  name="tanggal_akhir_keputusan"
-                  type="date"
-                  title="Decree Number Date Valid To"
-                />
-              </div>
-
-              <div className="flex gap-2 mb-2 items-end">
+              <div className="flex items-end gap-2 mb-6">
                 <Checkbox
-                  name="kantor_virtual"
                   className="mt-2"
                   onCheckedChange={(e) => {
-                    setIsVirtual(isVirtual ? 0 : 1);
+                    setIsNSK(isNSK ? 0 : 1);
                   }}
                 />
-                <Label>Kantor Virtual</Label>
+                <Label className="col-span-2">Nomor Surat Keputusan?</Label>
               </div>
 
-              <div className="flex gap-2 mb-2 items-end">
-                <Checkbox
-                  name="alamat_utama_kpk"
-                  className="mt-2"
-                  onCheckedChange={(e) => {
-                    setIsUtama(isUtama ? 0 : 1);
-                  }}
-                />
-                <Label>Alamat Utama KPK</Label>
-              </div>
+              {Boolean(isNSK) && (
+                <>
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-4  border rounded-lg p-4">
+                    <div className="flex items-end gap-2">
+                      <Checkbox
+                        className="mt-2"
+                        onCheckedChange={(e) => {
+                          setIsRetail(isRetail ? 0 : 1);
+                        }}
+                      />
+                      <Label className="col-span-2">Toko Retail ?</Label>
+                    </div>
+
+                    <div className="flex items-end gap-2">
+                      <Checkbox
+                        className="mt-2"
+                        onCheckedChange={(e) => {
+                          setIsKawasanBebas(isKawasanBebas ? 0 : 1);
+                        }}
+                      />
+                      <Label className="col-span-2">Kawasan Bebas ?</Label>
+                    </div>
+
+                    <div className="flex items-end gap-2">
+                      <Checkbox
+                        className="mt-2"
+                        onCheckedChange={(e) => {
+                          setIsKawasanKhusus(isKawasanKhusus ? 0 : 1);
+                        }}
+                      />
+                      <Label>Kawasan Ekonomi Khusus ?</Label>
+                    </div>
+
+                    <div className="flex items-end gap-2">
+                      <Checkbox
+                        className="mt-2"
+                        onCheckedChange={(e) => {
+                          setIsPenimbun(isPenimbun ? 0 : 1);
+                        }}
+                      />
+                      <Label>Tempat Penimbun Berikat ?</Label>
+                    </div>
+
+                    <div className="flex gap-2 mb-2 items-end">
+                      <Checkbox
+                        name="kantor_virtual"
+                        className="mt-2"
+                        onCheckedChange={(e) => {
+                          setIsVirtual(isVirtual ? 0 : 1);
+                        }}
+                      />
+                      <Label>Kantor Virtual ?</Label>
+                    </div>
+
+                    <div className="flex gap-2 mb-2 items-end">
+                      <Checkbox
+                        name="alamat_utama_pkp"
+                        className="mt-2"
+                        onCheckedChange={(e) => {
+                          setIsUtama(isUtama ? 0 : 1);
+                        }}
+                      />
+                      <Label>Alamat Utama KPK ?</Label>
+                    </div>
+
+                    <div className="col-span-2">
+                      <InputVertical
+                        name="nomor_surat"
+                        placeholder="Nomor Surat Keputusan"
+                      />
+                    </div>
+
+                    <InputVertical
+                      name="tanggal_awal_keputusan"
+                      type="date"
+                      title="Decree Number Date Valid From"
+                    />
+
+                    <InputVertical
+                      name="tanggal_akhir_keputusan"
+                      type="date"
+                      title="Decree Number Date Valid To"
+                    />
+                  </div>
+                </>
+              )}
             </div>
             <DialogFooter>
               <Button type="submit" pending={isPending}>

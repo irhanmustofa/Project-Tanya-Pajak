@@ -3,7 +3,7 @@ import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import { masterClientSchema } from "../../master-client/master-client.schema.js";
 import DataEkonomi from "../ekonomi-client.entities.js";
 
-export default async function updateDataEkonomi(req) {
+export default async function updateEkonomi(req) {
   const clientId = req.params.id;
   const wrapper = new MongodbWrapper(masterClientSchema());
   try {

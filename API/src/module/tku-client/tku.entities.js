@@ -10,6 +10,7 @@ export default class TKU {
       deskripsi_tku,
       klu_tku,
       deskripsi_klu_tku,
+      pic_tku,
       alamat,
       rt,
       rw,
@@ -48,6 +49,7 @@ export default class TKU {
       deskripsi_tku,
       klu_tku,
       deskripsi_klu_tku,
+      pic_tku,
       alamat,
       rt,
       rw,
@@ -86,6 +88,7 @@ export default class TKU {
       deskripsi_tku: "string",
       klu_tku: "required|string",
       deskripsi_klu_tku: "required|string",
+      pic_tku: "required|string",
       alamat: "required|string",
       rt: "required|string",
       rw: "required|string",
@@ -126,6 +129,7 @@ export default class TKU {
     this.deskripsi_tku = deskripsi_tku;
     this.klu_tku = klu_tku;
     this.deskripsi_klu_tku = deskripsi_klu_tku;
+    this.pic_tku = pic_tku;
     this.alamat = alamat;
     this.rt = rt;
     this.rw = rw;
@@ -138,22 +142,22 @@ export default class TKU {
     this.kode_pos = kode_pos;
     this.data_geometrik = data_geometrik;
     this.seksi_pengawasan = seksi_pengawasan;
-    this.lokasi_disewa = lokasi_disewa;
+    this.lokasi_disewa = Number(lokasi_disewa);
     this.identitas_pemilik = identitas_pemilik;
     this.nama_pemilik = nama_pemilik;
     this.tanggal_awal_sewa = tanggal_awal_sewa;
     this.tanggal_akhir_sewa = tanggal_akhir_sewa;
     this.tanggal_mulai = tanggal_mulai;
     this.tanggal_berakhir = tanggal_berakhir;
-    this.toko_retail = toko_retail;
-    this.kawasan_bebas = kawasan_bebas;
-    this.kawasan_ekonomi_khusus = kawasan_ekonomi_khusus;
-    this.tempat_penimbunan_berikat = tempat_penimbunan_berikat;
+    this.toko_retail = Number(toko_retail);
+    this.kawasan_bebas = Number(kawasan_bebas);
+    this.kawasan_ekonomi_khusus = Number(kawasan_ekonomi_khusus);
+    this.tempat_penimbunan_berikat = Number(tempat_penimbunan_berikat);
     this.nomor_surat = nomor_surat;
     this.tanggal_awal_keputusan = tanggal_awal_keputusan;
     this.tanggal_akhir_keputusan = tanggal_akhir_keputusan;
-    this.kantor_virtual = kantor_virtual;
-    this.alamat_utama_pkp = alamat_utama_pkp;
+    this.kantor_virtual = Number(kantor_virtual);
+    this.alamat_utama_pkp = Number(alamat_utama_pkp);
 
     if (result.error.length > 0) this.errors = result.error;
   }

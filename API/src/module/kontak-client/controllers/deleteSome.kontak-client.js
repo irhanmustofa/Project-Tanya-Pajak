@@ -2,7 +2,7 @@ import { badRequest, error } from "../../../app/response.js";
 import MongodbWrapper from "../../../database/mongo/mongo.wrapper.js";
 import { masterClientSchema } from "../../master-client/master-client.schema.js";
 
-export default async function deleteSomeKontakClient(req) {
+export default async function deleteSomeKontak(req) {
   const ids = req.body;
   const clientId = req.headers.clientid;
   var newData = [];

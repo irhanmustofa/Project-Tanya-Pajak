@@ -1,30 +1,30 @@
 import Response from "../../app/response.js";
-import createKontakClient from "./controllers/create.kontak-client.js";
-import updateKontakClient from "./controllers/update.kontak-client.js";
-import deleteKontakClient from "./controllers/delete.kontak-client.js";
-import deleteSomeKontakClient from "./controllers/deleteSome.kontak-client.js";
+import createKontak from "./controllers/create.kontak-client.js";
+import updateKontak from "./controllers/update.kontak-client.js";
+import deleteKontak from "./controllers/delete.kontak-client.js";
+import deleteSomeKontak from "./controllers/deleteSome.kontak-client.js";
 
 const create = async (req, res) => {
-  return Response(res, await createKontakClient(req));
+  return Response(res, await createKontak(req));
 };
 
 const update = async (req, res) => {
-  return Response(res, await updateKontakClient(req));
+  return Response(res, await updateKontak(req));
 };
 
 const remove = async (req, res) => {
-  return Response(res, await deleteKontakClient(req));
+  return Response(res, await deleteKontak(req));
 };
 
 const deleteSome = async (req, res) => {
-  return Response(res, await deleteSomeKontakClient(req));
+  return Response(res, await deleteSomeKontak(req));
 };
 
-const MasterClientController = {
+const kontakController = {
   create,
   update,
   remove,
   deleteSome,
 };
 
-export default MasterClientController;
+export default kontakController;

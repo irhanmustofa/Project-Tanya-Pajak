@@ -4,7 +4,7 @@ import { masterClientSchema } from "../../master-client/master-client.schema.js"
 import { generateId } from "../../../utils/functions.js";
 import KontakClient from "../kontak-client.entities.js";
 
-export default async function updateKontakClient(req) {
+export default async function updateKontak(req) {
   const id = req.params.id;
   const body = req.body;
   const clientId = req.headers.clientid;

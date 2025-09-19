@@ -28,7 +28,7 @@ export default async function createOrangTerkait(req) {
     console.log("create Related Person client err:", err);
     return error({
       message:
-        "An error occurred while the system was running, Refreshn your page",
+        "An error occurred while the system was running, Refresh your page",
     });
   }
 }

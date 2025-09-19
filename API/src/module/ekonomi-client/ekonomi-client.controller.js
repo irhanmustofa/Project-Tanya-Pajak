@@ -1,12 +1,12 @@
 import Response from "../../app/response.js";
-import updateEkonomiClient from "./controllers/update.ekonomi-client.js";
+import updateEkonomi from "./controllers/update.ekonomi-client.js";
 
 const update = async (req, res) => {
-  return Response(res, await updateEkonomiClient(req));
+  return Response(res, await updateEkonomi(req));
 };
 
-const MasterClientController = {
+const ekonomiController = {
   update,
 };
 
-export default MasterClientController;
+export default ekonomiController;
