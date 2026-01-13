@@ -18,11 +18,11 @@ import {
 import { clientFirst } from "../../perubahan-profil-components/PerubahanProfilService";
 import { ekonomiClientUpdate } from "./ekonomi-components/EkonomiService";
 import {
-  jumlahKaryawan,
-  mataUang,
-  metodePembukuan,
+  jumlahKaryawanOption,
+  mataUangOption,
+  metodePembukuanOption,
   omsetOption,
-  periodePembukuan,
+  periodePembukuanOption,
 } from "@/helpers/variables";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -151,9 +151,9 @@ export default function ProfilTabs() {
                     <SelectValue placeholder="Pilih" />
                   </SelectTrigger>
                   <SelectContent>
-                    {jumlahKaryawan.map((item, key) => {
+                    {jumlahKaryawanOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -176,9 +176,9 @@ export default function ProfilTabs() {
                     <SelectValue placeholder="Pilih" />
                   </SelectTrigger>
                   <SelectContent>
-                    {metodePembukuan.map((item, key) => {
+                    {metodePembukuanOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -201,9 +201,9 @@ export default function ProfilTabs() {
                     <SelectValue placeholder="Pilih" />
                   </SelectTrigger>
                   <SelectContent>
-                    {mataUang.map((item, key) => {
+                    {mataUangOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -226,9 +226,9 @@ export default function ProfilTabs() {
                     <SelectValue placeholder="Pilih" />
                   </SelectTrigger>
                   <SelectContent>
-                    {periodePembukuan.map((item, key) => {
+                    {periodePembukuanOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -253,7 +253,7 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {omsetOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );

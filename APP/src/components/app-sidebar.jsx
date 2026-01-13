@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarGroupLabel,
-  SidebarMenuButton,
-  useSidebar,
-  SidebarGroup,
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarRail,
+   SidebarMenu,
+   SidebarMenuItem,
+   SidebarGroupLabel,
+   SidebarMenuButton,
+   useSidebar,
+   SidebarGroup,
+   Sidebar,
+   SidebarContent,
+   SidebarFooter,
+   SidebarHeader,
+   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { sidebarData } from "@/layouts/SidebarData";
@@ -26,79 +26,79 @@ import { CompanySetting } from "./company-setting";
 import { NavSpt } from "./nav-spt";
 
 export function AppSidebar({ ...props }) {
-  const { dialogState, dialogAction } = useDialog();
-  const dispatch = useDialogDispatch();
-  const { toggleSidebar } = useSidebar();
-  const { users, sidebars, is_spt } = sidebarData();
-  const isOpen = useLocalStorage.get("sb") === "true";
-  const handleClick = () => {
-    if (!isOpen) {
-      toggleSidebar("ok");
-    }
-  };
+   const { dialogState, dialogAction } = useDialog();
+   const dispatch = useDialogDispatch();
+   const { toggleSidebar } = useSidebar();
+   const { users, sidebars, is_spt } = sidebarData();
+   const isOpen = useLocalStorage.get("sb") === "true";
+   const handleClick = () => {
+      if (!isOpen) {
+         toggleSidebar("ok");
+      }
+   };
 
-  return (
-    <>
-      <div onClick={handleClick}>
-        <Sidebar collapsible="icon" {...props}>
-          <SidebarHeader>
-            <div className="flex items-center p-2">
-              <Link to="/dashboard">
-                <img src={logo} alt="logo" className="w-10" />
-              </Link>
-              <SidebarGroupLabel className="ml-2 text-xl">
-                Tanya Pajak
-              </SidebarGroupLabel>
-            </div>
+   return (
+      <>
+         <div onClick={handleClick}>
+            <Sidebar collapsible="icon" {...props}>
+               <SidebarHeader>
+                  <div className="flex items-center p-2">
+                     <Link to="/dashboard">
+                        <img src={logo} alt="logo" className="w-10" />
+                     </Link>
+                     <SidebarGroupLabel className="ml-2 text-xl">
+                        Tanya Pajak
+                     </SidebarGroupLabel>
+                  </div>
 
-            {/* Wrap dengan Suspense dan error boundary */}
-            <Suspense fallback={<div>Loading...</div>}>
-              <CompanySetting />
-            </Suspense>
-          </SidebarHeader>
+                  {/* Wrap dengan Suspense dan error boundary */}
+                  <Suspense fallback={<div>Loading...</div>}>
+                     <CompanySetting />
+                  </Suspense>
+               </SidebarHeader>
 
-          <SidebarContent
-            style={{
-              overflowY: "scroll",
-              scrollbarWidth: "none",
-            }}
-          >
-            <SidebarGroup>
-              <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Dashboard">
-                    <Link to="/dashboard">
-                      <LucideLayoutDashboard />
-                      <span>Dashboard</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroup>
-            <NavMain items={sidebars} />
-          </SidebarContent>
+               <SidebarContent
+                  style={{
+                     overflowY: "scroll",
+                     scrollbarWidth: "none",
+                  }}
+               >
+                  <SidebarGroup>
+                     <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+                     <SidebarMenu>
+                        <SidebarMenuItem>
+                           <SidebarMenuButton asChild tooltip="Dashboard">
+                              <Link to="/dashboard">
+                                 <LucideLayoutDashboard />
+                                 <span>Dashboard</span>
+                              </Link>
+                           </SidebarMenuButton>
+                        </SidebarMenuItem>
+                     </SidebarMenu>
+                  </SidebarGroup>
+                  <NavMain items={sidebars} />
+               </SidebarContent>
 
-          <SidebarFooter>
-            <NavUser
-              user={users}
-              onLogout={() =>
-                dispatch({
-                  type: dialogAction.DIALOG_LOGOUT,
-                  payload: {
-                    isOpen: true,
-                    title: "Logout",
-                    message: "Are you sure you want to logout?",
-                    status: "warning",
-                  },
-                })
-              }
-            />
-          </SidebarFooter>
-          <SidebarRail />
-        </Sidebar>
-      </div>
-      {dialogState.isOpen && <DialogLogout />}
-    </>
-  );
+               <SidebarFooter>
+                  <NavUser
+                     user={users}
+                     onLogout={() =>
+                        dispatch({
+                           type: dialogAction.DIALOG_LOGOUT,
+                           payload: {
+                              isOpen: true,
+                              title: "Logout",
+                              message: "Are you sure you want to logout?",
+                              status: "warning",
+                           },
+                        })
+                     }
+                  />
+               </SidebarFooter>
+               <SidebarRail />
+            </Sidebar>
+         </div>
+         {dialogState.isOpen && <DialogLogout />}
+      </>
+   );
 }

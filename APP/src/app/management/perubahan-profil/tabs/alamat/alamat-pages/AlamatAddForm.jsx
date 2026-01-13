@@ -247,8 +247,8 @@ export default function ClientAddForm({ onClose }) {
                       <SelectContent>
                         {jenisAlamat.map((item, key) => {
                           return (
-                            <SelectItem key={key} value={String(item.kode)}>
-                              {item.jenis}
+                            <SelectItem key={key} value={String(item.code)}>
+                              {item.name}
                             </SelectItem>
                           );
                         })}
@@ -274,7 +274,7 @@ export default function ClientAddForm({ onClose }) {
                         <SelectContent>
                           {kewarganegaraanOption.map((item, key) => {
                             return (
-                              <SelectItem key={key} value={String(item.kode)}>
+                              <SelectItem key={key} value={String(item.code)}>
                                 {item.name}
                               </SelectItem>
                             );
@@ -292,7 +292,7 @@ export default function ClientAddForm({ onClose }) {
                         <SelectContent>
                           {jenisNitku.map((item, key) => {
                             return (
-                              <SelectItem key={key} value={String(item.name)}>
+                              <SelectItem key={key} value={String(item.code)}>
                                 {item.name}
                               </SelectItem>
                             );
@@ -392,8 +392,8 @@ export default function ClientAddForm({ onClose }) {
                         <SelectContent>
                           {kppOption.map((item, key) => {
                             return (
-                              <SelectItem key={key} value={String(item.kode)}>
-                                {item.jenis_wp}
+                              <SelectItem key={key} value={String(item.code)}>
+                                {item.name}
                               </SelectItem>
                             );
                           })}
@@ -417,8 +417,8 @@ export default function ClientAddForm({ onClose }) {
                         <SelectContent>
                           {kppOption.map((item, key) => {
                             return (
-                              <SelectItem key={key} value={String(item.kode)}>
-                                {item.jenis_wp}
+                              <SelectItem key={key} value={String(item.code)}>
+                                {item.name}
                               </SelectItem>
                             );
                           })}
@@ -560,7 +560,7 @@ export default function ClientAddForm({ onClose }) {
                       <SelectContent>
                         {kppOption.map((item, key) => {
                           return (
-                            <SelectItem key={key} value={item.kode}>
+                            <SelectItem key={key} value={item.code}>
                               {item.name}
                             </SelectItem>
                           );
@@ -588,7 +588,7 @@ export default function ClientAddForm({ onClose }) {
                       <SelectContent>
                         {pengawasOption.map((item, key) => {
                           return (
-                            <SelectItem key={key} value={item.kode}>
+                            <SelectItem key={key} value={item.code}>
                               {item.name}
                             </SelectItem>
                           );

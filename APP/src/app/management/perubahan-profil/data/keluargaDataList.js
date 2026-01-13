@@ -1,5 +1,4 @@
 import { dateShort } from "@/components/custom/DateFormatted";
-import { hubunganKeluarga } from "@/helpers/variables";
 
 export default function keluargaDataStructure(keluargaState) {
   var data = [],
@@ -9,35 +8,40 @@ export default function keluargaDataStructure(keluargaState) {
 
   if (keluargaState.length > 0) {
     const kodePtkp = statusPtkp.map((item) => item.code);
-    const kodeUnitPajak = statusUnitPerpajakan.map((item) => item.code);
-    const kodeHubunganKeluarga = hubunganKeluarga.map((item) => item.kode);
+    const kodeUnitPajak = statusUnitPerpajakanOption.map((item) => item.code);
+    const kodeHubunganKeluarga = hubunganKeluargaOption.map(
+      (item) => item.code
+    );
 
     keluargaState.map((item) => {
       ptkp = unit_pajak = hubungan_keluarga = "";
       if (kodePtkp.indexOf(item.status_ptkp) > -1) {
-        ptkp = statusPtkp[kodePtkp.indexOf(item.status_ptkp)].name;
+        ptkp = statusPtkpOption[kodePtkp.indexOf(item.status_ptkp)].name;
       }
 
       if (kodeUnitPajak.indexOf(item.status_unit_pajak) > -1) {
         unit_pajak =
-          statusUnitPerpajakan[kodeUnitPajak.indexOf(item.status_unit_pajak)]
-            .name;
+          statusUnitPerpajakanOption[
+            kodeUnitPajak.indexOf(item.status_unit_pajak)
+          ].name;
       }
 
       if (kodeHubunganKeluarga.indexOf(item.status_keluarga) > -1) {
         hubungan_keluarga =
-          hubunganKeluarga[kodeHubunganKeluarga.indexOf(item.status_keluarga)]
-            .name;
+          hubunganKeluargaOption[
+            kodeHubunganKeluarga.indexOf(item.status_keluarga)
+          ].name;
       }
 
       data.push({
         _id: item._id,
         nik: item.nik,
-        jenis_kelamin:
-          item.jenis_kelamin === "JK-1" ? "Laki Laki" : "Perempuan",
+        jenis_kelamin: item.jenis_kelamin === 1 ? "Laki Laki" : "Perempuan",
         tempat_lahir: item.tempat_lahir,
         tanggal_lahir:
-          item.tanggal_lahir === "" ? "" : dateShort(item.tanggal_lahir),
+          dateShort(item.tanggal_lahir) === "Invalid Date"
+            ? ""
+            : dateShort(item.tanggal_lahir),
         nomor_kk: item.nomor_kk,
         nama: item.nama,
         status_keluarga: hubungan_keluarga,
@@ -45,16 +49,20 @@ export default function keluargaDataStructure(keluargaState) {
         status_unit_pajak: unit_pajak,
         status_ptkp: ptkp,
         tanggal_mulai:
-          item.tanggal_mulai === "" ? "" : dateShort(item.tanggal_mulai),
+          dateShort(item.tanggal_mulai) === "Invalid Date"
+            ? ""
+            : dateShort(item.tanggal_mulai),
         tanggal_berakhir:
-          item.tanggal_berakhir === "" ? "" : dateShort(item.tanggal_berakhir),
+          dateShort(item.tanggal_berakhir) === "Invalid Date"
+            ? ""
+            : dateShort(item.tanggal_berakhir),
       });
     });
   }
   return data;
 }
 
-export const statusPtkp = [
+export const statusPtkpOption = [
   { code: "0", name: "-" },
   { code: "SP-1", name: "K/0" },
   { code: "SP-2", name: "K/1" },
@@ -66,7 +74,7 @@ export const statusPtkp = [
   { code: "SP-8", name: "TK/3" },
 ];
 
-export const statusUnitPerpajakan = [
+export const statusUnitPerpajakanOption = [
   { code: "SUP-1", name: "Tanggungan" },
   { code: "SUP-2", name: "Kepala Unit Keluarga Lain (HB)" },
   { code: "SUP-3", name: "Kepala Unit Keluarga lain (OP)" },
@@ -74,4 +82,18 @@ export const statusUnitPerpajakan = [
   { code: "SUP-5", name: "Kepala Unit Keluarga lain (MT)" },
   { code: "SUP-6", name: "Bukan Tanggungan" },
   { code: "SUP-7", name: "Kepala Unit Keluarga lain (PH)" },
+];
+
+export const hubunganKeluargaOption = [
+  { code: "HK-1", name: "Anak" },
+  { code: "HK-2", name: "Cucu" },
+  { code: "HK-3", name: "Kepala Keluarga" },
+  { code: "HK-4", name: "Suami" },
+  { code: "HK-5", name: "Istri" },
+  { code: "HK-6", name: "Mertua" },
+  { code: "HK-7", name: "Menantu" },
+  { code: "HK-8", name: "Pembantu" },
+  { code: "HK-9", name: "Family Lain" },
+  { code: "HK-10", name: "Orang Tua" },
+  { code: "HK-11", name: "Lainnya" },
 ];

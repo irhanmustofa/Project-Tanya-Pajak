@@ -3,14 +3,12 @@ import { dateShort } from "@/components/custom/DateFormatted";
 export default function bankDataStructure(bankState) {
   var data = [],
     jenisRekeningName = "";
+
   if (bankState.length > 0) {
-    const jenisRekeningCode = jenisRekening.map((item) => item.code);
+    const jenisRekeningCode = jenisRekeningOption.map((item) => item.code);
     bankState.map((item) => {
-      jenisRekeningName = "";
-      if (jenisRekeningCode.indexOf(item.jenis_rekening) > -1) {
-        jenisRekeningName =
-          jenisRekening[jenisRekeningCode.indexOf(item.jenis_rekening)].name;
-      }
+      jenisRekeningName =
+        item.jenis_rekening === 1 ? "Akun Pribadi" : "Akun Badan";
 
       data.push({
         _id: item._id,
@@ -33,7 +31,7 @@ export default function bankDataStructure(bankState) {
   return data;
 }
 
-export const jenisRekening = [
-  { code: "JR-1", name: "Akun Pribadi" },
-  { code: "JR-2", name: "Akun Badan" },
+export const jenisRekeningOption = [
+  { code: 1, name: "Akun Pribadi" },
+  { code: 2, name: "Akun Badan" },
 ];

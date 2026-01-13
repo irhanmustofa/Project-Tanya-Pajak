@@ -18,7 +18,7 @@ import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { hubunganKeluarga } from "@/helpers/variables";
+import { hubunganKeluargaOption } from "../../../data/keluargaDataList";
 import {
   Select,
   SelectContent,
@@ -240,9 +240,9 @@ export default function KeluargaAddForm({ onClose }) {
                       <SelectValue placeholder="Pilih" />
                     </SelectTrigger>
                     <SelectContent>
-                      {hubunganKeluarga.map((item) => {
+                      {hubunganKeluargaOption.map((item, key) => {
                         return (
-                          <SelectItem key={key} value={item.kode}>
+                          <SelectItem key={key} value={String(item.code)}>
                             {item.name}
                           </SelectItem>
                         );
@@ -283,7 +283,7 @@ export default function KeluargaAddForm({ onClose }) {
                     <SelectContent>
                       {statusUnitPerpajakan.map((item) => {
                         return (
-                          <SelectItem key={key} value={item.code}>
+                          <SelectItem key={key} value={String(item.code)}>
                             {item.name}
                           </SelectItem>
                         );

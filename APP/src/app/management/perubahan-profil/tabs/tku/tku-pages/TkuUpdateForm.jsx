@@ -45,8 +45,7 @@ import { InputVertical } from "@/components/custom/input-custom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { jenisNitku, pengawasOption } from "../../../data/alamatDataList";
-import { provinceList } from "../../../data/province";
-import { kppOption } from "@/helpers/variables";
+import { kppOption } from "../../../data/alamatDataList"
 import { Textarea } from "@/components/ui/textarea";
 import provinceReq, {
   districtReq,
@@ -487,8 +486,8 @@ export default function TkuUpdateForm({ id, onClose }) {
                         >
                           {province
                             ? provinceState.find(
-                                (item) => item.code === province
-                              )?.name
+                              (item) => item.code === province
+                            )?.name
                             : "Pilih..."}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -546,8 +545,8 @@ export default function TkuUpdateForm({ id, onClose }) {
                         >
                           {district
                             ? districtState.find(
-                                (item) => item.code === district
-                              )?.name
+                              (item) => item.code === district
+                            )?.name
                             : "Pilih..."}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -608,8 +607,8 @@ export default function TkuUpdateForm({ id, onClose }) {
                         >
                           {subDistrict
                             ? subDistrictState.find(
-                                (item) => item.code === subDistrict
-                              )?.name
+                              (item) => item.code === subDistrict
+                            )?.name
                             : "Pilih..."}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -666,7 +665,7 @@ export default function TkuUpdateForm({ id, onClose }) {
                         >
                           {village
                             ? villageState.find((item) => item.code === village)
-                                ?.name
+                              ?.name
                             : "Pilih..."}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -838,7 +837,7 @@ export default function TkuUpdateForm({ id, onClose }) {
                       <SelectContent>
                         {kppOption.map((item, key) => {
                           return (
-                            <SelectItem key={key} value={item.kode}>
+                            <SelectItem key={key} value={item.code}>
                               {item.name}
                             </SelectItem>
                           );

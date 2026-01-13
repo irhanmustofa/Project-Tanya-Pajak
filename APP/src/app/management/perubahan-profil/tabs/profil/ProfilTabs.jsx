@@ -15,14 +15,14 @@ import { useValidateInput } from "@/hooks/use-validate-input";
 import { useEffect, useState, useTransition } from "react";
 import {
   jenisWpOption,
-  kppOption,
   badanHukumOption,
   statusNpwpOption,
   kluOption,
   kewarganegaraanOption,
   bahasaOption,
-  jenisPerusahaan,
+  jenisPerusahaanOption,
 } from "@/helpers/variables";
+import { kppOption } from "../../data/alamatDataList"
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import {
   useClient,
@@ -311,8 +311,8 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {jenisWpOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
-                          {item.jenis_wp}
+                        <SelectItem key={key} value={String(item.code)}>
+                          {item.name}
                         </SelectItem>
                       );
                     })}
@@ -340,8 +340,8 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {badanHukumOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
-                          {item.badan_hukum}
+                        <SelectItem key={key} value={String(item.code)}>
+                          {item.name}
                         </SelectItem>
                       );
                     })}
@@ -369,7 +369,7 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {countryList.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -396,9 +396,9 @@ export default function ProfilTabs() {
                     <SelectValue placeholder="Pilih" />
                   </SelectTrigger>
                   <SelectContent>
-                    {jenisPerusahaan.map((item, key) => {
+                    {jenisPerusahaanOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={item.kode}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -427,7 +427,7 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {kewarganegaraanOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -454,7 +454,7 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {bahasaOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
+                        <SelectItem key={key} value={String(item.code)}>
                           {item.name}
                         </SelectItem>
                       );
@@ -735,8 +735,8 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {statusNpwpOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
-                          {item.status}
+                        <SelectItem key={key} value={String(item.code)}>
+                          {item.name}
                         </SelectItem>
                       );
                     })}
@@ -783,8 +783,8 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {statusNpwpOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
-                          {item.status}
+                        <SelectItem key={key} value={String(item.code)}>
+                          {item.name}
                         </SelectItem>
                       );
                     })}
@@ -821,8 +821,8 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {kppOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
-                          {item.kantor}
+                        <SelectItem key={key} value={String(item.code)}>
+                          {item.name}
                         </SelectItem>
                       );
                     })}
@@ -846,8 +846,8 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {statusNpwpOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
-                          {item.status}
+                        <SelectItem key={key} value={String(item.code)}>
+                          {item.name}
                         </SelectItem>
                       );
                     })}
@@ -871,8 +871,8 @@ export default function ProfilTabs() {
                   <SelectContent>
                     {kluOption.map((item, key) => {
                       return (
-                        <SelectItem key={key} value={String(item.kode)}>
-                          {item.kode + "-" + item.deskripsi}
+                        <SelectItem key={key} value={String(item.code)}>
+                          {item.code + "-" + item.name}
                         </SelectItem>
                       );
                     })}

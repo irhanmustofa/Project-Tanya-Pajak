@@ -1,11 +1,11 @@
 import DataTables from "@/components/datatables/Datatables";
 import useAlamatTableConfig from "../alamat-components/AlamatColumn";
 import AlamatSubject from "../alamat-components/AlamatSubject";
-import { dataAlamat } from "../../../data/alamatDataList";
+import { alamatDataStructure } from "../../../data/alamatDataList";
 
-export default function AlamatTable() {
+export default function AlamatTable({ alamatState = [] }) {
   const { alamatColumn, filterFields } = useAlamatTableConfig();
-  const data = dataAlamat();
+  const data = alamatDataStructure(alamatState);
 
   return (
     <>

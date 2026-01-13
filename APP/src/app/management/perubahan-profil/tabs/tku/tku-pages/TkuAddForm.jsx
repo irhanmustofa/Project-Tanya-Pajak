@@ -42,7 +42,7 @@ import {
 } from "@/app/management/perubahan-profil/perubahan-profil-components/PerubahanProfilProvider";
 import { useDialog, useDialogDispatch } from "@/dialogs/DialogProvider";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { kppOption } from "@/helpers/variables";
+import { kppOption } from "../../data/alamatDataList"
 import { jenisNitku, pengawasOption } from "../../../data/alamatDataList";
 import { InputVertical } from "@/components/custom/input-custom";
 import provinceReq, {
@@ -397,7 +397,7 @@ export default function TkuAddForm({ onClose }) {
                       >
                         {province
                           ? provinceState.find((item) => item.code === province)
-                              ?.name
+                            ?.name
                           : "Pilih..."}
                         <ChevronsUpDown className="opacity-50" />
                       </Button>
@@ -464,7 +464,7 @@ export default function TkuAddForm({ onClose }) {
                       >
                         {district
                           ? districtState.find((item) => item.code === district)
-                              ?.name
+                            ?.name
                           : "Pilih..."}
                         <ChevronsUpDown className="opacity-50" />
                       </Button>
@@ -531,8 +531,8 @@ export default function TkuAddForm({ onClose }) {
                       >
                         {subDistrict
                           ? subDistrictState.find(
-                              (item) => item.code === subDistrict
-                            )?.name
+                            (item) => item.code === subDistrict
+                          )?.name
                           : "Pilih..."}
                         <ChevronsUpDown className="opacity-50" />
                       </Button>
@@ -599,7 +599,7 @@ export default function TkuAddForm({ onClose }) {
                       >
                         {village
                           ? villageState.find((item) => item.code === village)
-                              ?.name
+                            ?.name
                           : "Pilih..."}
                         <ChevronsUpDown className="opacity-50" />
                       </Button>
@@ -746,7 +746,7 @@ export default function TkuAddForm({ onClose }) {
                     <SelectContent>
                       {kppOption.map((item, key) => {
                         return (
-                          <SelectItem key={key} value={item.kode}>
+                          <SelectItem key={key} value={item.code}>
                             {item.name}
                           </SelectItem>
                         );

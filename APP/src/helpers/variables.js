@@ -161,145 +161,119 @@ export const companyHandler = [
 ];
 
 export const jenisWpOption = [
-  { kode: "1", jenis_wp: "BADAN" },
-  { kode: "2", jenis_wp: "ORANG PRIBADI" },
-  { kode: "3", jenis_wp: "Joint Operation" },
-  { kode: "4", jenis_wp: "Hidup Berpisah" },
-  { kode: "5", jenis_wp: "Kantor Perwakilan Perusahaan Asing" },
-  { kode: "6", jenis_wp: "Pisah Harta" },
-  { kode: "7", jenis_wp: "Bendahara Pemerintah" },
-  { kode: "8", jenis_wp: "Memilih Terpisah" },
-  { kode: "9", jenis_wp: "Penyelenggara Kegiatan" },
-  { kode: "10", jenis_wp: "Warisan Belum Terbagi" },
+  { code: "JWP-1", jenis_wp: "BADAN" },
+  { code: "JWP-2", jenis_wp: "ORANG PRIBADI" },
+  { code: "JWP-3", jenis_wp: "Joint Operation" },
+  { code: "JWP-4", jenis_wp: "Hidup Berpisah" },
+  { code: "JWP-5", jenis_wp: "Kantor Perwakilan Perusahaan Asing" },
+  { code: "JWP-6", jenis_wp: "Pisah Harta" },
+  { code: "JWP-7", jenis_wp: "Bendahara Pemerintah" },
+  { code: "JWP-8", jenis_wp: "Memilih Terpisah" },
+  { code: "JWP-9", jenis_wp: "Penyelenggara Kegiatan" },
+  { code: "JWP-10", jenis_wp: "Warisan Belum Terbagi" },
 ];
 
 export const badanHukumOption = [
-  { kode: "1", badan_hukum: "Perseroan Terbatas (PT)" },
-  { kode: "2", badan_hukum: "Perseroan Perorangan" },
-  { kode: "3", badan_hukum: "Perusahaan Persero (Persero)" },
-  { kode: "4", badan_hukum: "Perusahaan Perum (Perum)" },
-  { kode: "5", badan_hukum: "Koperasi" },
-  { kode: "6", badan_hukum: "Yayasan" },
+  { code: "BH-1", badan_hukum: "Perseroan Terbatas (PT)" },
+  { code: "BH-2", badan_hukum: "Perseroan Perorangan" },
+  { code: "BH-3", badan_hukum: "Perusahaan Persero (Persero)" },
+  { code: "BH-4", badan_hukum: "Perusahaan Perum (Perum)" },
+  { code: "BH-5", badan_hukum: "Koperasi" },
+  { code: "BH-6", badan_hukum: "Yayasan" },
 ];
 
 export const statusNpwpOption = [
-  { status: "Aktif", kode: "1" },
-  { status: "Non Aktif", kode: "0" },
-];
-
-export const kppOption = [
-  { kode: "1", name: "KPP Pratama Jakarta Matraman (001)" },
-  { kode: "2", name: "KPP Pratama Jakarta Pulogadung (003)" },
-  { kode: "3", name: "KPP Pratama Jakarta Cakung Satu (004)" },
-  { kode: "4", name: "KPP Pratama Jakarta Kramat Jati (005)" },
-  { kode: "5", name: "KPP Pratama Jakarta Cakung Dua (006)" },
-  { kode: "6", name: "KPP Pratama Jakarta Duren Sawit (008)" },
-  { kode: "7", name: "KPP Pratama Jakarta Pasar Rebo (009)" },
+  { code: "Aktif", code: 1 },
+  { code: "Non Aktif", code: 0 },
 ];
 
 export const kluOption = [
   {
-    kode: "H50111",
-    deskripsi: "ANGKUTAN LAUT DOMESTIK UMUM LINER UNTUK PENUMPANG",
+    code: "H50111",
+    name: "ANGKUTAN LAUT DOMESTIK UMUM LINER UNTUK PENUMPANG",
   },
   {
-    kode: "H50112",
-    deskripsi: "ANGKUTAN LAUT DOMESTIK UMUM TRAMPER UNTUK PENUMPANG",
+    code: "H50112",
+    name: "ANGKUTAN LAUT DOMESTIK UMUM TRAMPER UNTUK PENUMPANG",
   },
-  { kode: "J60101", deskripsi: "PENYIARAN RADIO OLEH PEMERINTAH" },
-  { kode: "J61919", deskripsi: "JASA NILAI TAMBAH TELEPONI LAINNYA" },
-  { kode: "J61914", deskripsi: "WARUNG TELEKOMUNIKASI (WARTEL)" },
-  { kode: "K64200", deskripsi: "KEGIATAN PERUSAHAAN HOLDING" },
-  { kode: "K66110", deskripsi: "ADMINISTRASI PASAR UANG (BURSA EFEK)" },
-  { kode: "L68110", deskripsi: "REAL ESTAT YANG DIMILIKI SENDIRI ATAU DISEWA" },
+  { code: "J60101", name: "PENYIARAN RADIO OLEH PEMERINTAH" },
+  { code: "J61919", name: "JASA NILAI TAMBAH TELEPONI LAINNYA" },
+  { code: "J61914", name: "WARUNG TELEKOMUNIKASI (WARTEL)" },
+  { code: "K64200", name: "KEGIATAN PERUSAHAAN HOLDING" },
+  { code: "K66110", name: "ADMINISTRASI PASAR UANG (BURSA EFEK)" },
+  { code: "L68110", name: "REAL ESTAT YANG DIMILIKI SENDIRI ATAU DISEWA" },
   {
-    kode: "N77400",
-    deskripsi:
-      "SEWA GUNA USAHA TANPA HAK OPSI ASET NON FINANSIAL, BUKAN KARYA HAK CIPTA",
+    code: "N77400",
+    name: "SEWA GUNA USAHA TANPA HAK OPSI ASET NON FINANSIAL, BUKAN KARYA HAK CIPTA",
   },
   {
-    kode: "P85230",
-    deskripsi:
-      "JASA PENDIDIKAN MENENGAH KEJURUAN DAN TEKNIK/MADRASAH ALIYAH KEJURUAN PEMERINTAH",
+    code: "P85230",
+    name: "JASA PENDIDIKAN MENENGAH KEJURUAN DAN TEKNIK/MADRASAH ALIYAH KEJURUAN PEMERINTAH",
   },
-  { kode: "P85498", deskripsi: "JASA PENDIDIKAN KERAJINAN DAN INDUSTRI" },
-  { kode: "Q93123", deskripsi: "KELAB RENANG" },
-  { kode: "S95120", deskripsi: "JASA REPARASI PERALATAN KOMUNIKASI" },
+  { code: "P85498", name: "JASA PENDIDIKAN KERAJINAN DAN INDUSTRI" },
+  { code: "Q93123", name: "KELAB RENANG" },
+  { code: "S95120", name: "JASA REPARASI PERALATAN KOMUNIKASI" },
 ];
 
-export const jenisKelamin = [
-  { kode: "jk-1", name: "Pria" },
-  { kode: "jk-2", name: "Wanita" },
+export const jenisKelaminOption = [
+  { code: 1, name: "Pria" },
+  { code: 2, name: "Wanita" },
 ];
 
-export const jenisPerkawinan = [
-  { kode: "jp-1", name: "Kawin" },
-  { kode: "jp-2", name: "Tidak Kawin" },
-  { kode: "jp-3", name: "Cerai Hidup" },
-  { kode: "jp-4", name: "Cerai Mati" },
-];
-
-export const hubunganKeluarga = [
-  { kode: "hk-1", name: "Anak" },
-  { kode: "hk-2", name: "Cucu" },
-  { kode: "hk-3", name: "Kepala Keluarga" },
-  { kode: "hk-4", name: "Suami" },
-  { kode: "hk-5", name: "Istri" },
-  { kode: "hk-6", name: "Mertua" },
-  { kode: "hk-7", name: "Menantu" },
-  { kode: "hk-8", name: "Pembantu" },
-  { kode: "hk-9", name: "Family Lain" },
-  { kode: "hk-10", name: "Orang Tua" },
-  { kode: "hk-11", name: "Lainnya" },
+export const jenisPerkawinanOption = [
+  { code: "JP-1", name: "Kawin" },
+  { code: "JP-2", name: "Tidak Kawin" },
+  { code: "JP-3", name: "Cerai Hidup" },
+  { code: "JP-4", name: "Cerai Mati" },
 ];
 
 export const agamaOption = [
-  { kode: "a-1", name: "Islam" },
-  { kode: "a-2", name: "Kristen" },
-  { kode: "a-3", name: "Katholik" },
-  { kode: "a-4", name: "Hindu" },
-  { kode: "a-5", name: "Budha" },
-  { kode: "a-6", name: "Khonghucu" },
-  { kode: "a-7", name: "Kepercayaan Terhadap Tuhan YME" },
-  { kode: "a-8", name: "Lainnya" },
+  { code: "AO-1", name: "Islam" },
+  { code: "AO-2", name: "Kristen" },
+  { code: "AO-3", name: "Katholik" },
+  { code: "AO-4", name: "Hindu" },
+  { code: "AO-5", name: "Budha" },
+  { code: "AO-6", name: "Khonghucu" },
+  { code: "AO-7", name: "Kepercayaan Terhadap Tuhan YME" },
+  { code: "AO-8", name: "Lainnya" },
 ];
 
 export const kewarganegaraanOption = [
-  { kode: "k-1", name: "Warga Negara Indonesia" },
-  { kode: "k-2", name: "Warga Negara Asing" },
+  { code: 1, name: "Warga Negara Indonesia" },
+  { code: 2, name: "Warga Negara Asing" },
 ];
 
 export const bahasaOption = [
-  { kode: "k-1", name: "Bahasa Indonesia" },
-  { kode: "k-2", name: "Bahasa Inggris" },
+  { code: 1, name: "Bahasa Indonesia" },
+  { code: 2, name: "Bahasa Inggris" },
 ];
 
-export const jenisPerusahaan = [
-  { kode: "jp-1", name: "Swasta Nasional" },
-  { kode: "jp-2", name: "Fasilitas PMDN" },
-  { kode: "jp-3", name: "BUMN" },
-  { kode: "jp-4", name: "BUMD" },
-  { kode: "jp-5", name: "Penanaman Modal Asing (PMA)" },
+export const jenisPerusahaanOption = [
+  { code: "JP-1", name: "Swasta Nasional" },
+  { code: "JP-2", name: "Fasilitas PMDN" },
+  { code: "JP-3", name: "BUMN" },
+  { code: "JP-4", name: "BUMD" },
+  { code: "JP-5", name: "Penanaman Modal Asing (PMA)" },
 ];
 
-export const jumlahKaryawan = [
-  { kode: "jk-1", name: "Tidak Memiliki Karyawan" },
-  { kode: "jk-2", name: "di bawah 10" },
-  { kode: "jk-3", name: "10 sd 100" },
-  { kode: "jk-4", name: "101 sd 1000" },
-  { kode: "jk-5", name: "di atas 1000" },
+export const jumlahKaryawanOption = [
+  { code: "JKO-1", name: "Tidak Memiliki Karyawan" },
+  { code: "JKO-2", name: "di bawah 10" },
+  { code: "JKO-3", name: "10 sd 100" },
+  { code: "JKO-4", name: "101 sd 1000" },
+  { code: "JKO-5", name: "di atas 1000" },
 ];
 
-export const metodePembukuan = [
-  { kode: "mp-1", name: "Stelsel Akrual" },
-  { kode: "mp-2", name: "Stelsel Kas" },
+export const metodePembukuanOption = [
+  { code: 1, name: "Stelsel Akrual" },
+  { code: 2, name: "Stelsel Kas" },
 ];
 
-export const mataUang = [
-  { kode: "mu-1", name: "Indonesian Rupiah (IDR)" },
-  { kode: "mu-2", name: "Dolar Amerika Serikat (USD)" },
+export const mataUangOption = [
+  { code: 1, name: "Indonesian Rupiah (IDR)" },
+  { code: 2, name: "Dolar Amerika Serikat (USD)" },
 ];
 
-export const periodePembukuan = [{ kode: "pp-1", name: "01-12" }];
+export const periodePembukuanOption = [{ code: "PP-1", name: "01-12" }];
 
-export const omsetOption = [{ kode: "opt-1", name: "lebih dari Rp. 4,8 M" }];
+export const omsetOption = [{ code: "OM-1", name: "lebih dari Rp. 4,8 M" }];

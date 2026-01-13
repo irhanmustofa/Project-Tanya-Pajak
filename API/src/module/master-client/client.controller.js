@@ -24,7 +24,9 @@ const update = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-  return Response(res, await wrapper.delete(req.params.id));
+  const result = await wrapper.delete(req.params.id);
+  console.log("result:", result);
+  return Response(res, result);
 };
 
 const deleteSome = async (req, res) => {
